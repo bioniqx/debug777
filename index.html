@@ -2595,8 +2595,8 @@
           <div class="section-lbl">🔐 Rush Vault</div>
           <div class="cheat-hint" style="margin-bottom:8px;">
             Chỉ giữ <b>1 cheat / người chơi</b> (agency:userId) → <b>không arm Grid + Double-Up cùng lúc</b>.<br>
-            Trình tự: arm <b>Grid</b> → vào game <b>mua+mở két (cmd 1512)</b> → arm <b>Double-Up</b> → bấm <b>x2 (cmd 1513)</b> từng ván.<br>
-            Double-Up & Grid mở két: <b>đều đã chạy thật</b> (BE đã hoàn thiện). Hệ số cuộn 4 mặc định <b>×1</b> (tất định) — chọn ×2/×5/×10 để ép bonus.<br>
+            Trình tự: arm <b>Grid</b> (ở tab ⚙ Cheat Core) → vào game <b>mua+mở két (cmd 1512)</b> → arm <b>Double-Up</b> → bấm <b>x2 (cmd 1513)</b> từng ván.<br>
+            Double-Up & Grid mở két: <b>đều đã chạy thật</b> (BE đã hoàn thiện).<br>
             Quy ước: <b>arm ở đây (REST), rồi vào game thật để chơi.</b>
           </div>
           <div class="cheat-grid">
@@ -2638,40 +2638,8 @@
               <button class="btn btn-gold btn-sm btn-block" onclick="armVaultDoubleUp()">⚡ Cài Cheat Double-Up</button>
             </div>
 
-            <div class="cheat-c" style="grid-column: span 2;">
-              <div class="cheat-name">FORCE_VAULT_GRID <span class="badge b-full">Full</span></div>
-              <div class="cheat-hint">Vẽ lưới 3×3 cho lần mở két tiếp theo. Ép chính xác tiền thắng A. Hệ số cuộn 4 mặc định ×1.</div>
-              <div class="reel-wrap" id="vault-grid-ui">
-                <div></div>
-                <div class="reel-lbl">Reel 1</div>
-                <div class="reel-lbl">Reel 2</div>
-                <div class="reel-lbl">Reel 3</div>
-                <div class="reel-lbl">Reel 4 (×)</div>
-
-                <div class="row-lbl">Top<small>r0</small></div>
-                <select class="vg-sel" data-c="0" data-r="0"></select>
-                <select class="vg-sel" data-c="1" data-r="0"></select>
-                <select class="vg-sel" data-c="2" data-r="0"></select>
-                <select class="vr4-sel" data-r="0"></select>
-
-                <div class="row-lbl">Mid<small>r1</small></div>
-                <select class="vg-sel" data-c="0" data-r="1"></select>
-                <select class="vg-sel" data-c="1" data-r="1"></select>
-                <select class="vg-sel" data-c="2" data-r="1"></select>
-                <select class="vr4-sel" data-r="1"></select>
-
-                <div class="row-lbl">Bot<small>r2</small></div>
-                <select class="vg-sel" data-c="0" data-r="2"></select>
-                <select class="vg-sel" data-c="1" data-r="2"></select>
-                <select class="vg-sel" data-c="2" data-r="2"></select>
-                <select class="vr4-sel" data-r="2"></select>
-              </div>
-              <div class="flex mt8">
-                <button class="btn btn-gold btn-sm" onclick="armVaultGridCheat()">⚡ Cài Cheat Vault Grid</button>
-              </div>
-            </div>
-
           </div>
+          <div class="cheat-hint" style="margin-bottom:8px;">Dùng card lưới FORCE_GRID ở tab ⚙ Cheat Core để ép lưới mở két.</div>
 
           <div class="section-sep"></div>
           <div class="section-lbl">Treasure Room · Endpoint Riêng</div>
@@ -4283,7 +4251,6 @@
     document.addEventListener('DOMContentLoaded', () => {
       restoreConfigOnLoad();
       initGridSelects();
-      initVaultGridSelects();
       initFsSeqSelects();
       document.getElementById('wss-grid-wrap').appendChild(createFsEditor('winstreak'));
       showTab('cheat');
@@ -4607,34 +4574,6 @@
       });
     }
 
-    function initVaultGridSelects() {
-      document.querySelectorAll('.vg-sel').forEach(sel => {
-        SYMBOLS.forEach(s => {
-          const opt = document.createElement('option');
-          opt.value = s.id;
-          opt.textContent = s.label;
-          if (s.id === 5) opt.selected = true;
-          sel.appendChild(opt);
-        });
-      });
-      document.querySelectorAll('.vr4-sel').forEach(sel => {
-        R4_MULTS.filter(m => m.value !== '').forEach(m => {
-          const opt = document.createElement('option');
-          opt.value = m.value;
-          opt.textContent = m.label;
-          if (m.value === 1) opt.selected = true;
-          sel.appendChild(opt);
-        });
-        // Chỉ hàng giữa (middle row) mới có option Naga Eye
-        if (sel.dataset.r === '1') {
-          const eyeOpt = document.createElement('option');
-          eyeOpt.value = 'eye';
-          eyeOpt.textContent = '🐍 Naga Eye';
-          sel.appendChild(eyeOpt);
-        }
-      });
-    }
-
     function fillGrid(symbolId) {
       document.querySelectorAll('.g-sel').forEach(sel => sel.value = symbolId);
     }
@@ -4691,27 +4630,6 @@
       }
       const overflow = document.getElementById('vdu-overflow').value;
       await armCheat('FORCE_VAULT_DOUBLE_UP', { outcomes, overflow });
-    }
-
-    async function armVaultGridCheat() {
-      const screen = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
-      document.querySelectorAll('.vg-sel').forEach(sel => {
-        const c = +sel.dataset.c;
-        const r = +sel.dataset.r;
-        screen[c][r] = +sel.value;
-      });
-      const mults = [1, 1, 1];
-      let nagaEye = false;
-      document.querySelectorAll('.vr4-sel').forEach(sel => {
-        const r = +sel.dataset.r;
-        if (r === 1 && sel.value === 'eye') {
-          nagaEye = true;
-          mults[1] = 1;
-        } else {
-          mults[r] = +sel.value;
-        }
-      });
-      await armCheat('FORCE_VAULT_GRID', { screen, mults, nagaEye });
     }
 
     // ── FORCE_FREESPIN_SEQUENCE helpers ──────────────────────────────────

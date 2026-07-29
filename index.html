@@ -595,8 +595,7 @@
     /* Nhãn đánh dấu phiên WS của chính cheatTool trong danh sách người chơi — nó là kết nối thật
        nên vẫn hiện, nhưng phải nhìn ra ngay để không bấm "Dùng" nhầm vào nó. */
     /* Nằm ngoài .uc-name, vì .uc-name cắt chữ bằng ellipsis và sẽ nuốt luôn nhãn nếu đặt bên trong. */
-    /* Thẻ hẹp, nhãn chữ "TOOL" ăn hết chỗ của tên (tên bị cắt còn "te…"). Dùng ký hiệu nhỏ cộng
-       viền vàng quanh thẻ: nhận ra ngay mà gần như không tốn bề ngang. */
+    /* Thẻ hẹp, nhãn chữ "TOOL" ăn hết chỗ của tên (tên bị cắt còn "te…") nên dùng ký hiệu nhỏ. */
     .uc-tool {
       flex: 0 0 auto;
       margin-left: 4px;
@@ -606,9 +605,44 @@
       cursor: help;
     }
 
+    /* Phiên của chính tool: làm mờ + viền đứt để nó LÙI ra sau. Trước đây tô viền vàng đậm,
+       trùng ngôn ngữ với thẻ đang được chọn (.on) nên nhìn tưởng tool tự chọn dòng đầu.
+       Rê chuột hoặc cố ý bấm "Dùng" vào nó thì trả lại độ rõ bình thường. */
     .user-card.is-tool {
-      border-color: var(--warn);
-      background: color-mix(in srgb, var(--warn) 6%, transparent);
+      position: relative;
+      border-style: dashed;
+      opacity: 0.5;
+    }
+
+    /* Tooltip tự vẽ: thuộc tính `title` của trình duyệt trễ ~1 giây, rê vào là muốn thấy ngay.
+       Đặt ngay dưới thẻ và ăn đúng bề ngang thẻ vì #sidebar có overflow-x: hidden — thò ra
+       hai bên là bị cắt mất. pointer-events: none để nó không chắn thẻ nằm dưới. */
+    .user-card.is-tool::after {
+      content: attr(data-tip);
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      z-index: 20;
+      padding: 6px 8px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: var(--carved);
+      color: var(--text-secondary);
+      font-size: 12px;
+      line-height: 1.35;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .user-card.is-tool:hover::after {
+      display: block;
+    }
+
+    .user-card.is-tool:hover,
+    .user-card.is-tool.on {
+      opacity: 1;
     }
 
     #i-ws-url { width: 456px; }
@@ -2273,27 +2307,34 @@
         <div class="card-h"><span class="glyph">✦</span>Hướng dẫn nhanh</div>
         <div class="guide-box">
           <ol class="guide-steps">
-            <li><b>Chọn server:</b> bấm <b>STAG</b> hoặc <b>LOCAL</b> cạnh ô Base URL — danh sách user tự tải lại.</li>
+            <li><b>Chọn môi trường:</b> bấm <b>LOCAL</b> hoặc <b>STAG</b> trên hàng WS — WS URL và agentId tự điền.
+              Trỏ staging thì hiện thêm ô username/password (mặc định <code>KOL-001</code>); local dùng seed token
+              nên hai ô đó tự ẩn.</li>
+            <li>Bấm <b>Kết nối</b> — mở WebSocket, đăng nhập, JOIN rồi tải luôn danh sách người chơi.</li>
             <li><b>Mở game</b> trên thiết bị/trình duyệt test — đăng nhập tài khoản thật vào game.</li>
-            <li>Bấm <b>↻</b> (góc phải tiêu đề "Chọn người chơi"). Có 1 user → tự chọn; nhiều user → bấm <b>Dùng</b>
-              đúng người.</li>
+            <li>Bấm <b>↻</b> (góc phải tiêu đề "Chọn người chơi") để tải lại. Còn đúng <b>1 người chơi</b> → tự chọn;
+              nhiều người → bấm <b>Dùng</b> ở đúng người.</li>
             <li>Thanh trên hiện <code>username@agency</code> — xác nhận đã chọn đúng người chơi.</li>
             <li>Mở tab <b>⚙ Cheat Core</b>, chọn loại cheat trong mục <b>Cheat Naga Fortune 777</b>, chỉnh tham số rồi
               bấm <b>⚡ Cài Cheat</b>.</li>
             <li>Quay lại game, bấm <b>SPIN</b> để áp cheat. Mỗi cheat chỉ áp <b>1 lượt</b> kế tiếp rồi tự xóa.</li>
-            <li>Dùng tab <b>①–⑥</b> để test nhanh từng nhóm case QC: ① cược &amp; quay, ② thưởng &amp; cuộn 4, ③ jackpot
-              &amp; rush, ④ streak &amp; second choice, ⑤ validate, ⑥ tất định.</li>
-            <li>Tab <b>Raw / Validate</b> dùng khi cần gọi API thô hoặc kiểm tra state session trực tiếp.</li>
             <li>Tab <b>Lịch Sử</b> xem lại kết quả từng vòng đã quay — có thể lọc theo roundId.</li>
           </ol>
           <div class="guide-tips">
+            <div class="guide-tip">Mở tool lên là ở <b>mode WS</b> (badge <code>WS</code> trên thanh trạng thái). Cần
+              đường REST cũ thì bấm <b>REST</b>; F5 là quay lại WS.</div>
+            <div class="guide-tip">Dòng <b>mờ, viền đứt, có ⚙</b> trong danh sách là phiên WebSocket của chính tool,
+              không phải người chơi — tool không bao giờ tự chọn dòng đó. Rê chuột vào sẽ báo rõ.</div>
+            <div class="guide-tip">Danh sách tự tải lại mỗi <b>5 giây</b>; chuột rời khỏi trang thì tạm dừng (hiện
+              <b>⏸ Tạm dừng auto refresh</b>).</div>
+            <div class="guide-tip">Token staging hết hạn sau <b>~1 giờ</b> — gặp lỗi AUTH thì bấm <b>Kết nối</b> lại,
+              tool tự đăng nhập lấy token mới.</div>
             <div class="guide-tip">Chưa chọn user mà bấm nút thao tác → tool nhắc <b>"Vui lòng chọn user"</b>.</div>
             <div class="guide-tip"><b>FORCE_GRID:</b> chọn symbol từng ô trên 3 reel → ép kết quả spin chính xác.</div>
             <div class="guide-tip"><b>FORCE_NAGA_EYE:</b> kích hoạt màn chọn rương jackpot ngay lượt kế tiếp.</div>
             <div class="guide-tip"><b>FORCE_FOURTH_REEL_MULT:</b> ép hệ số nhân cột 4 (mặc định x10) cho 1 lượt.</div>
-            <div class="guide-tip"><b>FORCE_RUSH / STREAK</b> ở tab ③–④ để test các chế độ đặc biệt.</div>
-            <div class="guide-tip">Server <b>LOCAL</b> yêu cầu kết nối mạng nội bộ hoặc VPN (<code>172.10.10.50</code>).
-            </div>
+            <div class="guide-tip">Ở mode <b>REST</b>, nút <b>LOCAL</b> cạnh ô Base URL trỏ <code>172.10.10.50</code> —
+              cần mạng nội bộ hoặc VPN. Mode WS thì <b>LOCAL</b> trỏ <code>ws://localhost:9099</code>.</div>
             <div class="guide-tip"><b>📄 GDD</b> &amp; <b>🤖 Cùng AI học GDD</b> trên thanh trạng thái để tra luật game
               khi cần.</div>
             <div class="guide-tip"><b>💡 Gợi ý test case</b> — danh sách scenario QC đã soạn sẵn theo từng tính năng.
@@ -2323,10 +2364,10 @@
               title="Base URL — để trống dùng URL staging mặc định" onchange="saveBase()">
             <button id="btn-base-stag" class="btn btn-gold btn-sm" type="button"
               onclick="setBase('https://stag.osyamazakiglobel.club/api/game/nagas-fortune-777')"
-              title="Điền URL staging rồi tự Tải Danh Sách">STAG</button>
+              title="Điền URL staging rồi tự tải lại danh sách">STAG</button>
             <button id="btn-base-local" class="btn btn-gold btn-sm" type="button"
               onclick="setBase('http://172.10.10.50:3000')"
-              title="Điền URL local rồi tự Tải Danh Sách">LOCAL</button>
+              title="Điền URL local rồi tự tải lại danh sách">LOCAL</button>
             <button id="btn-mode-rest" class="btn btn-gold btn-sm" type="button" onclick="setTransportMode('rest')"
               title="Chế độ REST (mặc định) — đường HTTP cũ, giữ nguyên">REST</button>
             <button id="btn-mode-ws" class="btn btn-gold btn-sm" type="button" onclick="setTransportMode('ws')"
@@ -2349,9 +2390,6 @@
             <!-- Để chữ thường, không che: đây là tài khoản test dùng chung, che chỉ gây vướng khi
                  QC cần đọc lại xem mình gõ đúng chưa. -->
             <input id="i-ws-pass" placeholder="password" onchange="saveWsConfig()">
-            <button id="btn-ws-token" class="btn btn-gold btn-sm" type="button" onclick="wsFetchToken()"
-              title="Đăng nhập lại agency-platform để làm mới token (token staging hết hạn sau ~1 giờ)">Lấy
-              token</button>
             <button id="btn-ws-connect" class="btn btn-gold btn-sm" type="button" onclick="wsConnect()"
               title="Mở WebSocket tới WS URL, AUTH rồi JOIN cmd 1005 — biết ngay cấu hình đúng hay sai">Kết
               nối</button>
@@ -2404,8 +2442,8 @@
           <button class="qc-start-x" onclick="dismissStart()" title="Ẩn hướng dẫn">×</button>
           <div class="qc-start-title">Bắt đầu ở đây — 3 bước</div>
           <ol class="qc-start-steps">
-            <li><b>Chọn người chơi</b> đang test ở cột trái: bấm <b>Tải Danh Sách</b> rồi bấm <b>Dùng</b> ở đúng người.
-            </li>
+            <li>Bấm <b>Kết nối</b> (hàng WS trên cùng), rồi <b>chọn người chơi</b> ở cột trái: bấm <b>Dùng</b> ở đúng
+              người. Dòng có <b>⚙</b> là phiên của chính tool, bỏ qua.</li>
             <li><b>Chọn 1 case</b> bên dưới, bấm nút <b>Cài cho lượt quay</b> (cài sống 5 phút, dùng cho 1 lượt).</li>
             <li><b>Mở game</b> làm theo mục <b>Cách làm</b>, rồi đối chiếu với <b>Đúng khi</b>.</li>
           </ol>
@@ -2709,17 +2747,6 @@
           </div>
           <div class="cheat-hint" style="margin-bottom:8px;">Dùng card lưới FORCE_GRID ở tab ⚙ Cheat Core để ép lưới mở két.</div>
 
-          <div class="section-sep"></div>
-          <div class="section-lbl">Treasure Room · Endpoint Riêng</div>
-          <div class="card">
-            <div class="card-h"><span class="glyph">⛩</span>Arm Naga Eye — Treasure Room</div>
-            <div class="info mb8">Ghi trực tiếp vào session <code>nagaEyeTriggered=true</code> mà không cần spin. Cần
-              init game trước. Sau đó gọi <code>POST /api/v1/naga/jackpot/pick</code>.</div>
-            <div class="flex">
-              <button class="btn btn-orange" onclick="armTreasureRoom()">Arm Treasure Room</button>
-            </div>
-            <div id="tr-result" class="json-box mt8" style="display:none"></div>
-          </div>
         </div>
 
         <!-- ── QC ① ĐẶT CƯỢC & QUAY ──────────────────────────────────── -->
@@ -4256,7 +4283,7 @@
 
     const DEFAULT_BASE = 'https://stag.osyamazakiglobel.club/api/game/nagas-fortune-777';
     // Thông báo danh sách rỗng — dùng CHUNG cho lúc đổi server (setBase) và khi tải xong mà không có user.
-    const EMPTY_LIST_HTML = '<div class="empty">Chưa có người chơi nào đang mở game. Mở game ở thiết bị test rồi bấm "Tải Danh Sách" lại.</div>';
+    const EMPTY_LIST_HTML = '<div class="empty">Chưa có người chơi nào đang mở game. Mở game ở thiết bị test rồi bấm ↻ lại.</div>';
     function base() { return (cfg('base') || DEFAULT_BASE).replace(/\/+$/, ''); }
     function agency() { return cfg('agency', 'demo'); }
     function userId() { return cfg('user', 'player_001'); }
@@ -4488,6 +4515,10 @@
     // Thẻ user đang xổ chi tiết — lưu theo (agency|username) để giữ trạng thái qua mỗi lần re-render (poll 5s).
     const expandedUsers = new Set();
     function userCardKey(agency, username) { return (agency || '') + '|' + (username || ''); }
+    // ws-debug.js chỉ có ở mode WS nên phải kiểm tra trước khi gọi; mode REST luôn trả false.
+    function isOwnToolSession(u) {
+      return typeof isToolSession === 'function' && isToolSession(u);
+    }
     function toggleUserCard(nameEl) {
       const card = nameEl.closest('.user-card');
       if (!card) return;
@@ -4515,10 +4546,13 @@
         syncSelectedSession([]);
         return 0;
       }
-      // Đồng bộ user đang chọn + tự chọn khi danh sách chỉ có 1 user — làm TRƯỚC render để thẻ tô đúng trạng thái.
+      // Đồng bộ user đang chọn + tự chọn khi chỉ có 1 người chơi — làm TRƯỚC render để thẻ tô đúng trạng thái.
       syncSelectedSession(users);
-      if (users.length === 1) {
-        const only = users[0];
+      // Bỏ phiên của chính tool ra khỏi diện tự chọn: chọn trúng nó thì mọi lệnh cheat
+      // sẽ nhắm vào tool chứ không phải người chơi. QC vẫn bấm "Dùng" thủ công được.
+      const players = users.filter(u => !isOwnToolSession(u));
+      if (players.length === 1) {
+        const only = players[0];
         const already = selectedSession
           && (only.agency || '') === selectedSession.agency
           && (only.username || '') === selectedSession.username;
@@ -4542,11 +4576,15 @@
         const isOpen = expandedUsers.has(ukey);
         const sid = u.stableId || u.userId;
         const noStableId = !u.stableId;
-        const isTool = typeof isToolSession === 'function' && isToolSession(u);
-        return `<div class="user-card${isSel ? ' on' : ''}${isOpen ? ' open' : ''}${isTool ? ' is-tool' : ''}" data-key="${escAttr(ukey)}" data-sid="${escAttr(sid)}">
+        const isTool = isOwnToolSession(u);
+        // Thẻ của tool: dùng tooltip tự vẽ (data-tip) cho hiện tức thì, và bỏ hẳn `title` gốc
+        // trong thẻ — để lại thì trình duyệt bồi thêm một tooltip nữa sau 1 giây.
+        const toolTip = 'User này đang trong debug tool';
+        const nameTip = isTool ? '' : 'Bấm để xổ/thu thông tin · ' + (u.username || '');
+        return `<div class="user-card${isSel ? ' on' : ''}${isOpen ? ' open' : ''}${isTool ? ' is-tool' : ''}"${isTool ? ` data-tip="${escAttr(toolTip)}"` : ''} data-key="${escAttr(ukey)}" data-sid="${escAttr(sid)}">
       <div class="uc-top">
-        <div class="uc-name" title="Bấm để xổ/thu thông tin · ${escAttr(u.username || '')}" onclick="toggleUserCard(this)">${escHtml(u.username || '—')}</div>
-        ${isTool ? '<span class="uc-tool" title="Phiên WebSocket của chính cheatTool, không phải người chơi">⚙</span>' : ''}
+        <div class="uc-name"${nameTip ? ` title="${escAttr(nameTip)}"` : ''} onclick="toggleUserCard(this)">${escHtml(u.username || '—')}</div>
+        ${isTool ? '<span class="uc-tool">⚙</span>' : ''}
         <button class="btn btn-gold btn-sm" ${noStableId ? 'title="stableId thiếu — cheat bind theo userId (có thể sai khóa trên staging)" style="opacity:.7"' : ''} data-ag="${escAttr(u.agency)}" data-uid="${escAttr(u.userId)}" data-sid="${escAttr(sid)}" data-gid="${escAttr(u.gameId)}" data-tok="${escAttr(u.sessionToken)}" data-uname="${escAttr(u.username)}" onclick="useSessionFromBtn(this)">Dùng</button>
       </div>
       <div class="uc-meta">
@@ -4587,9 +4625,22 @@
       }
     }
 
+    // Viền xanh (.on) trước giờ chỉ được vẽ trong listSessions(), nên bấm "Dùng" xong phải đợi
+    // tới nhịp poll 5 giây mới thấy — lúc nhanh lúc chậm tuỳ rơi vào đâu trong nhịp. Tô ngay tại
+    // chỗ: dữ liệu đã nằm sẵn trên thẻ, không cần hỏi lại server.
+    function paintSelectedCard() {
+      const key = selectedSession
+        ? userCardKey(selectedSession.agency, selectedSession.username)
+        : null;
+      document.querySelectorAll('.user-card').forEach(card => {
+        card.classList.toggle('on', card.dataset.key === key);
+      });
+    }
+
     function useSessionFromBtn(btn) {
       selectedSession = { agency: btn.dataset.ag || '', username: btn.dataset.uname || '' };
       useSession(btn.dataset.ag, btn.dataset.uid, btn.dataset.gid, btn.dataset.tok, btn.dataset.uname, btn.dataset.sid);
+      paintSelectedCard();
     }
 
     // Bỏ bind user hiện tại: xóa agency/user/game/token và reset trạng thái.
@@ -4602,6 +4653,7 @@
         localStorage.setItem('naga_qc_' + k, '');
       });
       updateStatus('session', 'mute', 'Chưa chọn người chơi');
+      paintSelectedCard();   // bỏ chọn cũng phải gỡ viền ngay, không đợi poll
     }
 
     // stableId: khóa nghiệp vụ mà backend dùng để tra cheat/session/ví (= memberId ?? username ?? userId).
@@ -4891,7 +4943,6 @@
 
     async function armTreasureRoom() {
       const r = await debugCall('POST', `/api/v1/debug/treasure-room/${agency()}/${userId()}?gameId=${gameId()}`);
-      showJson('tr-result', r.data);
       if (r.ok) showMsg('✅ Treasure Room armed — bây giờ gọi Jackpot Pick');
     }
 
@@ -5448,8 +5499,8 @@
   </script>
   <!-- ?v= là cache-busting: đổi URL thì bản cũ trong cache trình duyệt không khớp được nữa, khỏi
        phụ thuộc vào việc người dùng có hard-refresh hay không. Sửa 2 file này thì tăng số. -->
-  <script src="js/ws-client.js?v=2"></script>
-  <script src="js/ws-debug.js?v=2"></script>
+  <script src="js/ws-client.js?v=3"></script>
+  <script src="js/ws-debug.js?v=3"></script>
   <script src="js/test-catalog.js"></script>
   <script src="js/cases/cases-core.js"></script>
   <script src="js/cases/cases-features.js"></script>

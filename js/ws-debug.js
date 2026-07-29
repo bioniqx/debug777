@@ -12,8 +12,8 @@
      - 4 adapter cho các op có "data" khác REST body (đổi từ handler gRPC
        tái dùng thay vì controller cũ): HISTORY_ROUNDS, HISTORY_ROUND_DETAIL,
        HISTORY_ROUND_REPLAY, JACKPOT_LEADERBOARD.
-     - UI glue: mode toggle (REST/WS), cấu hình WS URL/accessToken/agentId
-       (localStorage), preset LOCAL/STAG, nút "Lấy token".
+     - UI glue: mode toggle (REST/WS, mặc định WS mỗi lần tải trang), cấu hình
+       WS URL/agentId/đăng nhập (localStorage), preset LOCAL/STAG, nút "Kết nối".
 
    Chạy được cả trong browser (index.html nạp qua <script src>, sau
    ws-client.js) lẫn Node (require() để viết script probe/so sánh
@@ -32,7 +32,6 @@ function hasDom() { return typeof document !== 'undefined'; }
 
 /* ── Cấu hình phiên WS của tool (WS URL / accessToken / agentId) ──────── */
 
-const WS_MODE_KEY = 'naga_qc_mode';
 const WS_CFG_LS = { url: 'naga_qc_ws_url', agent: 'naga_qc_ws_agent', user: 'naga_qc_ws_user', pass: 'naga_qc_ws_pass' };
 
 // Giá trị lấy nguyên từ local_login.md và staging_login.md — hai tài liệu đó là nguồn đúng.
@@ -74,12 +73,17 @@ function wsIsLocal() {
 // một token cũ nằm lại sau khi đóng tab chỉ gây lỗi AUTH khó hiểu ở lần mở sau.
 let stagToken = null;
 
+// Mở tool lên là vào thẳng WS. Cố ý KHÔNG lưu localStorage: lưu thì lần bấm REST gần nhất sẽ
+// dính lại và lần mở sau không còn mặc định WS nữa. Bấm REST vẫn có hiệu lực trong phiên, F5
+// là quay về WS.
+let _transportMode = 'ws';
+
 function transportMode() {
-  return (hasDom() ? localStorage.getItem(WS_MODE_KEY) : null) || 'rest';
+  return _transportMode;
 }
 
 function setTransportMode(mode) {
-  if (hasDom()) localStorage.setItem(WS_MODE_KEY, mode);
+  _transportMode = mode;
   if (!hasDom()) return;
   const restBtn = document.getElementById('btn-mode-rest');
   const wsBtn = document.getElementById('btn-mode-ws');
@@ -144,12 +148,12 @@ function updateRestVisibility(mode) {
   if (restRow) restRow.style.flex = mode === 'ws' ? '0 0 auto' : '';
 }
 
-// Local không cần đăng nhập nên ẩn hẳn username/password/Lấy token — bớt thứ gây phân tâm và bớt
-// cơ hội QC tưởng phải điền mới chạy được.
+// Local không cần đăng nhập nên ẩn hẳn username/password — bớt thứ gây phân tâm và bớt cơ hội
+// QC tưởng phải điền mới chạy được.
 function updateWsAuthVisibility() {
   if (!hasDom()) return;
   const display = wsIsLocal() ? 'none' : '';
-  ['i-ws-user', 'i-ws-pass', 'btn-ws-token'].forEach((id) => {
+  ['i-ws-user', 'i-ws-pass'].forEach((id) => {
     const el = document.getElementById(id);
     if (el) el.style.display = display;
   });
@@ -205,23 +209,6 @@ async function resolveWsToken(forceRefresh) {
   return stagToken;
 }
 
-// Nút "Lấy token" giờ chỉ để làm mới thủ công khi token staging hết hạn — kết nối lần đầu tự đăng
-// nhập rồi, QC không phải bấm gì.
-async function wsFetchToken() {
-  if (wsIsLocal()) {
-    if (typeof toast === 'function') toast('Local dùng seed token sẵn có, không cần đăng nhập', 'info');
-    return;
-  }
-  try {
-    await resolveWsToken(true);
-    resetToolWs();                       // token đổi thì phiên cũ vô nghĩa
-    if (typeof toast === 'function') toast('Đã làm mới token staging', 'success');
-  } catch (e) {
-    const msg = 'Không lấy được token staging (có thể do CORS chặn từ localhost). Chi tiết: ' + e.message;
-    if (typeof toast === 'function') toast(msg, 'error'); else alert(msg);
-  }
-}
-
 /** Nút "Kết nối": dựng phiên WS ngay theo local_login.md / staging_login.md —
  *  mở WebSocket → AUTH (frame 1) → JOIN (cmd 1005). Nối lười vẫn giữ nguyên cho các op,
  *  nút này chỉ để QC biết ngay cấu hình đúng hay sai thay vì đợi tới lệnh debug đầu tiên. */
@@ -234,7 +221,10 @@ async function wsConnect() {
   };
   setBtn('Đang nối…', true);
   try {
-    resetToolWs();                 // bấm lại là nối lại từ đầu, không tái dùng phiên cũ
+    // Bấm lại là nối lại từ đầu: bỏ cả token staging đang nhớ trong phiên, để token hết hạn
+    // (~1 giờ) được đăng nhập lấy mới — đây là cách duy nhất làm mới token mà không phải F5.
+    resetToolWs();
+    stagToken = null;
     const client = await ensureToolWs();
     const j = client.joined || {};
     // Hiện cả stableId: đó mới là giá trị các debug op dùng để nhắm mục tiêu, còn userId là tên

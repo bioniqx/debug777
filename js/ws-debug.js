@@ -380,8 +380,8 @@ function toMinor(display) {
 }
 
 // REST serialize Instant thành số giây-epoch có phần thập phân (Jackson mặc định); WS (SpinListHandler/
-// SpinDetailHandler) trả chuỗi ISO-8601. Renderer loadHistory() dùng new Date(rr.timestamp) — cần đúng
-// dạng REST (số giây) để không lệch giữa 2 chế độ. Quy về cùng dạng REST cho đúng nghĩa "REST shape".
+// SpinDetailHandler) trả chuỗi ISO-8601. Quy về cùng dạng REST (số giây) cho đúng nghĩa "REST shape",
+// để bên gọi không phải phân biệt 2 chế độ. Tab Lịch Sử đã bỏ, giờ chỉ còn Node probe dùng route này.
 function toEpochSecondsRaw(iso) {
   if (!iso) return iso;
   const t = Date.parse(iso);
@@ -390,8 +390,8 @@ function toEpochSecondsRaw(iso) {
 
 // userId hiện tại: HISTORY_ROUND_DETAIL đi qua delegateHistoryOp ở BE — handler dùng chung với
 // HISTORY_ROUNDS nên đòi cả agency LẪN userId ở top-level, dù REST /rounds/{roundId} chỉ cần agency.
-// Lấy từ người chơi đang chọn trên header (đúng vì loadRoundDetail() chỉ được gọi từ 1 dòng trong
-// bảng lịch sử của userId() hiện tại) — Node probe không có DOM nên fallback globalThis.WS_TOOL_CONFIG.
+// Lấy từ người chơi đang chọn trên header — Node probe không có DOM nên fallback
+// globalThis.WS_TOOL_CONFIG.
 function currentUserId(q) {
   if (typeof userId === 'function') return userId();
   return (globalThis.WS_TOOL_CONFIG && globalThis.WS_TOOL_CONFIG.userId) || (q && q.get('userId')) || '';

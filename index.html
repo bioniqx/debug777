@@ -127,12 +127,6 @@
       letter-spacing: 0.08em;
     }
 
-    .display-italic {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-style: italic;
-      letter-spacing: 0.01em;
-    }
-
     .mono {
       font-family: 'JetBrains Mono', monospace;
       letter-spacing: -0.005em;
@@ -762,62 +756,6 @@
       box-shadow: 0 0 0 1px var(--gold-soft);
     }
 
-    /* ═══ TABS ═════════════════════════════════════════════════════ */
-    #tabs {
-      display: flex;
-      flex-wrap: nowrap;
-      background: rgba(24, 29, 35, 0.72);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      overflow-x: auto;
-      overflow-y: hidden;
-      scrollbar-width: thin;
-      scrollbar-color: var(--border) transparent;
-      padding: 0 14px;
-      position: sticky;
-      top: 90px;
-      z-index: 150;
-    }
-
-    #tabs::-webkit-scrollbar {
-      height: 6px;
-    }
-
-    #tabs::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    #tabs::-webkit-scrollbar-thumb {
-      background: var(--border);
-      border-radius: 3px;
-    }
-
-    #tabs::-webkit-scrollbar-thumb:hover {
-      background: var(--text-dim);
-    }
-
-    .tab {
-      padding: 14px 18px 13px;
-      border: none;
-      background: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      white-space: nowrap;
-      flex: 0 0 auto;
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 14.5px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      transition: color 0.2s ease;
-      position: relative;
-      border-bottom: 1px solid transparent;
-    }
-
-    .tab:hover {
-      color: var(--text-secondary);
-    }
-
     .tab.on {
       color: var(--gold-bright);
     }
@@ -1118,13 +1056,6 @@
       align-items: flex-end;
     }
 
-    .flex-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
     /* Nút tải lại (icon) nằm cùng hàng tiêu đề "Chọn người chơi" */
     .uc-reload {
       margin-left: auto;
@@ -1138,16 +1069,8 @@
       margin-top: 8px;
     }
 
-    .mt4 {
-      margin-top: 4px;
-    }
-
     .mb8 {
       margin-bottom: 8px;
-    }
-
-    .mb4 {
-      margin-bottom: 4px;
     }
 
     /* ═══ FORMS ════════════════════════════════════════════════════ */
@@ -1314,18 +1237,6 @@
       text-transform: uppercase;
     }
 
-    .b-full {
-      background: var(--jade-soft);
-      color: var(--jade-bright);
-      border: 1px solid var(--jade-deep);
-    }
-
-    .b-arm {
-      background: var(--gold-soft);
-      color: var(--gold-bright);
-      border: 1px solid var(--gold-warm);
-    }
-
     .cheat-hint {
       font-family: 'Inter', system-ui, sans-serif;
       font-size: 15px;
@@ -1414,74 +1325,6 @@
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* ═══ JACKPOT POOLS ════════════════════════════════════════════ */
-    .pool-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 4px;
-      border-bottom: 1px solid var(--border);
-      transition: background 0.2s ease;
-    }
-
-    .pool-row:hover {
-      background: rgba(255, 255, 255, 0.015);
-    }
-
-    .pool-row:last-child {
-      border-bottom: none;
-    }
-
-    .pool-row img {
-      width: 44px !important;
-      height: 44px !important;
-      object-fit: contain;
-      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 18px var(--gold-soft));
-    }
-
-    .pool-tier {
-      width: 90px;
-      font-family: 'Inter', system-ui, sans-serif;
-      font-weight: 700;
-      font-size: 18px;
-      letter-spacing: 0.18em;
-    }
-
-    .tier-GRAND {
-      color: var(--gold-bright);
-    }
-
-    .tier-MAJOR {
-      color: var(--amethyst-bright);
-    }
-
-    .tier-MINOR {
-      color: var(--jade-bright);
-    }
-
-    .tier-MINI {
-      color: var(--info);
-    }
-
-    .pool-amount {
-      flex: 1;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 24px;
-      font-weight: 500;
-      color: var(--text);
-      letter-spacing: -0.01em;
-    }
-
-    /* ═══ TABLES ═══════════════════════════════════════════════════ */
-    .tbl-wrap {
-      overflow-x: auto;
-      max-height: 440px;
-      overflow-y: auto;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      background: var(--obsidian);
-    }
-
     table {
       width: 100%;
       border-collapse: collapse;
@@ -1531,11 +1374,6 @@
       color: var(--text);
     }
 
-    .tw {
-      color: var(--success);
-      font-weight: 600;
-    }
-
     .tl {
       color: var(--text-muted);
     }
@@ -1543,34 +1381,6 @@
     .tb {
       color: var(--info);
       font-weight: 600;
-    }
-
-    /* ═══ JSON / CODE BOX ══════════════════════════════════════════ */
-    .json-box {
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px 16px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14.5px;
-      overflow: auto;
-      white-space: pre;
-      max-height: 320px;
-      word-break: break-all;
-      color: var(--jade-bright);
-      line-height: 1.6;
-      position: relative;
-    }
-
-    .json-box::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 12px;
-      bottom: 12px;
-      width: 2px;
-      background: linear-gradient(180deg, var(--jade-deep) 0%, transparent 100%);
-      border-radius: 0 2px 2px 0;
     }
 
     /* ═══ TOAST ════════════════════════════════════════════════════ */
@@ -1696,18 +1506,6 @@
       margin: 14px 0;
     }
 
-    .spin-result-box {
-      padding: 18px 20px;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
-      margin-top: 14px;
-      font-size: 16px;
-      background: var(--carved);
-      position: relative;
-      overflow: hidden;
-      animation: resultPop 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
     @keyframes resultPop {
       from {
         opacity: 0;
@@ -1718,24 +1516,6 @@
         opacity: 1;
         transform: scale(1);
       }
-    }
-
-    .sr-win {
-      border-color: var(--success-line);
-      background: linear-gradient(180deg, rgba(116, 192, 142, 0.06) 0%, var(--carved) 100%);
-      box-shadow: 0 0 0 1px var(--success-bg), 0 0 24px rgba(116, 192, 142, 0.08);
-    }
-
-    .sr-bonus {
-      border-color: var(--info-line);
-      background: linear-gradient(180deg, rgba(122, 163, 214, 0.06) 0%, var(--carved) 100%);
-    }
-
-    .sr-jp {
-      border-color: var(--amethyst);
-      background: linear-gradient(180deg, rgba(160, 124, 203, 0.08) 0%, var(--carved) 100%);
-      box-shadow: 0 0 0 1px var(--amethyst-soft), 0 0 40px rgba(160, 124, 203, 0.18);
-      animation: jpGlow 2.5s ease-in-out infinite, resultPop 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     @keyframes jpGlow {
@@ -1750,22 +1530,9 @@
       }
     }
 
-    .big-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 38px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      line-height: 1.05;
-      margin: 6px 0 8px;
-    }
-
     .win-color {
       color: var(--success);
       text-shadow: none;
-    }
-
-    .loss-color {
-      color: var(--text-muted);
     }
 
     .section-sep {
@@ -1830,36 +1597,6 @@
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* ═══ STATUS INFO TABLE (Setup tab) ════════════════════════════ */
-    .info-table {
-      width: 100%;
-    }
-
-    .info-table tr td:first-child {
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      font-size: 13.5px;
-      font-weight: 600;
-      width: 38%;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .info-table tr td:last-child {
-      color: var(--text);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 15.5px;
-    }
-
-    .info-table td {
-      padding: 9px 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .info-table tr:last-child td {
-      border-bottom: none;
-    }
-
     /* ═══ LOAD ANIMATIONS ═══════════════════════════════════════════ */
     @keyframes fadeUp {
       from {
@@ -1871,34 +1608,6 @@
         opacity: 1;
         transform: translateY(0);
       }
-    }
-
-    .fade-in-stagger>* {
-      animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-    }
-
-    .fade-in-stagger>*:nth-child(1) {
-      animation-delay: 0.02s;
-    }
-
-    .fade-in-stagger>*:nth-child(2) {
-      animation-delay: 0.08s;
-    }
-
-    .fade-in-stagger>*:nth-child(3) {
-      animation-delay: 0.14s;
-    }
-
-    .fade-in-stagger>*:nth-child(4) {
-      animation-delay: 0.20s;
-    }
-
-    .fade-in-stagger>*:nth-child(5) {
-      animation-delay: 0.26s;
-    }
-
-    .fade-in-stagger>*:nth-child(6) {
-      animation-delay: 0.32s;
     }
 
     /* ═══ KBD ══════════════════════════════════════════════════════ */
@@ -1933,57 +1642,10 @@
         padding-right: 12px;
       }
 
-      #tabs {
-        padding: 0 10px;
-      }
-
-      .tab {
-        padding: 12px 12px 11px;
-        font-size: 13.5px;
-        letter-spacing: 0.02em;
-      }
-
       #sidebar {
         width: 270px;
         padding: 12px 10px;
       }
-    }
-
-    /* QC case badges thêm cho bộ case mở rộng */
-    .b-part {
-      background: rgba(212, 160, 42, 0.12);
-      color: var(--gold-bright);
-      border: 1px solid var(--gold-soft);
-    }
-
-    .b-java {
-      background: rgba(196, 90, 60, 0.16);
-      color: #e9a48d;
-      border: 1px solid rgba(196, 90, 60, 0.45);
-    }
-
-    .b-auto {
-      background: var(--jade-soft);
-      color: var(--jade-bright);
-      border: 1px solid var(--jade-deep);
-    }
-
-    .tc-need {
-      font-size: 12.5px;
-      color: var(--text-muted);
-      margin-top: 6px;
-      line-height: 1.5;
-    }
-
-    .tc-need b {
-      color: #e9a48d;
-    }
-
-    .qc-mini {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 8px;
     }
 
     .qc-mini .btn-sm {
@@ -2001,286 +1663,6 @@
       margin-top: 2px;
     }
 
-    /* Banner "Bắt đầu ở đây" */
-    #qc-start {
-      position: relative;
-      background: linear-gradient(180deg, rgba(95, 179, 168, 0.07), var(--temple));
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--jade);
-      border-radius: var(--radius-lg);
-      padding: 13px 40px 13px 16px;
-      margin-bottom: 18px;
-    }
-
-    #qc-start.hide {
-      display: none;
-    }
-
-    .qc-start-title {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--jade-bright);
-      letter-spacing: 0.06em;
-      margin-bottom: 9px;
-      text-transform: uppercase;
-    }
-
-    .qc-start-steps {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      counter-reset: s;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px 18px;
-    }
-
-    .qc-start-steps li {
-      counter-increment: s;
-      position: relative;
-      padding-left: 30px;
-      font-size: 15px;
-      line-height: 1.45;
-      color: var(--text);
-      flex: 1 1 250px;
-      min-width: 230px;
-    }
-
-    .qc-start-steps li::before {
-      content: counter(s);
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 21px;
-      height: 21px;
-      border-radius: 50%;
-      background: var(--jade);
-      color: #0e1417;
-      font-weight: 800;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .qc-start-x {
-      position: absolute;
-      top: 8px;
-      right: 9px;
-      background: none;
-      border: none;
-      color: var(--text-dim);
-      font-size: 20px;
-      line-height: 1;
-      cursor: pointer;
-      padding: 2px 7px;
-      border-radius: 5px;
-    }
-
-    .qc-start-x:hover {
-      color: var(--text);
-      background: var(--carved);
-    }
-
-
-    /* Thẻ test case kiểu QC: Kiểm tra → Cách làm → Đúng khi */
-    .qcase {
-      background: linear-gradient(180deg, var(--temple), var(--obsidian));
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 13px 16px 11px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      transition: border-color .2s ease, box-shadow .2s ease;
-    }
-
-    .qcase:hover {
-      border-color: var(--border-strong);
-    }
-
-    .qcase-h {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 9px;
-      flex-wrap: wrap;
-    }
-
-    .qcase-id {
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 600;
-      font-size: 13.5px;
-      color: var(--gold-bright);
-    }
-
-    .b-star {
-      background: var(--gold-soft);
-      color: var(--gold-bright);
-      border: 1px solid var(--gold-warm);
-    }
-
-    /* Dòng nội dung có nhãn màu */
-    .qline {
-      font-size: 15px;
-      line-height: 1.55;
-      color: var(--text);
-      margin: 5px 0;
-    }
-
-    .qcase ol.qsteps {
-      margin: 3px 0 5px;
-      padding-left: 20px;
-    }
-
-    .qcase ol.qsteps li {
-      font-size: 15px;
-      line-height: 1.6;
-      color: var(--text);
-      margin: 2px 0;
-    }
-
-    .qlbl {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      padding: 1px 7px;
-      border-radius: 4px;
-      margin-right: 6px;
-    }
-
-    .qlbl-test {
-      background: var(--jade-soft);
-      color: var(--jade-bright);
-    }
-
-    .qlbl-do {
-      background: var(--gold-soft);
-      color: var(--gold-bright);
-    }
-
-    .qlbl-exp {
-      background: var(--success-bg);
-      color: var(--success);
-    }
-
-    .qline code {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13.5px;
-      background: var(--code-bg);
-      padding: 1px 5px;
-      border-radius: 3px;
-      border: 1px solid var(--border);
-      color: var(--jade-bright);
-    }
-
-    .qline b {
-      color: var(--text);
-      font-weight: 700;
-    }
-
-    /* Hàng nút hành động — ghim sát đáy thẻ (.qcase là flex-column nên margin-top:auto đẩy xuống dưới) */
-    .qcase-act {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      margin-top: auto;
-      padding-top: 10px;
-      border-top: 1px solid var(--hairline);
-    }
-
-    .qcase-note {
-      font-size: 12.5px;
-      color: var(--text-muted);
-      margin-top: 7px;
-      line-height: 1.5;
-    }
-
-    .qcase-note b {
-      color: #e9a48d;
-    }
-
-    .qcase .qc-mini {
-      margin-top: 9px;
-    }
-
-    /* ── Test Runner ─────────────────────────────────────────── */
-    .tr-badge {
-      display: inline-block;
-      min-width: 52px;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 11.5px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-align: center;
-      border: 1px solid var(--border-strong);
-      color: var(--text-muted);
-    }
-
-    .tr-badge.tr-pass {
-      color: var(--success);
-      background: var(--success-bg);
-      border-color: var(--success-line);
-    }
-
-    .tr-badge.tr-fail {
-      color: var(--error);
-      background: var(--error-bg);
-      border-color: var(--error-line);
-    }
-
-    .tr-badge.tr-skip {
-      color: var(--warn);
-      background: var(--warn-bg);
-      border-color: var(--warn-line);
-    }
-
-    .tr-badge.tr-run {
-      color: var(--gold-bright);
-      background: var(--gold-soft);
-      border-color: var(--gold-deep);
-    }
-
-    .tr-group-row td {
-      color: var(--jade-bright);
-      font-weight: 700;
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      padding-top: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .tr-case-row {
-      cursor: pointer;
-    }
-
-    .tr-case-row .tr-id {
-      font-family: monospace;
-      white-space: nowrap;
-    }
-
-    .tr-row-fail td {
-      background: var(--error-bg);
-    }
-
-    .tr-dim {
-      color: var(--text-muted);
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    .tr-detail td {
-      padding: 0 8px 10px;
-    }
-
-    .tr-detail .json-box {
-      max-height: 420px;
-      overflow: auto;
-    }
   </style>
 </head>
 
@@ -2415,37 +1797,12 @@
         </div>
       </header>
 
-      <!-- ════════════════════════════════════════════════════════════
-     TABS
-     ════════════════════════════════════════════════════════════ -->
-      <nav id="tabs">
-        <button class="tab on" onclick="showTab('cheat')">⚙ Cheat Core</button>
-        <button class="tab" onclick="showTab('qc1')" style="display:none">① Cược &amp; Quay</button>
-        <button class="tab" onclick="showTab('qc2')" style="display:none">② Thưởng &amp; Cuộn 4</button>
-        <button class="tab" onclick="showTab('qc3')" style="display:none">③ Jackpot &amp; Rush</button>
-        <button class="tab" onclick="showTab('qc4')" style="display:none">④ Streak &amp; Second Choice</button>
-        <button class="tab" onclick="showTab('qc5')" style="display:none">⑤ Validate</button>
-        <button class="tab" onclick="showTab('qc6')" style="display:none">⑥ Tất Định</button>
-        <button class="tab" onclick="showTab('raw')" style="display:none">Raw / Validate</button>
-        <button class="tab" onclick="showTab('runner')" style="display:none">⚡ Test Runner</button>
-      </nav>
 
       <!-- ════════════════════════════════════════════════════════════
      MAIN
      ════════════════════════════════════════════════════════════ -->
       <main id="main">
 
-        <!-- ── BẮT ĐẦU Ở ĐÂY (hướng dẫn nhanh cho QC) ─────────────────── -->
-        <div id="qc-start">
-          <button class="qc-start-x" onclick="dismissStart()" title="Ẩn hướng dẫn">×</button>
-          <div class="qc-start-title">Bắt đầu ở đây — 3 bước</div>
-          <ol class="qc-start-steps">
-            <li>Bấm <b>Kết nối</b> (hàng WS trên cùng), rồi <b>chọn người chơi</b> ở cột trái: bấm <b>Dùng</b> ở đúng
-              người. Dòng có <b>⚙</b> là phiên của chính tool, bỏ qua.</li>
-            <li><b>Chọn 1 case</b> bên dưới, bấm nút <b>Cài cho lượt quay</b> (cài sống 5 phút, dùng cho 1 lượt).</li>
-            <li><b>Mở game</b> làm theo mục <b>Cách làm</b>, rồi đối chiếu với <b>Đúng khi</b>.</li>
-          </ol>
-        </div>
 
 
         <!-- ── CHEAT ─────────────────────────────────────────────────── -->
@@ -2453,7 +1810,7 @@
           <div class="section-lbl">Cheat Naga Fortune 777</div>
           <div class="cheat-grid">
             <div class="cheat-c arm" style="grid-column: span 2;">
-              <div class="cheat-name">FORCE_GRID <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_GRID</div>
               <div class="cheat-hint">Vẽ lưới 3×3 tùy chỉnh cho lần spin tiếp theo. Đọc trái→phải, trên→dưới giống giao
                 diện game.</div>
               <div class="reel-wrap" id="grid-ui">
@@ -2490,7 +1847,7 @@
             </div>
 
             <div class="cheat-c">
-              <div class="cheat-name">FORCE_VAULT_DOUBLE_UP <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_VAULT_DOUBLE_UP</div>
               <div class="cheat-hint">Ép kết quả từng ván x2. Khai báo front-prefix: điền liên tiếp từ Ván 1, dừng tại ô đầu tiên để "—".</div>
               <div class="frow mb8">
                 <div class="fg"><label>Ván 1</label>
@@ -2527,13 +1884,13 @@
             </div>
 
             <div class="cheat-c" style="display:none">
-              <div class="cheat-name">FORCE_NAGA_EYE <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_NAGA_EYE</div>
               <div class="cheat-hint">Ép Naga Eye xuất hiện ở giữa Reel 4 → kích jackpot nếu có winning line.</div>
               <button class="btn btn-gold btn-sm btn-block" onclick="armCheat('FORCE_NAGA_EYE',{})">⚡ Cài Cheat</button>
             </div>
 
             <div class="cheat-c">
-              <div class="cheat-name">FORCE_RUSH_MODE_FILL <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_RUSH_MODE_FILL</div>
               <div class="cheat-hint">Nạp Rush Mode energy counter. 30 = kích hoạt free spin.</div>
               <div class="fgroup mb8">
                 <label>Energy (0–30)</label>
@@ -2547,14 +1904,14 @@
             </div>
 
             <div class="cheat-c" style="display:none">
-              <div class="cheat-name">FORCE_FREE_SPIN_FROM_RUSH <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_FREE_SPIN_FROM_RUSH</div>
               <div class="cheat-hint">Nạp đầy Rush Mode VÀ kích luôn 5 free spin bonus.</div>
               <button class="btn btn-gold btn-sm btn-block" onclick="armCheat('FORCE_FREE_SPIN_FROM_RUSH',{})">⚡ Cài
                 Cheat</button>
             </div>
 
             <div class="cheat-c" style="display:none">
-              <div class="cheat-name">FORCE_WIN_STREAK <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_WIN_STREAK</div>
               <div class="cheat-hint">Pin winStreakCount = requiredStreak−1. Spin thắng tiếp theo sẽ hoàn thành streak.
               </div>
               <button class="btn btn-gold btn-sm btn-block" onclick="armCheat('FORCE_WIN_STREAK',{})">⚡ Cài
@@ -2562,14 +1919,14 @@
             </div>
 
             <div class="cheat-c" style="display:none">
-              <div class="cheat-name">FORCE_SPECIAL_FREE_SPIN <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_SPECIAL_FREE_SPIN</div>
               <div class="cheat-hint">Đưa thẳng session vào SPECIAL_FREE_SPIN mode với 1 free spin.</div>
               <button class="btn btn-gold btn-sm btn-block" onclick="armCheat('FORCE_SPECIAL_FREE_SPIN',{})">⚡ Cài
                 Cheat</button>
             </div>
 
             <div class="cheat-c" style="display:none">
-              <div class="cheat-name">FORCE_WIN_CAP <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_WIN_CAP</div>
               <div class="cheat-hint">Test <b>trần PER-SPIN</b> (<code>winCapReached</code>). Lấp grid toàn Wild
                 (~3200× tổng cược) → luôn vượt trần thực là <b>20000×</b> khi override xuống thấp. Override mặc định =
                 1× (tức cắt ở <code>bet × 1</code>).<br>
@@ -2584,7 +1941,7 @@
             </div>
 
             <div class="cheat-c" style="display:none">
-              <div class="cheat-name">FORCE_FREESPIN_CAP <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_FREESPIN_CAP</div>
               <div class="cheat-hint">Test <b>trần SEQUENCE free spin</b> (<code>winCapMilestone = MAXIMUM_WIN_CAP</code>).
                 <b>Sticky ~5 phút</b> — arm một lần, tồn tại suốt cả dãy free spin. Override mặc định = 1×.<br>
                 Thủ tục: vào free spin trước (trigger tự nhiên hoặc <code>FORCE_FREE_SPIN</code>), arm cheat này, sau
@@ -2598,7 +1955,7 @@
             </div>
 
             <div class="cheat-c" style="display:none">
-              <div class="cheat-name">FORCE_SECOND_CHOICE <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_SECOND_CHOICE</div>
               <div class="cheat-hint">
                 Vẽ grid <b>Wild reel 1&amp;2, reel 3 không Wild, không đường thắng</b> qua FORCE_GRID → spin <b>BASE</b>
                 kế tiếp trả
@@ -2610,7 +1967,7 @@
 
             <!-- ── FORCE_WIN_STREAK_SEQUENCE ────────────────────────────── -->
             <div class="cheat-c arm" style="grid-column: span 2;">
-              <div class="cheat-name">FORCE_WIN_STREAK_SEQUENCE <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_WIN_STREAK_SEQUENCE</div>
               <div class="cheat-hint">Đặt số đếm win-streak; quay base thắng tới ngưỡng sẽ kích hoạt Special Free Spin dùng lưới bên dưới.</div>
               <div class="frow mb8 mt8">
                 <div class="fg">
@@ -2626,7 +1983,7 @@
 
             <!-- ── FORCE_FREESPIN_SEQUENCE ──────────────────────────────── -->
             <div class="cheat-c arm" style="grid-column: span 2;">
-              <div class="cheat-name">FORCE_FREESPIN_SEQUENCE <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_FREESPIN_SEQUENCE</div>
               <div class="cheat-hint">Dựng chuỗi lưới cho 1 trigger spin (base) + N vòng freespin. Arm 1 lần, dùng 1 lần.</div>
 
               <div style="font-size:13px;color:var(--gold-bright);font-weight:600;margin-bottom:6px;margin-top:4px;">Spin Trigger</div>
@@ -2667,7 +2024,7 @@
           <div class="cheat-grid">
 
             <div class="cheat-c">
-              <div class="cheat-name">FORCE_FREE_SPIN <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_FREE_SPIN</div>
               <div class="cheat-hint">Ép vào FREE_SPIN. Payload: số vòng.</div>
               <div class="frow mb8">
                 <div class="fg"><label>Số vòng</label><input id="fs-spins" type="number" value="10"></div>
@@ -2677,7 +2034,7 @@
             </div>
 
             <div class="cheat-c">
-              <div class="cheat-name">FORCE_HOLD_AND_WIN <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_HOLD_AND_WIN</div>
               <div class="cheat-hint">Ép vào HOLD_AND_WIN bonus.</div>
               <div class="frow mb8">
                 <div class="fg"><label>Respins</label><input id="hw-rs" type="number" value="3"></div>
@@ -2689,7 +2046,7 @@
             </div>
 
             <div class="cheat-c">
-              <div class="cheat-name">FORCE_JACKPOT <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_JACKPOT</div>
               <div class="cheat-hint">Kích Naga Eye + giải jackpot theo tier.</div>
               <div class="fgroup mb8">
                 <label>Tier Jackpot</label>
@@ -2705,7 +2062,7 @@
             </div>
 
             <div class="cheat-c">
-              <div class="cheat-name">FORCE_WIN <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_WIN</div>
               <div class="cheat-hint">Ép thắng với multiplier + symbolId gợi ý.</div>
               <div class="frow mb8">
                 <div class="fg"><label>Multiplier</label><input id="fw-mult" type="number" value="200"></div>
@@ -2717,13 +2074,13 @@
             </div>
 
             <div class="cheat-c">
-              <div class="cheat-name">FORCE_LOSS <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_LOSS</div>
               <div class="cheat-hint">Ép thua (0 win). Nạp năng lượng Rush Mode bar.</div>
               <button class="btn btn-gold btn-sm btn-block" onclick="armCheat('FORCE_LOSS',{})">⚡ Cài Cheat</button>
             </div>
 
             <div class="cheat-c">
-              <div class="cheat-name">FORCE_SCATTER <span class="badge b-full">Full</span></div>
+              <div class="cheat-name">FORCE_SCATTER</div>
               <div class="cheat-hint">Ép scatter (kích free spin trigger).</div>
               <div class="fgroup mb8"><label>Số Scatter</label><input id="sc-cnt" type="number" value="3"></div>
               <button class="btn btn-gold btn-sm btn-block" onclick="armCheat('FORCE_SCATTER',{count:+idv('sc-cnt')})">⚡
@@ -2734,1441 +2091,6 @@
         </div>
 
         <!-- ── QC ① ĐẶT CƯỢC & QUAY ──────────────────────────────────── -->
-        <div id="tc-qc1" class="tc">
-          <div class="card">
-            <div class="card-h"><span class="glyph">①</span>Đặt Cược &amp; Quay</div>
-            <div class="qc-guide info" style="border-left-color:var(--gold)">
-              Bấm nút trong một case để cài cho lượt quay kế tiếp — hướng dẫn chi tiết sẽ hiện ở đây.
-            </div>
-          </div>
-
-          <div class="section-lbl">Đặt cược &amp; mức cược</div>
-          <div class="cheat-grid">
-
-            <div class="qcase" id="case-BET-01">
-              <div class="qcase-h"><span class="qcase-id">TC-BET-01</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Đặt mức cược <b>nhỏ nhất</b> phải được chấp
-                nhận.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Nạp số dư</b>.</li>
-                <li>Trong game chọn <b>Coin Value $0.01</b>, <b>Coin/Line 1</b> → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Tổng cược = <code>$0.05</code>; số dư giảm
-                đúng <code>$0.05</code>.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcBet01()">Nạp số dư</button></div>
-            </div>
-
-            <div class="qcase" id="case-BET-02">
-              <div class="qcase-h"><span class="qcase-id">TC-BET-02</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Đặt mức cược <b>lớn nhất</b> phải được chấp
-                nhận.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Nạp số dư</b>.</li>
-                <li>Trong game chọn <b>Coin Value $5.00</b>, <b>Coin/Line 10</b> → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Tổng cược = <code>$250.00</code>; số dư giảm
-                đúng <code>$250.00</code>.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcBet02()">Nạp số dư</button></div>
-            </div>
-
-            <div class="qcase" id="case-BET-03">
-              <div class="qcase-h"><span class="qcase-id">TC-BET-03</span><span class="badge b-part">thủ công</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Mọi tổ hợp giá xu × số xu/đường (70 tổ hợp)
-                đều hợp lệ.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Nạp số dư</b>.</li>
-                <li>Trong game thử lần lượt 7 giá xu × 10 số xu/đường, mỗi tổ hợp bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Tổ hợp nào cũng được chấp nhận; Tổng cược =
-                giá xu × số xu/đường × 5.</p>
-              <div class="qcase-note">Chạy tự động 70 lượt: <b>cần J2</b> (backend bổ sung <code>/debug/spin</code>).
-              </div>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcBet03()">Nạp số dư</button></div>
-            </div>
-
-            <div class="qcase" id="case-BET-04" style="grid-column: span 2;">
-              <div class="qcase-h"><span class="qcase-id">TC-BET-04…08</span><span class="badge b-java">cần J2</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Gửi yêu cầu quay <b>sai hoặc thiếu thông
-                  tin</b> thì server phải từ chối.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span>Bấm từng nút dưới để gửi một trường hợp lỗi;
-                kết quả hiện trong ô bên dưới.</p>
-              <div class="qc-mini">
-                <button class="btn btn-orange btn-sm" onclick="qcBet04()">Thiếu mức cược</button>
-                <button class="btn btn-orange btn-sm" onclick="qcBet05()">Thiếu giá trị xu</button>
-                <button class="btn btn-orange btn-sm" onclick="qcBet06()">Mức cược = chữ</button>
-                <button class="btn btn-orange btn-sm" onclick="qcBet07()">Giá trị xu = chữ</button>
-                <button class="btn btn-orange btn-sm" onclick="qcBet08()">Xu ngoài danh sách</button>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Server báo lỗi tương ứng và <b>không</b> thực
-                hiện quay.</p>
-              <div class="qcase-note">Cần backend bổ sung <b>J2</b> (<code>/debug/spin</code>) — hiện bấm sẽ trả 404. Mã
-                lỗi kỳ vọng: MISSING_BET_LEVEL_ID · MISSING_COIN_VALUE_ID · INVALID_BET_LEVEL_ID · INVALID_COIN_VALUE_ID
-                · INVALID_COIN_VALUE.</div>
-              <div id="r-bet0x" class="json-box mt8" style="display:none"></div>
-
-            </div>
-          </div>
-
-          <div class="section-lbl">Quay &amp; trả thưởng</div>
-          <div class="cheat-grid">
-
-            <div class="qcase" id="case-SPIN-01">
-              <div class="qcase-h"><span class="qcase-id">TC-SPIN-01</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>3 ô <b>A</b> ở hàng giữa phải thắng (hệ số
-                200×).</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Hàng giữa A-A-A sáng; ô Win =
-                <code>200×</code> tiền cược mỗi đường (rồi nhân hệ số cuộn 4 hiển thị).
-              </p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcSpin01()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-SPIN-02">
-              <div class="qcase-h"><span class="qcase-id">TC-SPIN-02</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Lượt quay <b>không trúng</b> đường nào.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Win = <code>$0.00</code>; không đường nào
-                sáng; số dư giảm đúng tiền cược.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcSpin02()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-SPIN-03">
-              <div class="qcase-h"><span class="qcase-id">TC-SPIN-03</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Trúng <b>2 đường cùng lúc</b> thì cộng dồn
-                tiền thắng.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Hàng trên (A) và hàng dưới (E) cùng sáng; Win
-                = tổng 2 đường (vd <code>$2.00 + $0.10 = $2.10</code>, trước hệ số cuộn 4).</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcSpin03()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-SPIN-04">
-              <div class="qcase-h"><span class="qcase-id">TC-SPIN-04</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Ô <b>Wild</b> thay cho A để tạo đường thắng.
-              </p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>A-Wild-A được tính như A-A-A (200×); hàng giữa
-                sáng.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcSpin04()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-SPIN-05">
-              <div class="qcase-h"><span class="qcase-id">TC-SPIN-05</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Sau mỗi lượt quay, màn hình hiện <b>đủ thông
-                  tin</b>.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b>, chờ dừng hẳn.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Thấy đủ: lưới, cuộn 4 (hệ số), Số dư / Cược /
-                Win, thanh Rush, chuỗi thắng, kho báu; chế độ = thường (BASE).</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcSpin05()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-SPIN-06">
-              <div class="qcase-h"><span class="qcase-id">TC-SPIN-06</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Chỉ <b>2 ô giống nhau</b> thì không được tính
-                thắng.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>A-A-D <b>không</b> tính thắng; Win =
-                <code>$0.00</code>.
-              </p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcSpin06()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-SPIN-07">
-              <div class="qcase-h"><span class="qcase-id">TC-SPIN-07</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Tiền thắng tính đúng theo <b>giá xu × số
-                  xu/đường</b>.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Đặt <b>Coin Value $0.20</b>, <b>Coin/Line 3</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>3 ô B thắng = 50 × 3 × $0.20 =
-                <code>$30.00</code> (trước hệ số cuộn 4).
-              </p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcSpin07()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-SPIN-08">
-              <div class="qcase-h"><span class="qcase-id">TC-SPIN-08</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Win Cap — checklist đủ 8 path. Trần thực =
-                <b>20000×</b> tổng cược; grid toàn Wild ≈ <b>3200×</b>. Override = 1× để luôn cắt.</p>
-
-              <p class="qline"><span class="qlbl qlbl-do">Path 1 · Base Spin (PER-SPIN cap)</span></p>
-              <ol class="qsteps">
-                <li>Đặt cược nhỏ (ví dụ CV $0.01).</li>
-                <li>Bấm <b>Cài cho lượt quay</b> (arms <code>FORCE_WIN_CAP</code> với <code>winCap=1</code>).</li>
-                <li>SPIN một lần trong BASE mode.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Live cmd-1500 response trả <code>winCapReached: true</code> TRỰC TIẾP; Win bị cắt = <code>bet × 1</code>. (Cũng có trong history replay cmd 1520/1522.)</p>
-
-              <p class="qline"><span class="qlbl qlbl-do">Path 2 · Free Spin — per-spin cap trong từng vòng</span></p>
-              <ol class="qsteps">
-                <li>Vào FREE_SPIN trước (<code>FORCE_FREE_SPIN</code> hoặc trigger tự nhiên).</li>
-                <li>Arm <code>FORCE_WIN_CAP {winCap:1}</code> (tab Cheat Core Engine).</li>
-                <li>SPIN một lượt free spin.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Live cmd-1500 response trả <code>winCapReached: true</code> TRỰC TIẾP; Win = <code>bet × 1</code>. (Cũng có trong history replay cmd 1520/1522.)</p>
-              <p class="qline"><span class="qlbl qlbl-warn">Lưu ý</span>Nếu <code>winCap</code> rất nhỏ (ví dụ 1), sequence cap cũng bị trip ngay và các lượt free spin còn lại sẽ bị hủy (<code>winCapMilestone</code> có thể fire). Để kiểm tra thuần per-spin mà không kết thúc sequence, dùng <code>winCap</code> lớn hơn <code>accumulatedWin / baseBet</code>.</p>
-
-              <p class="qline"><span class="qlbl qlbl-do">Path 3 · Free Spin — SEQUENCE accumulation cap</span></p>
-              <ol class="qsteps">
-                <li>Vào FREE_SPIN trước.</li>
-                <li>Arm <code>FORCE_FREESPIN_CAP {winCap:1}</code> (sticky, tab Cheat Core Engine).</li>
-                <li>Chơi hết tất cả lượt free spin còn lại.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Một lượt nào đó trả
-                <code>winCapMilestone = MAXIMUM_WIN_CAP</code>; tổng tích lũy bị cắt.</p>
-
-              <p class="qline"><span class="qlbl qlbl-do">Path 4 · Hold &amp; Win</span></p>
-              <ol class="qsteps">
-                <li>Vào HOLD_AND_WIN (<code>FORCE_HOLD_AND_WIN</code> hoặc trigger).</li>
-                <li>Arm <code>FORCE_WIN_CAP {winCap:1}</code>.</li>
-                <li>SPIN một lượt hold&amp;win.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Live cmd-1500 response trả <code>winCapReached: true</code> TRỰC TIẾP; Win bị cắt = <code>bet × 1</code>. (Cũng có trong history replay cmd 1520/1522.)</p>
-
-              <p class="qline"><span class="qlbl qlbl-do">Path 5 · Rush Mode / Special Free Spin</span></p>
-              <ol class="qsteps">
-                <li>Vào RUSH_MODE hoặc SPECIAL_FREE_SPIN (<code>FORCE_RUSH_MODE</code> / <code>FORCE_SPECIAL_FREE_SPIN</code>).</li>
-                <li>Arm <code>FORCE_WIN_CAP {winCap:1}</code>.</li>
-                <li>SPIN.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Live cmd-1500 response trả <code>winCapReached: true</code> TRỰC TIẾP; Win bị cắt = <code>bet × 1</code>. (Cũng có trong history replay cmd 1520/1522.)</p>
-
-              <p class="qline"><span class="qlbl qlbl-do">Path 6 · Prepaid Bulk Buy spin</span></p>
-              <ol class="qsteps">
-                <li>Mua Bulk Buy (cmd 1511 hoặc nút trong game).</li>
-                <li>Arm <code>FORCE_WIN_CAP {winCap:1}</code>.</li>
-                <li>SPIN lượt prepaid bulk.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Live cmd-1500 response trả <code>winCapReached: true</code> TRỰC TIẾP; Win bị cắt = <code>bet × 1</code>. (Cũng có trong history replay cmd 1520/1522.)</p>
-
-              <p class="qline"><span class="qlbl qlbl-do">Path 7 · Buy-Feature (cmd 1501)</span></p>
-              <ol class="qsteps">
-                <li>Gọi cmd 1501 (BUY_FEATURE).</li>
-                <li>Arm <code>FORCE_WIN_CAP {winCap:1}</code>.</li>
-                <li>SPIN lượt buy-feature.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Live cmd-1500 response trả <code>winCapReached: true</code> TRỰC TIẾP; Win bị cắt = <code>bet × 1</code>. (Cũng có trong history replay cmd 1520/1522.)</p>
-
-              <p class="qline"><span class="qlbl qlbl-do">Path 8 · Second Choice respin (cmd 1510)</span></p>
-              <ol class="qsteps">
-                <li>Trigger Second Choice (arm <code>FORCE_SECOND_CHOICE</code> → SPIN BASE → nhận
-                  <code>secondChoiceAvailable=true</code>).</li>
-                <li>Arm <code>FORCE_WIN_CAP {winCap:1}</code>.</li>
-                <li>Gọi cmd 1510 (Second Choice respin).</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Live cmd-1500 response (cmd 1510) trả <code>winCapReached: true</code> TRỰC TIẾP; Win bị cắt = <code>bet × 1</code>. (Cũng có trong history replay cmd 1520/1522.)</p>
-
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcSpin08()">Cài Path 1 (Base
-                  Spin)</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── QC ② THƯỞNG ĐẶC BIỆT & CUỘN 4 ─────────────────────────── -->
-        <div id="tc-qc2" class="tc">
-          <div class="card">
-            <div class="card-h"><span class="glyph">②</span>Thưởng &amp; Cuộn 4</div>
-            <div class="qc-guide info" style="border-left-color:var(--gold)">Chưa dựng case nào — bấm một nút bên dưới
-              để bắt đầu.</div>
-          </div>
-
-          <div class="section-lbl">Tổ Hợp Thưởng Đặc Biệt (TC-PAY)</div>
-          <div class="cheat-grid">
-
-            <div class="qcase" id="case-PAY-01">
-              <div class="qcase-h"><span class="qcase-id">TC-PAY-01</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>3 Wild trên đường P01 (hàng giữa) phải kích
-                thưởng đặc biệt <code>1000×</code>.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Hàng giữa W-W-W sáng; Win = <code>1000×</code>
-                tiền cược mỗi đường (CV=<code>$0.01</code> → <code>$10</code>).</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcPay01()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-PAY-02">
-              <div class="qcase-h"><span class="qcase-id">TC-PAY-02</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>3 Wild trên đường P04 (chéo xuống) phải kích
-                thưởng cao nhất <code>6000×</code>.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Đường chéo xuống W-W-W sáng; Win =
-                <code>6000×</code> (CV=<code>$0.01</code> → <code>$60</code>).
-              </p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcPay02()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-PAY-03">
-              <div class="qcase-h"><span class="qcase-id">TC-PAY-03</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>B + C + D cùng đường P01 (giữa) phải kích
-                thưởng đặc biệt <code>8×</code>.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Hàng giữa B-C-D sáng; Win = <code>8×</code>
-                tiền cược mỗi đường.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcPay03()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-PAY-04" style="grid-column: span 2;">
-              <div class="qcase-h"><span class="qcase-id">TC-PAY-04…08</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>3 Wild theo từng đường — mỗi đường phải trả
-                đúng hệ số tương ứng.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span>Bấm từng nút để cài Wild theo đường đó, rồi vào
-                game bấm <b>SPIN</b>, ghi lại Win.</p>
-              <div class="qc-mini">
-                <button class="btn btn-gold btn-sm" onclick="qcPay04(0)">P01 ·1000×</button>
-                <button class="btn btn-gold btn-sm" onclick="qcPay04(1)">P02 ·2000×</button>
-                <button class="btn btn-gold btn-sm" onclick="qcPay04(2)">P03 ·3000×</button>
-                <button class="btn btn-gold btn-sm" onclick="qcPay04(3)">P04 ·6000×</button>
-                <button class="btn btn-gold btn-sm" onclick="qcPay04(4)">P05 ·4000×</button>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Mỗi đường hiện đúng hệ số:
-                P01=<code>1000×</code> · P02=<code>2000×</code> · P03=<code>3000×</code> · P04=<code>6000×</code> ·
-                P05=<code>4000×</code>.</p>
-
-            </div>
-
-            <div class="qcase" id="case-PAY-05">
-              <div class="qcase-h"><span class="qcase-id">TC-PAY-05</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>B, C, D rải trên 3 đường khác nhau thì
-                <b>không</b> kích thưởng <code>8×</code>.
-              </p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Mỗi biểu tượng B, C, D nằm 1 đường riêng;
-                thưởng <code>8×</code> <b>không</b> xuất hiện.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcPay05()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-PAY-06">
-              <div class="qcase-h"><span class="qcase-id">TC-PAY-06</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>B-B-D cùng đường P01 (thiếu C) thì
-                <b>không</b> có thưởng <code>8×</code>.
-              </p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Hàng giữa B-B-D <b>không</b> kích thưởng
-                <code>8×</code>; chỉ tính thưởng thường nếu có.
-              </p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcPay06()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-PAY-07">
-              <div class="qcase-h"><span class="qcase-id">TC-PAY-07</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>W-W-W trên P01 chỉ trả giá trị đặc biệt
-                <code>1000×</code>, <b>không</b> cộng thêm payout Wild thường.
-              </p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Win chỉ = <code>1000×</code> tiền cược;
-                <b>không</b> cộng thêm giá trị Wild thường trên cùng đường.
-              </p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcPay07()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="section-lbl">Cuộn Thứ 4 — Hệ Số Nhân (TC-R4)</div>
-          <div class="cheat-grid">
-
-            <div class="qcase" id="case-R4-01">
-              <div class="qcase-h"><span class="qcase-id">TC-R4-01</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Khi có đường thắng, cuộn 4 phải sáng và hiện
-                hệ số cả 3 hàng.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b> (ép A-A-A hàng giữa).</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Cuộn 4 sáng sau spin; hiển thị hệ số của cả 3
-                hàng.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcR401()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-R4-02">
-              <div class="qcase-h"><span class="qcase-id">TC-R4-02</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Đường thắng P02 (hàng trên) dùng đúng hệ số
-                hàng trên trên cuộn 4.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-                <li>Đọc hệ số <b>hàng trên</b> trên cuộn 4 → nhân với Win gốc → so kết quả.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Win thực tế = Win gốc × hệ số hàng trên (không
-                dùng hệ số hàng giữa hay hàng dưới).</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcR402()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-R4-03" style="grid-column: span 2;">
-              <div class="qcase-h"><span class="qcase-id">TC-R4-03</span><span class="badge b-part">đọc hệ số</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Mỗi đường thắng dùng đúng hệ số hàng tương
-                ứng trên cuộn 4 (P01→giữa · P02→trên · P03→dưới · P04→dưới · P05→trên).</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span>Bấm từng nút để cài đường đó, vào game bấm
-                <b>SPIN</b>, đọc hệ số hàng tương ứng trên cuộn 4 rồi đối chiếu Win.
-              </p>
-              <div class="qc-mini">
-                <button class="btn btn-gold btn-sm" onclick="qcR403(0)">P01→hàng giữa</button>
-                <button class="btn btn-gold btn-sm" onclick="qcR403(1)">P02→hàng trên</button>
-                <button class="btn btn-gold btn-sm" onclick="qcR403(2)">P03→hàng dưới</button>
-                <button class="btn btn-gold btn-sm" onclick="qcR403(3)">P04→hàng dưới</button>
-                <button class="btn btn-gold btn-sm" onclick="qcR403(4)">P05→hàng trên</button>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Win mỗi đường = Win gốc × hệ số đúng hàng:
-                P01/P04/P03→dưới · P02/P05→trên · P01→giữa (theo mapping).</p>
-              <div class="qcase-note">Cuộn 4 hiển thị hệ số cả 3 hàng → đối chiếu được; <b>J1 (hệ số per-row)</b> giúp
-                kiểm tất định &amp; lặp lại.</div>
-
-            </div>
-
-            <div class="qcase" id="case-R4-04">
-              <div class="qcase-h"><span class="qcase-id">TC-R4-04</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Khi lượt quay không thắng, cuộn 4 phải mờ/tối
-                và không hiện hệ số.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b> (ép lưới trượt).</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Cuộn 4 mờ/tối; không hiện hệ số nhân nào.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcR404()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-R4-05">
-              <div class="qcase-h"><span class="qcase-id">TC-R4-05</span><span class="badge b-part">đọc hệ số</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Khi thắng P02 lẫn P03 cùng lúc, mỗi đường
-                nhân hệ số hàng riêng (hàng trên và hàng dưới độc lập).</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài 2 đường (P02+P03)</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-                <li>Đọc hệ số hàng trên và hàng dưới trên cuộn 4 → đối chiếu từng đường.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Win P02 = gốc × hệ số hàng trên; Win P03 = gốc
-                × hệ số hàng dưới (hai hệ số khác nhau là đúng).</p>
-              <div class="qcase-note">Ép cứng x2/x10 (tất định): <b>cần J1</b> (multiplier per-row).</div>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcR405()">Cài 2 đường
-                  (P02+P03)</button></div>
-            </div>
-
-            <div class="qcase" id="case-R4-06">
-              <div class="qcase-h"><span class="qcase-id">TC-R4-06</span><span class="badge b-part">thống kê</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Tỉ lệ xuất hiện các hệ số x1/x2/x5/x10 phải
-                gần đúng phân phối kỳ vọng.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Xem hướng dẫn</b> để biết cách thu thập dữ liệu.</li>
-                <li>Chạy nhiều lượt thắng, tra log để thống kê hệ số.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Sau ~100 lượt thắng, tỉ lệ xấp xỉ:
-                x1=<code>5%</code> · x2=<code>30%</code> · x5=<code>42%</code> · x10=<code>23%</code>.</p>
-              <div class="qcase-act"><button class="btn btn-blue btn-sm" onclick="qcR406()">Xem hướng dẫn</button></div>
-            </div>
-
-            <div class="qcase" id="case-R4-07">
-              <div class="qcase-h"><span class="qcase-id">TC-R4-07</span><span class="badge b-java">tất định J1</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Khi Mắt Naga xuất hiện, đường qua hàng giữa
-                (P01) luôn nhận hệ số cố định <code>x1</code>.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài Mắt Naga</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b> (cần lượt thắng để Mắt Naga trigger).</li>
-                <li>Kiểm tra hệ số hàng giữa trên cuộn 4.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Cuộn 4 hàng giữa = <code>x1</code>; Mắt Naga
-                hiện trên cuộn 4 (cần J1 để xem visual).</p>
-              <div class="qcase-note">Tất định (lưới thắng + Mắt Naga cùng spin): <b>cần J1</b>.</div>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcR407()">Cài Mắt Naga</button></div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- ── QC ③ JACKPOT & RUSH MODE ──────────────────────────────── -->
-        <div id="tc-qc3" class="tc">
-          <div class="card">
-            <div class="card-h"><span class="glyph">③</span>Jackpot &amp; Rush Mode</div>
-            <div class="qc-guide info" style="border-left-color:var(--gold)">Chưa dựng case nào — bấm một nút bên dưới
-              để bắt đầu.</div>
-          </div>
-
-          <div class="section-lbl">Jackpot Mắt Naga (TC-JACK)</div>
-          <div class="cheat-grid">
-
-            <div class="qcase" id="case-JACK-01">
-              <div class="qcase-h"><span class="qcase-id">TC-JACK-01</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Khi kích Mắt Naga
-                (<code>nagaEyeTriggered</code>), game phải chuyển sang Phòng Kho Báu 3 rương.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Màn hình chuyển sang Phòng Kho Báu; thấy đúng
-                3 rương có thể chọn.</p>
-              <div class="qcase-note">Hiện Mắt Naga trên cuộn 4 (visual): <b>cần J1</b>.</div>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcJack01()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-JACK-02">
-              <div class="qcase-h"><span class="qcase-id">TC-JACK-02</span><span class="badge b-star">Quan
-                  trọng</span><span class="badge b-java">tier J4</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Chọn 1 rương trong Phòng Kho Báu: rương mở
-                hiện tier + tiền, 2 rương kia lộ tier, số dư tăng.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b> để vào Phòng Kho Báu.</li>
-                <li>Bấm chọn 1 trong 3 rương.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Rương được chọn mở ra hiện tier và số tiền; 2
-                rương còn lại lộ tier; số dư tăng đúng giá trị jackpot.</p>
-              <div class="qcase-note">Ép tier cụ thể (BRONZE→GRAND…): <b>cần J4</b> (hiện gán ngẫu nhiên).</div>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcJack02()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-JACK-03">
-              <div class="qcase-h"><span class="qcase-id">TC-JACK-03</span><span class="badge b-java">cần J1</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Khi Mắt Naga và đường thắng thường cùng xảy
-                ra, tổng Win = jackpot + thắng thường (cộng dồn).</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b> (arm jackpot rời — không kèm đường thắng).</li>
-                <li>Mở game → bấm <b>SPIN</b> (cần J1 để có lưới thắng + Mắt Naga cùng spin).</li>
-                <li>Ghi Win jackpot và Win thường, kiểm tra tổng.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Tổng Win = giá trị jackpot + Win đường thắng
-                thường; không bị bỏ sót một trong hai.</p>
-              <div class="qcase-note">Lưới thắng + Mắt Naga cùng spin: <b>cần J1</b>.</div>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcJack03()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-JACK-04">
-              <div class="qcase-h"><span class="qcase-id">TC-JACK-04</span><span class="badge b-part">log</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Xác suất kích Mắt Naga tăng theo mức cược
-                (tối đa ≤10%).</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Xem hướng dẫn</b> để biết cách tra log/công thức.</li>
-                <li>So sánh tỉ lệ kích tại mức cược thấp và mức cược cao.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Mức cược càng cao → xác suất càng lớn; tỉ lệ
-                không vượt <code>10%</code> ở mức cược tối đa.</p>
-              <div class="qcase-act"><button class="btn btn-blue btn-sm" onclick="qcJack04()">Xem hướng dẫn</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-JACK-05">
-              <div class="qcase-h"><span class="qcase-id">TC-JACK-05</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Mỗi lần vào Phòng Kho Báu, 3 rương luôn đủ 3
-                tier (MINOR/MAJOR/GRAND) theo thứ tự ngẫu nhiên.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b> vào Kho Báu → chọn rương.</li>
-                <li>Lặp lại vài lần, kiểm tra thứ tự tier 3 rương mỗi lần.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Mỗi lần 3 rương đủ MINOR, MAJOR, GRAND; thứ tự
-                vị trí rương thay đổi giữa các lần.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcJack05()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-JACK-06">
-              <div class="qcase-h"><span class="qcase-id">TC-JACK-06</span><span class="badge b-java">cần J1</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Khi Mắt Naga xuất hiện, đường P01 (hàng giữa)
-                nhận hệ số cuộn 4 cố định <code>x1</code>.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài Mắt Naga</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b> (cần P01 thắng + Mắt Naga cùng spin, dùng J1).</li>
-                <li>Kiểm tra hệ số hàng giữa trên cuộn 4.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Hệ số hàng giữa = <code>x1</code> cố định
-                (không ngẫu nhiên); Win P01 = gốc × 1.</p>
-              <div class="qcase-note">Tất định: <b>cần J1</b>.</div>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcJack06()">Cài Mắt Naga</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-JACK-07">
-              <div class="qcase-h"><span class="qcase-id">TC-JACK-07</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Trong Rush free spin, Mắt Naga không được
-                kích — cuộn 4 không hiện Mắt Naga, không vào Kho Báu.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b> để vào Rush free spin.</li>
-                <li>Chơi hết 5 free spin, quan sát cuộn 4.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Trong toàn bộ 5 free spin: cuộn 4 <b>không</b>
-                hiện Mắt Naga; màn hình <b>không</b> chuyển sang Phòng Kho Báu.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcJack07()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-JACK-08" style="grid-column: span 2;">
-              <div class="qcase-h"><span class="qcase-id">TC-JACK-08</span><span class="badge b-auto">đọc DB</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Sau mỗi spin, 3 hũ jackpot
-                (MINOR/MAJOR/GRAND) phải tăng đúng mức tích lũy theo cược.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span>Bấm <b>Đọc hũ (trước/sau)</b> để xem giá trị
-                hũ; vào game spin 1 lượt; bấm lại để đọc sau spin rồi so sánh.</p>
-              <div class="qc-mini">
-                <button class="btn btn-blue btn-sm" onclick="qcJack08Read()">↻ Đọc hũ (trước/sau)</button>
-                <button class="btn btn-ghost btn-sm" onclick="qcJack08Seed()">Seed hũ gốc</button>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Cược = <code>$10</code>: MINOR tăng
-                <code>+0.05</code> · MAJOR tăng <code>+0.03</code> · GRAND tăng <code>+0.02</code>.
-              </p>
-              <div id="r-jack08" class="json-box mt8" style="display:none"></div>
-
-            </div>
-
-          </div>
-
-          <div class="section-lbl">Rush Mode — Quay Miễn Phí (TC-RUSH)</div>
-          <div class="cheat-grid">
-
-            <div class="qcase" id="case-RUSH-01">
-              <div class="qcase-h"><span class="qcase-id">TC-RUSH-01</span><span class="badge b-java">cần J3</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Mỗi lượt spin hụt (thua) cộng thêm
-                <code>+1</code> năng lượng vào thanh Rush.
-              </p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Ép thua 1 lượt</b> (cần J3 để set thanh = 5 trước).</li>
-                <li>Mở game → bấm <b>SPIN</b> (chờ thua).</li>
-                <li>Kiểm tra thanh Rush tăng từ 5 lên 6.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Thanh Rush tăng <code>+1</code> (ví dụ 5→6)
-                sau lượt spin thua.</p>
-              <div class="qcase-note">Set năng lượng tuỳ ý (5): <b>cần J3</b> (đọc field <code>energy</code>). Cheat
-                hiện chỉ set được 29.</div>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcRush01()">Ép thua 1 lượt</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-RUSH-02">
-              <div class="qcase-h"><span class="qcase-id">TC-RUSH-02</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Khi thanh Rush đủ 30, phải kích ngay 5 free
-                spin.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b> (nạp thanh về 29/30).</li>
-                <li>Mở game → bấm <b>SPIN</b> 1 lượt <b>thua</b> để chạm 30.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Thanh chạm <code>30/30</code> → Rush Mode
-                kích, game chuyển sang 5 free spin.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcRush02()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-RUSH-03">
-              <div class="qcase-h"><span class="qcase-id">TC-RUSH-03</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Trong 5 free spin Rush, mức Bet giữ nguyên và
-                số dư không bị trừ.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Kích 5 free spin</b>.</li>
-                <li>Ghi số dư trước, vào game chơi hết 5 lượt free spin.</li>
-                <li>Kiểm tra Bet và số dư.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Mức Bet không đổi; số dư không bị trừ trong
-                suốt 5 lượt free spin.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcRush03()">Kích 5 free spin</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-RUSH-04">
-              <div class="qcase-h"><span class="qcase-id">TC-RUSH-04</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Khi thắng, thanh Rush phải reset về
-                <code>0</code>.
-              </p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>① Nạp thanh</b> để thanh Rush &gt; 0.</li>
-                <li>Bấm <b>② Ép thắng</b> để cài lượt thắng.</li>
-                <li>Mở game → bấm <b>SPIN</b>, quan sát thanh Rush.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Sau lượt thắng, thanh Rush về <code>0</code>.
-              </p>
-              <div class="qcase-act">
-                <div class="flex">
-                  <button class="btn btn-gold btn-sm" onclick="qcRush04Fill()">① Nạp thanh</button>
-                  <button class="btn btn-jade btn-sm" onclick="qcRush04Win()">② Ép thắng</button>
-                </div>
-
-              </div>
-            </div>
-
-            <div class="qcase" id="case-RUSH-05">
-              <div class="qcase-h"><span class="qcase-id">TC-RUSH-05</span><span class="badge b-part">thủ công</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Mỗi mức cược có thanh Rush riêng và độc lập
-                nhau.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Ép thua (để nạp)</b> để tạo năng lượng ở mức cược A.</li>
-                <li>Đổi sang mức cược B, quan sát thanh Rush.</li>
-                <li>Đổi lại mức A, kiểm tra thanh Rush vẫn giữ giá trị cũ.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Thanh Rush mức A và mức B hoạt động độc lập;
-                thay đổi ở một mức không ảnh hưởng mức kia.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcRush05()">Ép thua (để nạp)</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-RUSH-06">
-              <div class="qcase-h"><span class="qcase-id">TC-RUSH-06</span><span class="badge b-java">cần J3</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Ở mức 28→29 chưa kích Rush; chỉ khi 29→30 mới
-                kích.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Nạp 29 + ép thua</b> (cần J3 để set thanh = 28 trước).</li>
-                <li>Mở game → bấm <b>SPIN</b> thua → quan sát (thanh = 29, chưa Rush).</li>
-                <li>Spin thêm 1 lượt thua → quan sát (thanh = 30, kích Rush).</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Spin tại 28 → 29: <b>không</b> kích Rush. Spin
-                tiếp tại 29 → 30: Rush <b>kích ngay</b>.</p>
-              <div class="qcase-note">Set năng lượng = 28: <b>cần J3</b>. Cheat hiện chỉ set được 29.</div>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcRush06()">Nạp 29 + ép thua</button>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- ── QC ④ WIN STREAK & SECOND CHOICE ───────────────────────── -->
-        <div id="tc-qc4" class="tc">
-          <div class="card">
-            <div class="card-h"><span class="glyph">④</span>Win Streak &amp; Second Choice</div>
-            <div class="qc-guide info" style="border-left-color:var(--gold)">Chưa dựng case nào — bấm một nút bên dưới
-              để bắt đầu.</div>
-          </div>
-
-          <div class="section-lbl">Win Streak — Chuỗi Thắng (TC-STREAK)</div>
-          <div class="cheat-grid">
-
-            <div class="qcase" id="case-STREAK-01">
-              <div class="qcase-h"><span class="qcase-id">TC-STREAK-01</span><span class="badge b-star">Quan
-                  trọng</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Thắng 3 ván liên tiếp (cùng mức cược) phải
-                kích Special Free Spin.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b> (ép thắng).</li>
-                <li>Mở game → bấm <b>SPIN</b>, lặp lại đủ 3 lần thắng (giữ nguyên mức cược).</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Sau 3 lần thắng liên tiếp, game chuyển sang
-                Special Free Spin.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcStreak01()">Cài cho lượt
-                  quay</button></div>
-            </div>
-
-            <div class="qcase" id="case-STREAK-02">
-              <div class="qcase-h"><span class="qcase-id">TC-STREAK-02</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Sau 1 lượt thắng, bộ đếm chuỗi hiện
-                <code>1/3</code>.
-              </p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b> 1 lượt thắng.</li>
-                <li>Quan sát bộ đếm Win Streak.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Bộ đếm chuỗi hiện <code>1/3</code>.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcStreak02()">Cài cho lượt
-                  quay</button></div>
-            </div>
-
-            <div class="qcase" id="case-STREAK-03">
-              <div class="qcase-h"><span class="qcase-id">TC-STREAK-03</span><span class="badge b-star">Quan
-                  trọng</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Thua giữa chuỗi thắng thì bộ đếm reset về
-                <code>0</code>.
-              </p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>① Ép thắng ×2</b> để đạt chuỗi = 2.</li>
-                <li>Bấm <b>② Ép thua</b> để cài 1 lượt thua.</li>
-                <li>Mở game → bấm <b>SPIN</b>, quan sát bộ đếm.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Sau lượt thua, bộ đếm Win Streak về
-                <code>0</code> (chuỗi bị phá).
-              </p>
-              <div class="qcase-act">
-                <div class="flex">
-                  <button class="btn btn-gold btn-sm" onclick="qcStreak03Win()">① Ép thắng ×2</button>
-                  <button class="btn btn-red btn-sm" onclick="qcStreak03Lose()">② Ép thua</button>
-                </div>
-
-              </div>
-            </div>
-
-            <div class="qcase" id="case-STREAK-04">
-              <div class="qcase-h"><span class="qcase-id">TC-STREAK-04</span><span class="badge b-part">thủ công</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Đổi mức cược giữa chừng làm mất chuỗi — thắng
-                tiếp theo bắt đầu chuỗi mới từ <code>1/3</code>.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b> (ép thắng, tạo chuỗi ≥ 1).</li>
-                <li>Mở game → bấm <b>SPIN</b> thắng.</li>
-                <li>Đổi sang mức cược khác, rồi spin thắng thêm 1 lượt.</li>
-                <li>Quan sát bộ đếm chuỗi.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Sau khi đổi mức cược, lượt thắng tiếp hiện bộ
-                đếm <code>1/3</code> (không cộng tiếp chuỗi cũ).</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcStreak04()">Cài cho lượt
-                  quay</button></div>
-            </div>
-
-            <div class="qcase" id="case-STREAK-05">
-              <div class="qcase-h"><span class="qcase-id">TC-STREAK-05</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Thắng liên tiếp trong Special Free Spin
-                <b>không</b> tăng bộ đếm Win Streak.
-              </p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Vào Special Free Spin</b>.</li>
-                <li>Mở game → chơi hết free spin, cố thắng nhiều lượt.</li>
-                <li>Kiểm tra bộ đếm Win Streak sau khi free spin kết thúc.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Bộ đếm Win Streak <b>không</b> thay đổi trong
-                suốt Special Free Spin.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcStreak05()">Vào Special Free
-                  Spin</button></div>
-            </div>
-
-            <div class="qcase" id="case-STREAK-06">
-              <div class="qcase-h"><span class="qcase-id">TC-STREAK-06</span><span class="badge b-part">thống kê</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Special Free Spin xuất hiện Wild nhiều hơn
-                lượt thường (cấu hình 9 Wild vs 2 Wild).</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Vào Special Free Spin</b>.</li>
-                <li>Mở game → đếm số ô Wild trong mỗi lượt free spin.</li>
-                <li>So sánh với lượt thường (quay BASE bình thường).</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Số Wild trung bình trong Special Free Spin
-                (~<code>9</code>) nhiều hơn lượt thường (~<code>2</code>).</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcStreak06()">Vào Special Free
-                  Spin</button></div>
-            </div>
-
-          </div>
-
-          <div class="section-lbl">Second Choice — Quay Lại Cuộn 3 (TC-SC)</div>
-          <div class="cheat-grid">
-
-            <div class="qcase" id="case-SC-01">
-              <div class="qcase-h"><span class="qcase-id">TC-SC-01</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Khi cuộn 1 và 2 đều Wild nhưng không có đường
-                thắng, game phải mời reroll cuộn 3.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b> (ép W/W/non-W, không đường thắng).</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Cuộn 3 rung; popup mời reroll xuất hiện.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcSc01()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-SC-02">
-              <div class="qcase-h"><span class="qcase-id">TC-SC-02</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Khi đồng ý reroll, cuộn 1 và 2 giữ nguyên
-                Wild, chỉ cuộn 3 quay lại; số dư bị trừ đúng mức cược.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b> → khi popup xuất hiện, bấm <b>Đồng ý</b>.</li>
-                <li>Quan sát cuộn 1, 2 và số dư.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Cuộn 1 và 2 vẫn Wild; cuộn 3 quay lại; số dư
-                giảm đúng <code>1×</code> mức cược.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcSc02()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-SC-03">
-              <div class="qcase-h"><span class="qcase-id">TC-SC-03</span><span class="badge b-part">ngẫu nhiên</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Sau khi reroll, nếu cuộn 3 ra Wild hoặc
-                symbol đúng thì phải tạo đường thắng.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Mở game → bấm <b>SPIN</b> → đồng ý reroll.</li>
-                <li>Quan sát kết quả cuộn 3 (ngẫu nhiên).</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Nếu cuộn 3 ra Wild hoặc symbol khớp đường
-                thắng → Win tính đúng; nếu không khớp → Win = <code>$0.00</code>.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcSc03()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-SC-04">
-              <div class="qcase-h"><span class="qcase-id">TC-SC-04</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Khi Wild ở cuộn 1 và 2 đã tạo đường thắng,
-                game <b>không</b> mời reroll.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b> (ép Wild cuộn 1 và 2 có 1 đường thắng).</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Popup reroll <b>không</b> xuất hiện; Win tính
-                bình thường.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcSc04()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-SC-05">
-              <div class="qcase-h"><span class="qcase-id">TC-SC-05</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Khi cả 3 cuộn đều Wild (đường W-W-W thắng),
-                game <b>không</b> mời reroll.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b> (ép 3 cuộn Wild).</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>W-W-W thắng bình thường; popup reroll
-                <b>không</b> xuất hiện.
-              </p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcSc05()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-SC-06">
-              <div class="qcase-h"><span class="qcase-id">TC-SC-06</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Chỉ có Wild ở cuộn 1 (cuộn 2 không phải Wild)
-                thì <b>không</b> mời reroll.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b> (ép Wild chỉ ở cuộn 1).</li>
-                <li>Mở game → bấm <b>SPIN</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Popup reroll <b>không</b> xuất hiện (điều kiện
-                phải là cuộn 1 VÀ 2 đều Wild).</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcSc06()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-            <div class="qcase" id="case-SC-07">
-              <div class="qcase-h"><span class="qcase-id">TC-SC-07</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Khi số dư thấp hơn mức cược, bấm Đồng ý
-                reroll phải báo thiếu tiền và <b>không</b> trừ số dư.</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay (dư thấp)</b> (arm offer + set số dư &lt; mức cược).</li>
-                <li>Mở game → bấm <b>SPIN</b> → khi popup xuất hiện, bấm <b>Đồng ý</b>.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Thông báo thiếu tiền hiện; popup vẫn còn; số
-                dư <b>không</b> bị trừ.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcSc07()">Cài cho lượt quay (dư
-                  thấp)</button></div>
-            </div>
-
-            <div class="qcase" id="case-SC-08">
-              <div class="qcase-h"><span class="qcase-id">TC-SC-08</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Chi phí reroll = đúng 1× mức cược (không tính
-                thêm phí).</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
-              <ol class="qsteps">
-                <li>Bấm <b>Cài cho lượt quay</b>.</li>
-                <li>Ghi số dư trước khi bấm Đồng ý reroll.</li>
-                <li>Mở game → bấm <b>SPIN</b> → đồng ý reroll.</li>
-                <li>Ghi số dư sau, tính chênh lệch.</li>
-              </ol>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Số dư giảm đúng <code>1×</code> mức cược
-                (không nhiều hơn, không ít hơn).</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcSc08()">Cài cho lượt quay</button>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- ── ⑤ VALIDATE (J2) ──────────────────────────────────────── -->
-        <div id="tc-qc5" class="tc">
-          <div class="card">
-            <div class="card-h"><span class="glyph">⑤</span>Validate Đầu Vào — BET-04…10 · JACK-09…11 · SC-09</div>
-            <div class="qc-guide info" style="border-left-color:var(--gold)">Mỗi nút gửi 1 request <b>sai/thiếu
-                field</b> tới endpoint debug (J2) rồi <b>tự so mã lỗi</b> với kỳ vọng → đánh dấu Đạt/Lỗi. Chọn user ở
-              thanh trái trước khi bấm.</div>
-          </div>
-
-          <div class="section-lbl">Đặt cược — Validate (TC-BET)</div>
-          <div class="cheat-grid">
-
-            <div class="qcase" id="case-VAL-BET-03">
-              <div class="qcase-h"><span class="qcase-id">TC-BET-03</span><span class="badge b-auto">Tự chấm</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Tổ hợp HỢP LỆ (CV 500 × CPL 10) được chấp
-                nhận; Total Bet = CV×CPL×5.</p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span><code>ok=true</code> và
-                <code>totalBet=25000</code>.
-              </p>
-              <div class="qcase-act"><button class="btn btn-jade btn-sm" onclick="qcVBet03()">▶ Gửi &amp; chấm</button>
-              </div>
-              <div id="r-VAL-BET-03" class="json-box mt8" style="display:none"></div>
-            </div>
-
-            <div class="qcase" id="case-VAL-BET-04">
-              <div class="qcase-h"><span class="qcase-id">TC-BET-04</span><span class="badge b-auto">Tự chấm</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Thiếu <code>betLevelId</code> → server từ
-                chối.</p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Mã lỗi <code>MISSING_BET_LEVEL_ID</code>;
-                không quay; số dư không đổi.</p>
-              <div class="qcase-act"><button class="btn btn-orange btn-sm" onclick="qcVBet04()">▶ Gửi &amp;
-                  chấm</button></div>
-              <div id="r-VAL-BET-04" class="json-box mt8" style="display:none"></div>
-            </div>
-
-            <div class="qcase" id="case-VAL-BET-05">
-              <div class="qcase-h"><span class="qcase-id">TC-BET-05</span><span class="badge b-auto">Tự chấm</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Thiếu <code>coinValueId</code> → server từ
-                chối.</p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Mã lỗi <code>MISSING_COIN_VALUE_ID</code>.</p>
-              <div class="qcase-act"><button class="btn btn-orange btn-sm" onclick="qcVBet05()">▶ Gửi &amp;
-                  chấm</button></div>
-              <div id="r-VAL-BET-05" class="json-box mt8" style="display:none"></div>
-            </div>
-
-            <div class="qcase" id="case-VAL-BET-06">
-              <div class="qcase-h"><span class="qcase-id">TC-BET-06</span><span class="badge b-auto">Tự chấm</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span><code>betLevelId="abc"</code> (không phải số)
-                → từ chối.</p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Mã lỗi <code>INVALID_BET_LEVEL_ID</code>.</p>
-              <div class="qcase-act"><button class="btn btn-orange btn-sm" onclick="qcVBet06()">▶ Gửi &amp;
-                  chấm</button></div>
-              <div id="r-VAL-BET-06" class="json-box mt8" style="display:none"></div>
-            </div>
-
-            <div class="qcase" id="case-VAL-BET-07">
-              <div class="qcase-h"><span class="qcase-id">TC-BET-07</span><span class="badge b-auto">Tự chấm</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span><code>coinValueId="xyz"</code> (không phải
-                số) → từ chối.</p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Mã lỗi <code>INVALID_COIN_VALUE_ID</code>.</p>
-              <div class="qcase-act"><button class="btn btn-orange btn-sm" onclick="qcVBet07()">▶ Gửi &amp;
-                  chấm</button></div>
-              <div id="r-VAL-BET-07" class="json-box mt8" style="display:none"></div>
-            </div>
-
-            <div class="qcase" id="case-VAL-BET-08">
-              <div class="qcase-h"><span class="qcase-id">TC-BET-08</span><span class="badge b-auto">Tự chấm</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span><code>coinValueId=3</code> (ngoài whitelist
-                {1,5,20,50,100,200,500}) → từ chối.</p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Mã lỗi <code>INVALID_COIN_VALUE</code>.</p>
-              <div class="qcase-act"><button class="btn btn-orange btn-sm" onclick="qcVBet08()">▶ Gửi &amp;
-                  chấm</button></div>
-              <div id="r-VAL-BET-08" class="json-box mt8" style="display:none"></div>
-            </div>
-
-            <div class="qcase" id="case-VAL-BET-09">
-              <div class="qcase-h"><span class="qcase-id">TC-BET-09</span><span class="badge b-auto">Tự chấm</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span><code>betLevelId=11</code> (Coin/Line > 10) →
-                từ chối.</p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Mã lỗi <code>INVALID_COIN_PER_LINE</code>.</p>
-              <div class="qcase-act"><button class="btn btn-orange btn-sm" onclick="qcVBet09()">▶ Gửi &amp;
-                  chấm</button></div>
-              <div id="r-VAL-BET-09" class="json-box mt8" style="display:none"></div>
-            </div>
-
-            <div class="qcase" id="case-VAL-BET-10">
-              <div class="qcase-h"><span class="qcase-id">TC-BET-10</span><span class="badge b-auto">Tự chấm</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span><code>betLevelId=0</code> (Coin/Line < 1) →
-                  từ chối.</p>
-                  <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Mã lỗi <code>INVALID_COIN_PER_LINE</code>.
-                  </p>
-                  <div class="qcase-act"><button class="btn btn-orange btn-sm" onclick="qcVBet10()">▶ Gửi &amp;
-                      chấm</button></div>
-                  <div id="r-VAL-BET-10" class="json-box mt8" style="display:none"></div>
-            </div>
-
-          </div>
-
-          <div class="section-lbl">Jackpot Pick — Validate (TC-JACK)</div>
-          <div class="cheat-grid">
-
-            <div class="qcase" id="case-VAL-JACK-09">
-              <div class="qcase-h"><span class="qcase-id">TC-JACK-09</span><span class="badge b-auto">Tự chấm</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Chọn rương khi <b>chưa</b> kích Mắt Naga → từ
-                chối.</p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Mã lỗi <code>JACKPOT_NOT_TRIGGERED</code>.</p>
-              <p class="qcase-note">Chạy nút này <b>trước</b> khi arm Phòng Kho Báu (nếu vừa chạy JACK-10/11 thì Mắt
-                Naga còn bật — cần pick rương trong game để clear).</p>
-              <div class="qcase-act"><button class="btn btn-orange btn-sm" onclick="qcVJack09()">▶ Gửi &amp;
-                  chấm</button></div>
-              <div id="r-VAL-JACK-09" class="json-box mt8" style="display:none"></div>
-            </div>
-
-            <div class="qcase" id="case-VAL-JACK-10">
-              <div class="qcase-h"><span class="qcase-id">TC-JACK-10</span><span class="badge b-auto">Tự chấm</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Đã ở Phòng Kho Báu nhưng gửi lệnh chọn rương
-                <b>thiếu</b> chest → từ chối.
-              </p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Mã lỗi <code>MISSING_CHEST</code>.</p>
-              <p class="qcase-note">Nút tự arm Phòng Kho Báu (Mắt Naga=true) rồi mới gửi lệnh thiếu chest.</p>
-              <div class="qcase-act"><button class="btn btn-orange btn-sm" onclick="qcVJack10()">▶ Arm + Gửi &amp;
-                  chấm</button></div>
-              <div id="r-VAL-JACK-10" class="json-box mt8" style="display:none"></div>
-            </div>
-
-            <div class="qcase" id="case-VAL-JACK-11">
-              <div class="qcase-h"><span class="qcase-id">TC-JACK-11</span><span class="badge b-auto">Tự chấm</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Đã ở Phòng Kho Báu nhưng chọn rương <b>không
-                  hợp lệ</b> (<code>PLATINUM</code>) → từ chối.</p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Mã lỗi <code>INVALID_CHEST</code>.</p>
-              <p class="qcase-note">Nút tự arm Phòng Kho Báu rồi gửi chest=PLATINUM.</p>
-              <div class="qcase-act"><button class="btn btn-orange btn-sm" onclick="qcVJack11()">▶ Arm + Gửi &amp;
-                  chấm</button></div>
-              <div id="r-VAL-JACK-11" class="json-box mt8" style="display:none"></div>
-            </div>
-
-          </div>
-
-          <div class="section-lbl">Second Choice — Validate (TC-SC)</div>
-          <div class="cheat-grid">
-
-            <div class="qcase" id="case-VAL-SC-09">
-              <div class="qcase-h"><span class="qcase-id">TC-SC-09</span><span class="badge b-part">Chờ team (J6)</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Gửi lệnh quay lại cuộn 3 khi <b>không</b> có
-                lời mời → theo GDD phải bị từ chối.</p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Server trả
-                <code>SECOND_CHOICE_NOT_AVAILABLE</code>. <b>Lưu ý:</b> check này đang <b>comment-out</b> (J6) →
-                endpoint báo cáo trạng thái để QC ghi nhận, <b>chờ team chốt</b> mới chấm.
-              </p>
-              <div class="qcase-act"><button class="btn btn-orange btn-sm" onclick="qcVSc09()">▶ Gửi &amp; xem trạng
-                  thái</button></div>
-              <div id="r-VAL-SC-09" class="json-box mt8" style="display:none"></div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- ── ⑥ TẤT ĐỊNH (J1/J3/J4) ────────────────────────────────── -->
-        <div id="tc-qc6" class="tc">
-          <div class="card">
-            <div class="card-h"><span class="glyph">⑥</span>Tổ Hợp Tất Định — J1 (lưới+Mắt Naga+hệ số) · J3 (năng lượng)
-              · J4 (tier)</div>
-            <div class="qc-guide info" style="border-left-color:var(--gold)">Các case trước phải spin tới khi "may mắn"
-              trúng; nay ép <b>lưới + Mắt Naga + hệ số per-row</b> (hoặc năng lượng / tier) trong <b>cùng 1 cheat</b> →
-              tất định. Bấm "Cài" rồi vào game SPIN / chọn rương.</div>
-          </div>
-
-          <div class="section-lbl">Cuộn 4 — Hệ số per-row (TC-R4 · J1)</div>
-          <div class="cheat-grid">
-
-            <div class="qcase" id="case-DET-R4-03">
-              <div class="qcase-h"><span class="qcase-id">TC-R4-03</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Mỗi đường dùng đúng hệ số HÀNG nó kết thúc —
-                ép hệ số cố định [trên×2 · giữa×5 · dưới×10].</p>
-              <p class="qline"><span class="qlbl qlbl-do">Cách làm</span>Chọn 1 đường → vào game SPIN → đọc Win.</p>
-              <div class="qc-mini">
-                <button class="btn btn-gold btn-sm" onclick="qcDetR403(0)">P01 giữa→×5</button>
-                <button class="btn btn-gold btn-sm" onclick="qcDetR403(1)">P02 trên→×2</button>
-                <button class="btn btn-gold btn-sm" onclick="qcDetR403(2)">P03 dưới→×10</button>
-                <button class="btn btn-gold btn-sm" onclick="qcDetR403(3)">P04→×10</button>
-                <button class="btn btn-gold btn-sm" onclick="qcDetR403(4)">P05→×2</button>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Win = (200×CV×CPL) × hệ số hàng kết thúc của
-                đường đã chọn.</p>
-
-            </div>
-
-            <div class="qcase" id="case-DET-R4-05">
-              <div class="qcase-h"><span class="qcase-id">TC-R4-05</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>2 đường ở hàng khác nhau, mỗi đường nhân hệ
-                số riêng của hàng nó.</p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Cuộn 4 hiện ×2 hàng trên & ×10 hàng dưới; P02
-                nhân ×2, P03 nhân ×10 (độc lập).</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcDetR405()">Cài (P02 trên×2 + P03
-                  dưới×10)</button></div>
-            </div>
-
-            <div class="qcase" id="case-DET-R4-07">
-              <div class="qcase-h"><span class="qcase-id">TC-R4-07</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Mắt Naga ở hàng giữa cuộn 4 → đường qua giữa
-                nhận ×1 cố định.</p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Ô giữa cuộn 4 hiện Mắt Naga; P01 (qua giữa)
-                ×1; P02 (qua trên) vẫn ×5.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcDetR407()">Cài (P01 giữa + P02 trên
-                  + Mắt Naga)</button></div>
-            </div>
-
-          </div>
-
-          <div class="section-lbl">Jackpot Mắt Naga — tất định (TC-JACK · J1/J4)</div>
-          <div class="cheat-grid">
-
-            <div class="qcase" id="case-DET-JACK-03">
-              <div class="qcase-h"><span class="qcase-id">TC-JACK-03</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Một lượt vừa trúng Mắt Naga vừa có đường
-                thắng thường → tổng = jackpot + thắng thường.</p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>SPIN có đường thắng + mở Phòng Kho Báu; chọn
-                rương → Win = jackpot + thắng thường; số dư tăng đúng tổng.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcDetJack03()">Cài (P02 thắng + Mắt
-                  Naga)</button></div>
-            </div>
-
-            <div class="qcase" id="case-DET-JACK-06">
-              <div class="qcase-h"><span class="qcase-id">TC-JACK-06</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Đường thắng qua hàng giữa khi có Mắt Naga chỉ
-                nhận ×1.</p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>P01 (qua giữa) nhận ×1 (không ×5); cuộn 4 hiện
-                Mắt Naga hàng giữa.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcDetJack06()">Cài (P01 giữa + Mắt
-                  Naga)</button></div>
-            </div>
-
-            <div class="qcase" id="case-DET-JACK-02">
-              <div class="qcase-h"><span class="qcase-id">TC-JACK-02</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Chọn rương nhận đúng tier + tiền (ép tier để
-                kiểm tất định, J4).</p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Ép BRONZE→GRAND; vào game chọn rương Đồng →
-                nhận GRAND + tiền hũ GRAND; 2 rương kia lộ MAJOR/MINOR.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcDetJack02()">Cài (ép tier + mở Phòng
-                  Kho Báu)</button></div>
-            </div>
-
-          </div>
-
-          <div class="section-lbl">Rush Mode — Năng lượng (TC-RUSH · J3)</div>
-          <div class="cheat-grid">
-
-            <div class="qcase" id="case-DET-RUSH-01">
-              <div class="qcase-h"><span class="qcase-id">TC-RUSH-01</span><span class="badge b-star">Quan trọng</span>
-              </div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>Đặt thanh = 5/30, quay hụt → 6/30.</p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Sau 1 lượt thua, thanh Rush từ 5 lên 6.</p>
-              <div class="qcase-act"><button class="btn btn-gold btn-sm" onclick="qcDetRush01()">Cài năng lượng =
-                  5</button></div>
-            </div>
-
-            <div class="qcase" id="case-DET-RUSH-06">
-              <div class="qcase-h"><span class="qcase-id">TC-RUSH-06</span></div>
-              <p class="qline"><span class="qlbl qlbl-test">Kiểm tra</span>28→29 chưa kích; 29→30 mới kích 5 free spin.
-              </p>
-              <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Ở 29 không có free spin; lên 30 mới kích.</p>
-              <div class="qc-mini">
-                <button class="btn btn-gold btn-sm" onclick="qcDetRush06()">Cài = 28</button>
-                <button class="btn btn-jade btn-sm" onclick="qcDetRush06b()">Cài = 29</button>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-
-        <!-- ── RAW / VALIDATE ────────────────────────────────────────── -->
-        <div id="tc-raw" class="tc">
-
-          <div class="card">
-            <div class="card-h"><span class="glyph">⚙</span>Raw Request — Test Validate Input</div>
-            <div class="info mb8" style="border-left-color:var(--warn)">
-              ✅ 3 endpoint debug (J2) đã có: <code>/debug/spin</code> · <code>/debug/jackpot-pick</code> ·
-              <code>/debug/second-choice</code>. Gửi request <b>thô</b> (thiếu/sai field) để kiểm server từ chối đúng mã
-              lỗi. Bản 1-bấm <b>tự chấm Đạt/Lỗi</b> nằm ở tab <b>⑤ Validate</b>.
-            </div>
-            <div class="fgroup"><label>Session ID (để trống = backend tự lấy theo user đang bind)</label><input
-                id="raw-sid" placeholder="tùy chọn"></div>
-          </div>
-
-          <div class="section-lbl">Raw Spin — BET-04…10</div>
-          <div class="card">
-            <div class="info mb8">Đề xuất: <code>POST /api/v1/debug/spin/{agency}/{userId}</code>. Để trống field =
-              thiếu field đó. <code>betLevelId</code> = Coin/Line (1–10) · <code>coinValueId</code> = Coin Value
-              (1,5,20,50,100,200,500).</div>
-            <div class="frow mb8">
-              <div class="fg"><label>betLevelId</label><input id="raw-bet" placeholder="vd: 1 · 11 · 0 · abc · (trống)">
-              </div>
-              <div class="fg"><label>coinValueId</label><input id="raw-cv" placeholder="vd: 1 · 3 · xyz · (trống)">
-              </div>
-            </div>
-            <button class="btn btn-orange btn-sm" onclick="qcRawSpin()">▶ Gửi Spin thô</button>
-            <div id="raw-spin-result" class="json-box mt8" style="display:none"></div>
-            <div class="info mt8">Map case: BET-04 trống betLevelId · BET-05 trống coinValueId · BET-06 betLevelId=abc ·
-              BET-07 coinValueId=xyz · BET-08 coinValueId=3 · BET-09 betLevelId=11 · BET-10 betLevelId=0.</div>
-          </div>
-
-          <div class="section-lbl">Raw Jackpot Pick — JACK-09…11</div>
-          <div class="card">
-            <div class="info mb8">Đề xuất: <code>POST /api/v1/debug/jackpot-pick/{agency}/{userId}</code>.</div>
-            <div class="frow mb8">
-              <div class="fg" style="max-width:320px"><label>chest (trống / sai để test)</label><input id="raw-chest"
-                  placeholder="BRONZE · SILVER · GOLD · PLATINUM · (trống)"></div>
-            </div>
-            <button class="btn btn-orange btn-sm" onclick="qcRawPick()">▶ Gửi Pick thô</button>
-            <div id="raw-pick-result" class="json-box mt8" style="display:none"></div>
-            <div class="info mt8">JACK-09 gửi khi chưa kích hoạt mắt Naga (kỳ vọng từ chối) · JACK-10 chest trống ·
-              JACK-11 chest=PLATINUM.</div>
-          </div>
-
-          <div class="section-lbl">Raw Second Choice — SC-09</div>
-          <div class="card">
-            <div class="info mb8">Đề xuất: <code>POST /api/v1/debug/second-choice/{agency}/{userId}</code>. Gửi khi
-              <b>không</b> có lời mời → kỳ vọng từ chối.
-            </div>
-            <button class="btn btn-orange btn-sm" onclick="qcRawSecondChoice()">▶ Gửi Second-Choice thô</button>
-            <div id="raw-sc-result" class="json-box mt8" style="display:none"></div>
-            <div class="info mt8" style="border-left-color:var(--warn)">⚠ Code hiện <b>đang comment-out</b> kiểm tra
-              <code>SECOND_CHOICE_NOT_AVAILABLE</code> (NagaCommandHandler ~73–83, ghi "todo: sửa sau"). SC-09 chỉ PASS
-              sau khi team bật lại check này.
-            </div>
-          </div>
-
-        </div>
-
-        <!-- ── TEST RUNNER ───────────────────────────────────────────── -->
-        <div id="tc-runner" class="tc">
-          <div class="card">
-            <div class="card-h"><span class="glyph">⚡</span>Happy-Case Test Runner · TEST_CASES.md Phần A (Ưu tiên Cao)</div>
-            <div class="info mb8">
-              Mỗi case chạy bằng <b>người chơi đang chọn</b> ở danh sách bên trái, qua <b>một kết nối WebSocket riêng</b>
-              suy thẳng từ <b>Base URL</b> ở thanh header (đổi sang ws/wss, path <code>/websocket</code>); cheat được arm qua REST debug (<code>X-Debug-Token</code>) bằng đúng Base URL đó.
-              Yêu cầu: đã chọn 1 người chơi và Base URL trỏ đúng server.
-            </div>
-            <div class="frow mb8">
-              <div class="fg" style="max-width:130px"><label>Timeout (ms)</label><input id="tr-cfg-timeout" type="number" min="1000" step="500"></div>
-            </div>
-            <div class="frow mb8" style="align-items:flex-end">
-              <button class="btn btn-gold" onclick="trRunAll()">▶ Chạy tất cả</button>
-              <div class="fg" style="max-width:180px"><label>Nhóm</label><select id="tr-group-select"></select></div>
-              <button class="btn btn-blue" onclick="trRunGroup()">▶ Chạy nhóm</button>
-              <button class="btn btn-orange" id="tr-btn-stop" onclick="trStop()" disabled>■ Dừng</button>
-              <button class="btn btn-ghost" onclick="trExport()">⤓ Export JSON</button>
-            </div>
-            <div id="tr-summary" class="mb8"></div>
-            <div class="tbl-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th style="width:70px">KQ</th>
-                    <th style="width:120px">Mã TC</th>
-                    <th>Tên case</th>
-                    <th style="width:60px">User</th>
-                    <th style="width:80px">Thời gian</th>
-                    <th style="width:46px"></th>
-                  </tr>
-                </thead>
-                <tbody id="tr-tbody">
-                  <tr><td colspan="6" class="empty">— catalog đang nạp —</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
 
       </main>
 
@@ -4242,20 +2164,6 @@
 
     // Người chơi đang chọn ở danh sách trái — Test Runner dùng danh tính này để AUTH/JOIN
     // WebSocket (thay cho user ảo). Trả null nếu chưa chọn ai.
-    function selectedPlayer() {
-      const uid = idv('i-user').trim();
-      if (!uid) return null;
-      const ag = idv('i-agency').trim();
-      return {
-        token: idv('i-tok').trim(),
-        userId: uid,
-        username: (selectedSession && selectedSession.username) || uid,
-        agency: ag,
-        agentId: ag,
-        gameId: idv('i-game').trim() || 'game-naga-fortune-777',
-      };
-    }
-
     // ═══════════════════════ INIT ═══════════════════════
     let _pollTimer = null;
 
@@ -4280,7 +2188,6 @@
       initGridSelects();
       initFsSeqSelects();
       document.getElementById('wss-grid-wrap').appendChild(createFsEditor('winstreak'));
-      showTab('cheat');
       peekStatus();
       listSessions();
       _pollTimer = setInterval(listSessions, 5000);
@@ -4328,28 +2235,7 @@
     }
 
     // ═══════════════════════ TABS ═══════════════════════
-    function showTab(name) {
-      document.querySelectorAll('.tc').forEach(el => el.classList.remove('on'));
-      document.querySelectorAll('.tab').forEach(el => el.classList.remove('on'));
-      const tc = document.getElementById('tc-' + name);
-      if (tc) tc.classList.add('on');
-      const tabs = document.querySelectorAll('.tab');
-      tabs.forEach(t => { const o = t.getAttribute('onclick') || ''; if (o.includes("'" + name + "'")) t.classList.add('on'); });
-      // Banner "Bắt đầu ở đây" chỉ hiện ở các tab case (qc1–qc4).
-      const start = document.getElementById('qc-start');
-      if (start) {
-        let hidden = false; try { hidden = localStorage.getItem('naga_start_hide') === '1'; } catch (e) { }
-        start.style.display = (/^qc[1-6]$/.test(name) && !hidden) ? '' : 'none';
-      }
-    }
-
     // Ẩn banner hướng dẫn (nhớ lựa chọn qua localStorage).
-    function dismissStart() {
-      try { localStorage.setItem('naga_start_hide', '1'); } catch (e) { }
-      const s = document.getElementById('qc-start');
-      if (s) s.style.display = 'none';
-    }
-
     // (Đã bỏ tính năng đánh dấu Đạt/Lỗi theo yêu cầu.)
 
     // ═══════════════════════ API ═══════════════════════
@@ -4392,21 +2278,8 @@
       return call(method, path, body, { 'X-Debug-Token': DBG_TOKEN });
     }
 
-    function gameCall(method, path, body) {
-      const tok = token();
-      const h = tok ? { 'Authorization': 'Bearer ' + tok } : {};
-      return call(method, path, body, h);
-    }
-
     function escHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
     function escAttr(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
-
-    function showJson(elId, data) {
-      const el = document.getElementById(elId);
-      if (!el) return;
-      el.style.display = 'block';
-      el.textContent = JSON.stringify(data, null, 2);
-    }
 
     function showMsg(msg) {
       // API·LOG đã bỏ — showMsg chỉ còn bắn toast làm phản hồi cho QC.
@@ -4865,135 +2738,17 @@
       showMsg('✅ Arm Second Choice (Wild reel 1&2, reel 3 không Wild, không đường thắng) — spin BASE kế tiếp trả secondChoiceAvailable=true');
     }
 
-    async function armTreasureRoom() {
-      const r = await debugCall('POST', `/api/v1/debug/treasure-room/${agency()}/${userId()}?gameId=${gameId()}`);
-      if (r.ok) showMsg('✅ Treasure Room armed — bây giờ gọi Jackpot Pick');
-    }
-
-    // ═══════════════════════ QC TEST CASES TAB ═══════════════════════
-    // Mỗi nút "⚡ Dựng case" cài sẵn cheat phù hợp rồi hiện hướng dẫn thao tác
-    // tiếp theo (trong game) ở khung #qc-guide.
-
-    function qcGuide(html) {
-      // Mỗi tab QC có một khung .qc-guide riêng — ghi hướng dẫn vào tất cả để tab nào đang mở cũng thấy.
-      document.querySelectorAll('.qc-guide').forEach(el => el.innerHTML = html);
-    }
-
     // Lưới THẮNG đúng 1 đường giữa (P01): trio nằm hàng giữa; hàng trên/dưới dùng
     // E(5)/Q(0) xen kẽ để không tạo đường thắng phụ và không trùng tổ hợp B+C+D.
-    function qcWinMidScreen(trio) {
-      const top = [5, 0, 5];   // E Q E (hàng trên)
-      const bot = [0, 5, 0];   // Q E Q (hàng dưới)
-      return [
-        [top[0], trio[0], bot[0]],   // reel 0: [trên, giữa, dưới]
-        [top[1], trio[1], bot[1]],   // reel 1
-        [top[2], trio[2], bot[2]],   // reel 2
-      ];
-    }
-
     // Lưới THUA hoàn toàn: cột E | A | E → mọi đường đều E-A-E, không ăn.
-    function qcLoseScreen() {
-      return [[5, 5, 5], [1, 1, 1], [5, 5, 5]];
-    }
-
-    async function qcDoSetBalance(v) {
-      const r = await debugCall('POST', `/api/v1/debug/wallet/${agency()}/${userId()}`, { balance: String(v) });
-      if (r.ok) { showMsg('✅ Đã đặt số dư = ' + v); peekStatus(); return true; }
-      showMsg('❌ Đặt số dư lỗi: ' + (r.data?.error || r.status));
-      return false;
-    }
-
-    async function qcArmGridWin(trio) { await armCheat('FORCE_GRID', { screen: qcWinMidScreen(trio) }); }
-    async function qcArmGridLose() { await armCheat('FORCE_GRID', { screen: qcLoseScreen() }); }
-
     // ── 1 · Đặt cược ──
-    async function qcBet01() {
-      await qcDoSetBalance(1000);
-      qcGuide('<b>TC-BET-01 · Mức cược nhỏ nhất.</b> Đã nạp số dư 1000. Trong game chọn <b>Coin Value $0.01</b>, <b>Coin/Line 1</b> → <b>SPIN</b>. Kỳ vọng: Total Bet = <code>$0.05</code>; số dư giảm đúng $0.05.');
-    }
-    async function qcBet02() {
-      await qcDoSetBalance(2000);
-      qcGuide('<b>TC-BET-02 · Mức cược lớn nhất.</b> Đã nạp số dư 2000. Trong game chọn <b>Coin Value $5.00</b>, <b>Coin/Line 10</b> → <b>SPIN</b>. Kỳ vọng: Total Bet = <code>$250.00</code>; số dư giảm đúng $250.');
-    }
-
     // ── 2 · Quay & trả thưởng ──
-    async function qcSpin01() {
-      await qcArmGridWin([1, 1, 1]);
-      qcGuide('<b>TC-SPIN-01 · 3×A đường giữa.</b> Vào game <b>SPIN</b>. Kỳ vọng: đường giữa A-A-A thắng = <code>200 × CoinValue × CoinPerLine</code> × hệ số cuộn 4 (x1 → đúng giá trị gốc); đường giữa sáng.');
-    }
-    async function qcSpin02() {
-      await qcArmGridLose();
-      qcGuide('<b>TC-SPIN-02 · Không đường thắng.</b> Vào game <b>SPIN</b>. Kỳ vọng: Win = <code>$0.00</code>; không đường nào sáng; số dư giảm đúng tiền cược.');
-    }
-
     // ── 3 · Tổ hợp đặc biệt ──
-    async function qcPay01() {
-      await qcArmGridWin([10, 10, 10]);
-      qcGuide('<b>TC-PAY-01 · 3 Wild đường giữa (P01).</b> Vào game <b>SPIN</b>. Kỳ vọng: thưởng đặc biệt <code>1000 × tiền cược mỗi đường</code> × hệ số cuộn 4; hiệu ứng đặc biệt đường giữa.');
-    }
-    async function qcPay03() {
-      await qcArmGridWin([2, 3, 4]);
-      qcGuide('<b>TC-PAY-03 · B + C + D cùng đường giữa.</b> Vào game <b>SPIN</b>. Kỳ vọng: đường giữa thắng <code>8 × tiền cược mỗi đường</code> × hệ số cuộn 4; có hiệu ứng đặc biệt.');
-    }
-
     // ── 4 · Cuộn 4 hệ số ──
-    async function qcR401() {
-      await qcArmGridWin([1, 1, 1]);
-      qcGuide('<b>TC-R4-01 · Có thắng → cuộn 4 sáng.</b> Vào game <b>SPIN</b>. Kỳ vọng: có đường thắng (A-A-A giữa); <b>cuộn 4 sáng</b>, hiện hệ số x1/x2/x5/x10 cho 3 hàng.');
-    }
-    async function qcR404() {
-      await qcArmGridLose();
-      qcGuide('<b>TC-R4-04 · Không thắng → cuộn 4 tối.</b> Vào game <b>SPIN</b>. Kỳ vọng: Win = $0; <b>cuộn 4 bị làm tối/mờ</b>, không hiện hệ số.');
-    }
-
     // ── 5 · Jackpot ──
-    async function qcJack01() {
-      await armTreasureRoom();
-      qcGuide('<b>TC-JACK-01 · Kích hoạt Phòng Kho Báu.</b> Đã ghi <code>nagaEyeTriggered=true</code> vào session (không cần spin). Vào game (spin 1 lần nếu cần đồng bộ). Kỳ vọng: chuyển sang <b>Phòng Kho Báu</b> với 3 rương chờ chọn. <i>Lưu ý: đường này không hiện mắt Naga ở cuộn 4 — xem mục Java để có bản tất định.</i>');
-    }
-    async function qcJack02() {
-      await armTreasureRoom();
-      qcGuide('<b>TC-JACK-02 · Chọn rương nhận thưởng.</b> Vào <b>Phòng Kho Báu</b>, bấm chọn 1 rương. Kỳ vọng: rương mở hiện tier + số tiền; 2 rương còn lại tự mở lộ tier; <b>số dư tăng</b> đúng phần thưởng.');
-    }
-
     // ── 6 · Rush Mode ──
-    async function qcRush02() {
-      await armCheat('FORCE_RUSH_MODE_FILL', {});
-      qcGuide('<b>TC-RUSH-02 · Đủ 30 điểm → 5 free spin.</b> Đã nạp thanh Rush về <b>29/30</b>. Vào game <b>SPIN 1 lượt</b> — lượt này cần <b>THUA</b> (đa số spin là thua) để chạm 30. Kỳ vọng: kích hoạt Rush, nhận <b>5 free spin</b>, thanh reset về 0, game tự quay. <i>Nếu lỡ THẮNG → thanh về 0, bấm Dựng lại rồi spin lại.</i>');
-    }
-    async function qcRush04Fill() {
-      await armCheat('FORCE_LOSS', {});
-      qcGuide('<b>TC-RUSH-04 · Bước ① nạp thanh.</b> Đã cài ép <b>THUA</b>. Vào game <b>SPIN</b> → thanh Rush +1 (&gt;0 là đạt). Xong bấm <b>②</b>.');
-    }
-    async function qcRush04Win() {
-      await qcArmGridWin([1, 1, 1]);
-      qcGuide('<b>TC-RUSH-04 · Bước ② thắng để reset.</b> Đã cài ép <b>THẮNG</b>. Vào game <b>SPIN</b> → thắng. Kỳ vọng: thanh Rush <b>về 0 ngay</b> sau lượt thắng.');
-    }
-
     // ── 7 · Win Streak ──
-    async function qcStreak01() {
-      await qcArmGridWin([1, 1, 1]);
-      qcGuide('<b>TC-STREAK-01 · Thắng 3 ván liên tiếp.</b> Đã cài ép <b>THẮNG</b>. <b>Bấm nút này rồi SPIN — lặp lại đủ 3 lần</b> (giữ nguyên mức cược). Sau lượt thắng thứ 3: thông báo Win Streak, nhận <b>1 Special Free Spin</b> tự quay, chuỗi reset 0.');
-    }
-    async function qcStreak03Win() {
-      await qcArmGridWin([1, 1, 1]);
-      qcGuide('<b>TC-STREAK-03 · Bước ① dựng chuỗi 2.</b> Đã cài ép <b>THẮNG</b>. Bấm nút này rồi SPIN <b>2 lần</b> để chuỗi = 2/3 (chưa kích hoạt). Xong bấm <b>②</b>.');
-    }
-    async function qcStreak03Lose() {
-      await armCheat('FORCE_LOSS', {});
-      qcGuide('<b>TC-STREAK-03 · Bước ② thua giữa chuỗi.</b> Đã cài ép <b>THUA</b>. Vào game <b>SPIN</b> → thua. Kỳ vọng: bộ đếm chuỗi <b>về 0/3</b> ngay; không kích hoạt Special Free Spin.');
-    }
-
     // ── 8 · Second Choice ──
-    async function qcSc01() {
-      await armSecondChoiceCheat();
-      qcGuide('<b>TC-SC-01 · Mời quay lại cuộn 3.</b> Đã cài lưới <b>W / W / non-W</b>. Vào game <b>SPIN</b>. Kỳ vọng: cuộn 3 rung lắc; popup <b>"Quay lại cuộn 3 với giá = mức cược?"</b> xuất hiện.');
-    }
-    async function qcSc02() {
-      await armSecondChoiceCheat();
-      qcGuide('<b>TC-SC-02 · Đồng ý quay lại cuộn 3.</b> Vào game <b>SPIN</b> để hiện popup, rồi bấm <b>ĐỒNG Ý</b>. Kỳ vọng: số dư giảm đúng mức cược; cuộn 1 &amp; 2 giữ nguyên Wild; chỉ <b>cuộn 3 quay lại</b> dừng ở biểu tượng mới.');
-    }
-
     // ═══════════════════════ QC · BỘ DỰNG LƯỚI THEO ĐƯỜNG THẮNG ═══════════════════════
     // Tọa độ 5 payline (theo [cột, hàng]); P01 giữa · P02 trên · P03 dưới · P04 chéo xuống · P05 chéo lên.
     const QC_PAYLINES = [
@@ -5006,372 +2761,46 @@
 
     // Chọn 3 filler PHÂN BIỆT, không trùng symbol của trio. Ưu tiên E/A/Q (không thuộc {B,C,D})
     // để không vô tình tạo tổ hợp B+C+D trên đường khác.
-    function qcPickFillers(trio) {
-      const used = new Set(trio);
-      const pool = [5, 1, 0, 4, 2, 3]; // E, A, Q, D, B, C
-      const f = pool.filter(s => !used.has(s));
-      return [f[0], f[1], f[2]];
-    }
-
     // Lưới NỀN: mỗi payline là một hoán vị của {X,Y,Z} → mọi đường có 3 ô KHÁC nhau.
     // Nhờ vậy, khi ép trio (kể cả Wild) lên 1 đường, các đường cắt qua chỉ đổi 1 ô → còn 2 ô khác nhau
     // → không bao giờ thành 3-giống (Wild thay thế cũng không đủ) hay B+C+D ngoài ý muốn.
-    function qcBaseGrid(trio) {
-      const [X, Y, Z] = qcPickFillers(trio);
-      return [
-        [X, Z, X], // cột 0: [hàng0, hàng1, hàng2]
-        [Y, Y, Y], // cột 1
-        [Z, X, Z], // cột 2
-      ];
-    }
-
     // Lưới thắng đúng 1 đường pIdx (0..4) với trio = [symbol reel0, reel1, reel2].
-    function qcGridForPayline(pIdx, trio) {
-      const screen = qcBaseGrid(trio);
-      QC_PAYLINES[pIdx].forEach(([c, r], i) => { screen[c][r] = trio[i]; });
-      return screen;
-    }
-
     // Lưới thắng 2 đường RỜI nhau (chỉ dùng cho cặp không chung ô, vd P02 & P03).
-    function qcGridTwoLines(p1, trio1, p2, trio2) {
-      const screen = qcBaseGrid([...trio1, ...trio2]);
-      QC_PAYLINES[p1].forEach(([c, r], i) => { screen[c][r] = trio1[i]; });
-      QC_PAYLINES[p2].forEach(([c, r], i) => { screen[c][r] = trio2[i]; });
-      return screen;
-    }
-
-    async function qcArmGrid(screen) { await armCheat('FORCE_GRID', { screen }); }
-
     // Nhắc QC: mỗi đường thắng còn được nhân hệ số cuộn 4 (ngẫu nhiên) của HÀNG nó kết thúc.
     const QC_R4_NOTE = ' <i>(Win cuối = giá trị gốc × hệ số cuộn 4 của hàng kết thúc — đọc hệ số hiển thị trên cuộn 4.)</i>';
 
     // ── 1 · BET (mở rộng) ──
-    async function qcBet03() {
-      await qcDoSetBalance(25000);
-      qcGuide('<b>TC-BET-03 · 70 tổ hợp hợp lệ.</b> Đã nạp số dư 25000. Trong game thử lần lượt 7 Coin Value × 10 Coin/Line — mỗi tổ hợp Total Bet = CV×CPL×5, đều được chấp nhận. <i>Kiểm nhanh từng tổ hợp qua <code>/debug/spin</code> ở tab ⑤/Raw.</i>');
-    }
     // BET-04…08: gửi request thô tới /debug/spin (cần J2). Hiện trả 404 — đó là trạng thái mong đợi tới khi backend thêm endpoint.
-    async function qcRawSpinCase(fields, expected) {
-      const body = { gameId: gameId(), ...fields };
-      const r = await debugCall('POST', `/api/v1/debug/spin/${agency()}/${userId()}`, body);
-      showJson('r-bet0x', r.data);
-      qcGuide('<b>TC-BET · Validate.</b> Đã gửi <code>' + JSON.stringify(fields) + '</code>. Kỳ vọng lỗi <code>' + expected + '</code>. <i>Endpoint J2 đã có — xem JSON trả về; tab ⑤ có bản tự chấm.</i>');
-    }
-    async function qcBet04() { await qcRawSpinCase({ coinValueId: "1" }, "MISSING_BET_LEVEL_ID"); }
-    async function qcBet05() { await qcRawSpinCase({ betLevelId: "1" }, "MISSING_COIN_VALUE_ID"); }
-    async function qcBet06() { await qcRawSpinCase({ betLevelId: "abc", coinValueId: "1" }, "INVALID_BET_LEVEL_ID"); }
-    async function qcBet07() { await qcRawSpinCase({ betLevelId: "1", coinValueId: "xyz" }, "INVALID_COIN_VALUE_ID"); }
-    async function qcBet08() { await qcRawSpinCase({ betLevelId: "1", coinValueId: "3" }, "INVALID_COIN_VALUE"); }
-
     // ── 2 · SPIN (mở rộng) ──
-    async function qcSpin03() {
-      await qcArmGrid(qcGridTwoLines(1, [1, 1, 1], 2, [5, 5, 5])); // P02=A-A-A, P03=E-E-E
-      qcGuide('<b>TC-SPIN-03 · Thắng nhiều đường.</b> Ép P02=A-A-A (200×) và P03=E-E-E (10×). SPIN. Kỳ vọng: 2 đường sáng; Win = tổng 2 đường (gốc CV $0.01/CPL 1 → $2.00 + $0.10 = $2.10).' + QC_R4_NOTE);
-    }
-    async function qcSpin04() {
-      await qcArmGrid(qcGridForPayline(0, [1, 10, 1])); // A-W-A đường giữa
-      qcGuide('<b>TC-SPIN-04 · Wild thay thế.</b> Ép A-W-A đường giữa. SPIN. Kỳ vọng: tính như A-A-A (200×); đường giữa sáng.' + QC_R4_NOTE);
-    }
-    async function qcSpin05() {
-      await qcArmGrid(qcGridForPayline(0, [1, 1, 1]));
-      qcGuide('<b>TC-SPIN-05 · Hiển thị đủ thông tin.</b> Ép 1 đường thắng. SPIN, chờ dừng hẳn. Soát đủ: lưới 3×3 · cuộn 4 hệ số · Số dư/Bet/Win · thanh Rush · Win Streak · vault · mode = BASE.');
-    }
-    async function qcSpin06() {
-      await qcArmGrid(qcGridForPayline(0, [1, 1, 4])); // A-A-D
-      qcGuide('<b>TC-SPIN-06 · Chỉ 2 giống nhau.</b> Ép A-A-D đường giữa. SPIN. Kỳ vọng: KHÔNG tính thắng (cần ≥3 từ trái); Win = $0.00.');
-    }
-    async function qcSpin07() {
-      await qcArmGrid(qcGridForPayline(0, [2, 2, 2])); // B-B-B
-      qcGuide('<b>TC-SPIN-07 · Tiền thắng theo CPL×CV.</b> Ép B-B-B đường giữa. Đặt <b>CV $0.20, CPL 3</b>. SPIN. Kỳ vọng Win gốc = 50×3×$0.20 = $30.00.' + QC_R4_NOTE);
-    }
-    async function qcSpin08() {
-      // Arms Path 1 (Base Spin): FORCE_WIN_CAP với winCap=1 → grid toàn Wild (~3200×) luôn vượt trần 20000×,
-      // bị cắt về bet×1, response trả winCapReached=true.
-      await armCheat('FORCE_WIN_CAP', { winCap: 1 });
-      qcGuide('<b>TC-SPIN-08 · Path 1 · Base Spin PER-SPIN cap.</b> Grid toàn Wild (~3200× tổng cược) bị cắt về <code>bet × 1</code>. SPIN. Kỳ vọng: Win = 1× tổng cược + <code>winCapReached = true</code>. Xem checklist đầy đủ 8 path trong QC card.');
-    }
-
     // ── 3 · PAY (mở rộng) ──
-    async function qcPay02() {
-      await qcArmGrid(qcGridForPayline(3, [10, 10, 10])); // W-W-W P04
-      qcGuide('<b>TC-PAY-02 · 3 Wild P04.</b> SPIN. Kỳ vọng thưởng cao nhất 6000× tiền cược mỗi đường (CV $0.01 → $60).' + QC_R4_NOTE);
-    }
     const QC_PAY_LABELS = ['P01 giữa', 'P02 trên', 'P03 dưới', 'P04 chéo xuống', 'P05 chéo lên'];
     const QC_PAY_MULT = [1000, 2000, 3000, 6000, 4000];
-    async function qcPay04(p) {
-      await qcArmGrid(qcGridForPayline(p, [10, 10, 10]));
-      qcGuide('<b>TC-PAY-04 · 3 Wild ' + QC_PAY_LABELS[p] + '.</b> SPIN, ghi Win. Kỳ vọng = ' + QC_PAY_MULT[p] + '× tiền cược mỗi đường (CV $0.01 → $' + (QC_PAY_MULT[p] * 0.01).toFixed(2) + ').' + QC_R4_NOTE);
-    }
-    async function qcPay05() {
-      // B,C,D mỗi cái một đường KHÁC nhau (B→P02, C→P03, D→P01); không đường nào đủ bộ B+C+D.
-      await qcArmGrid([[5, 4, 5], [2, 1, 3], [5, 5, 5]]);
-      qcGuide('<b>TC-PAY-05 · B,C,D rải khác đường.</b> SPIN. Kỳ vọng: KHÔNG kích thưởng 8× (mỗi đường chỉ có 1 trong B/C/D).');
-    }
-    async function qcPay06() {
-      await qcArmGrid(qcGridForPayline(0, [2, 2, 4])); // B-B-D
-      qcGuide('<b>TC-PAY-06 · B-B-D (thiếu C).</b> SPIN. Kỳ vọng: KHÔNG có thưởng 8× (không đủ bộ B+C+D); cũng không thắng thường (chỉ 2 B).');
-    }
-    async function qcPay07() {
-      await qcArmGrid(qcGridForPayline(0, [10, 10, 10])); // W-W-W P01
-      qcGuide('<b>TC-PAY-07 · 3 Wild không cộng thường.</b> SPIN. Kỳ vọng: đường giữa chỉ nhận giá trị đặc biệt 1000×, KHÔNG cộng thêm payout Wild thường (không double-count).' + QC_R4_NOTE);
-    }
-
     // ── 4 · R4 (mở rộng) ──
-    async function qcR402() {
-      await qcArmGrid(qcGridForPayline(1, [1, 1, 1])); // P02 thắng (kết thúc hàng trên)
-      qcGuide('<b>TC-R4-02 · Nhân đúng hệ số hàng kết thúc.</b> Ép P02 (A-A-A hàng trên) thắng. SPIN. Đọc hệ số <b>hàng trên</b> trên cuộn 4 → kỳ vọng Win = (200×CV×CPL) × hệ số hàng trên đó. <i>Ép cứng x5 cần J1.</i>');
-    }
-    async function qcR403(p) {
-      await qcArmGrid(qcGridForPayline(p, [1, 1, 1]));
-      const rowMap = ['hàng GIỮA', 'hàng TRÊN', 'hàng DƯỚI', 'hàng DƯỚI', 'hàng TRÊN'];
-      qcGuide('<b>TC-R4-03 · Mapping ' + QC_PAY_LABELS[p] + '.</b> SPIN. Kỳ vọng đường này dùng hệ số <b>' + rowMap[p] + '</b> của cuộn 4 (đối chiếu Win = gốc × hệ số hàng đó). <i>Hệ số ép đồng loạt không phân biệt được hàng → J1 để tất định.</i>');
-    }
-    async function qcR405() {
-      await qcArmGrid(qcGridTwoLines(1, [1, 1, 1], 2, [5, 5, 5])); // P02 trên + P03 dưới
-      qcGuide('<b>TC-R4-05 · Nhiều đường, hệ số riêng.</b> Ép P02 (hàng trên) + P03 (hàng dưới) cùng thắng. SPIN. Đọc hệ số <b>hàng trên</b> và <b>hàng dưới</b> trên cuộn 4 → mỗi đường nhân hệ số hàng riêng. <i>Ép cứng x2/x10 cần J1.</i>');
-    }
-    async function qcR406() {
-      qcGuide('<b>TC-R4-06 · Tỉ lệ hệ số (thống kê).</b> Quay nhiều lượt CÓ thắng, ghi hệ số mỗi hàng cuộn 4 (xem log). Kỳ vọng ≈ x1 5% · x2 30% · x5 42% · x10 23%. Cần mẫu lớn (vài trăm lượt).');
-    }
-    async function qcR407() {
-      await armCheat('FORCE_NAGA_EYE', {});
-      qcGuide('<b>TC-R4-07 · Mắt Naga giữa → x1.</b> Đã arm Mắt Naga. SPIN cho tới khi có đường thắng → Mắt Naga hiện hàng giữa cuộn 4; đường qua hàng giữa nhận <b>x1 cố định</b>, đường qua hàng trên/dưới vẫn x2/x5/x10. <i>Bản tất định (lưới thắng + Mắt Naga cùng spin): cần J1.</i>');
-    }
-
     // ── 5 · JACK (mở rộng) ──
-    async function qcJack03() {
-      await armCheat('FORCE_NAGA_EYE', {});
-      qcGuide('<b>TC-JACK-03 · Tổng = jackpot + thắng thường.</b> Đã arm Mắt Naga. SPIN tới khi lượt đó CÓ thắng thường → Mắt Naga trigger + đường thắng thường. Kỳ vọng Win = jackpot + thắng thường; số dư tăng đúng tổng. <i>Tất định (ép lưới thắng + Mắt Naga cùng spin): cần J1.</i>');
-    }
-    async function qcJack04() {
-      qcGuide('<b>TC-JACK-04 · Xác suất theo mức cược (log).</b> Ghi mức cược, nhờ dev tra log xác suất Mắt Naga; lặp với mức cược cao hơn. Kỳ vọng: cược cao → xác suất cao, nhưng ≤ 10%.');
-    }
-    async function qcJack05() {
-      await armTreasureRoom();
-      qcGuide('<b>TC-JACK-05 · 3 rương 3 tier ngẫu nhiên.</b> Đã arm Mắt Naga. Vào game chọn rương; mỗi lần kích hoạt, 3 rương đủ MINOR/MAJOR/GRAND, mỗi rương khác nhau. Lặp nhiều lần → thứ tự gán đổi (không cố định Vàng=GRAND).');
-    }
-    async function qcJack06() {
-      await armCheat('FORCE_NAGA_EYE', {});
-      qcGuide('<b>TC-JACK-06 · Đường giữa khi có Mắt Naga → x1.</b> Đã arm Mắt Naga. SPIN tới khi có đường thắng qua hàng giữa (P01) → đường đó nhận x1. <i>Bản tất định (ép P01 thắng + Mắt Naga cùng spin): cần J1.</i>');
-    }
-    async function qcJack07() {
-      await armCheat('FORCE_FREE_SPIN_FROM_RUSH', {});
-      qcGuide('<b>TC-JACK-07 · Không kích Mắt Naga trong free spin.</b> Đã kích Rush + 5 free spin. SPIN để vào free spin, soát toàn bộ các lượt: cuộn 4 KHÔNG hiện Mắt Naga, KHÔNG vào Phòng Kho Báu.');
-    }
-    async function qcJack08Read() {
-      const r = await debugCall('GET', `/api/v1/debug/jackpot/${agency()}/${gameId()}/pools`);
-      showJson('r-jack08', r.data);
-      qcGuide('<b>TC-JACK-08 · Mỗi spin tích hũ.</b> Đã đọc giá trị 3 hũ — GHI LẠI. Vào game SPIN 1 lượt (cược 10). Bấm "Đọc hũ" lần nữa để so. Kỳ vọng: MINOR +0.05 · MAJOR +0.03 · GRAND +0.02.');
-    }
-    async function qcJack08Seed() {
-      const r = await debugCall('POST', `/api/v1/debug/jackpot/${agency()}/${gameId()}/seed`);
-      showJson('r-jack08', r.data);
-      if (r.ok) showMsg('✅ Đã seed hũ gốc (MINOR=100 · MAJOR=1000 · GRAND=10000)');
-    }
-
     // ── 6 · RUSH (mở rộng) ──
-    async function qcRush01() {
-      await armCheat('FORCE_LOSS', {});
-      qcGuide('<b>TC-RUSH-01 · Hụt → +1 năng lượng.</b> Đã ép THUA. Ghi mức thanh Rush hiện tại, SPIN → thanh +1. <i>Đặt thanh đúng 5/30 để kiểm 5→6: cần J3 (cheat đọc field energy; hiện chỉ set được 29).</i>');
-    }
-    async function qcRush03() {
-      await armCheat('FORCE_FREE_SPIN_FROM_RUSH', {});
-      qcGuide('<b>TC-RUSH-03 · Free spin dùng đúng mức cược.</b> Đã kích Rush + 5 free spin. SPIN để bắt đầu. Soát: ô Mức cược giữ nguyên trong 5 lượt; số dư KHÔNG bị trừ tiền cược các lượt free.');
-    }
-    async function qcRush05() {
-      await armCheat('FORCE_LOSS', {});
-      qcGuide('<b>TC-RUSH-05 · Mỗi mức cược thanh riêng.</b> Ở <b>mức A</b>: bấm nút này rồi SPIN (thua) vài lần để thanh A tăng. Đổi sang <b>mức B</b>: thanh B độc lập (bắt đầu từ giá trị riêng). Quay lại mức A: thanh A giữ nguyên.');
-    }
-    async function qcRush06() {
-      await armCheat('FORCE_RUSH_MODE_FILL', {});
-      qcGuide('<b>TC-RUSH-06 · 28→29 chưa kích, 29→30 kích.</b> Cheat hiện set thanh = <b>29</b>. SPIN thua 1 lượt → 30 → kích 5 free spin. <i>Để kiểm mốc 28→29 (chưa kích): cần J3 (set energy=28).</i>');
-    }
-
     // ── 7 · STREAK (mở rộng) ──
-    async function qcStreak02() {
-      await qcArmGridWin([1, 1, 1]);
-      qcGuide('<b>TC-STREAK-02 · Bộ đếm +1 sau thắng.</b> Đã ép THẮNG. SPIN 1 lượt thắng. Kỳ vọng bộ đếm chuỗi hiển thị <code>1/3</code>.');
-    }
-    async function qcStreak04() {
-      await qcArmGridWin([1, 1, 1]);
-      qcGuide('<b>TC-STREAK-04 · Đổi mức cược → mất chuỗi.</b> Bấm nút này rồi SPIN thắng (chuỗi ≥1). <b>Đổi mức cược</b>, bấm lại + SPIN thắng. Kỳ vọng: chuỗi cũ bỏ, chuỗi mới = <code>1/3</code>; không kích Special Free Spin từ chuỗi cũ.');
-    }
-    async function qcStreak05() {
-      await armCheat('FORCE_SPECIAL_FREE_SPIN', {});
-      qcGuide('<b>TC-STREAK-05 · Không kích trong free spin.</b> Đã vào Special Free Spin. SPIN các lượt free (kể cả thắng). Kỳ vọng: bộ đếm Win Streak KHÔNG tăng; không có thông báo Special Free Spin mới.');
-    }
-    async function qcStreak06() {
-      await armCheat('FORCE_SPECIAL_FREE_SPIN', {});
-      qcGuide('<b>TC-STREAK-06 · Special Free Spin nhiều Wild hơn (thống kê).</b> Đã vào Special Free Spin. SPIN, đếm số Wild trên lưới, so với lượt thường. Kỳ vọng Wild nhiều hơn rõ rệt (cấu hình tần suất 9 vs 2).');
-    }
-
     // ── 8 · SECOND CHOICE (mở rộng) ──
-    async function qcSc03() {
-      await armSecondChoiceCheat();
-      qcGuide('<b>TC-SC-03 · Reroll tạo đường thắng.</b> Đã arm W/W/non-W. SPIN → hiện popup → ĐỒNG Ý reroll. Nếu cuộn 3 ra Wild/đúng symbol → có đường thắng, Win tăng, số dư cộng tiền thắng. <i>Kết quả cuộn 3 ngẫu nhiên — lặp tới khi ra thắng.</i>');
-    }
-    async function qcSc04() {
-      // Wild ở reel1&2 (cột 0&1, hàng giữa) NHƯNG đã có đường thắng (P02=A-A-A) → second choice bị chặn.
-      await qcArmGrid([[1, 10, 4], [1, 10, 2], [1, 5, 5]]);
-      qcGuide('<b>TC-SC-04 · Không mời khi đã có thắng.</b> Ép lưới có Wild reel 1&amp;2 NHƯNG đã có đường thắng (hàng trên A-A-A). SPIN. Kỳ vọng: cuộn 3 KHÔNG rung; KHÔNG hiện popup reroll.');
-    }
-    async function qcSc05() {
-      await qcArmGrid([[10, 10, 10], [10, 10, 10], [10, 10, 10]]); // toàn Wild → W-W-W mọi đường
-      qcGuide('<b>TC-SC-05 · W-W-W không mời.</b> Ép cả 3 cuộn Wild (đường W-W-W thắng, cuộn 3 cũng Wild). SPIN. Kỳ vọng: KHÔNG hiện popup reroll (đã thắng + cả 3 cuộn Wild).');
-    }
-    async function qcSc06() {
-      // Chỉ reel1 (cột 0) có Wild; reel2&3 không Wild; không đường thắng → không đủ điều kiện mời.
-      await qcArmGrid([[10, 4, 5], [1, 2, 3], [5, 1, 4]]);
-      qcGuide('<b>TC-SC-06 · Chỉ 1 cuộn Wild → không mời.</b> Ép Wild chỉ ở cuộn 1 (cuộn 2 không Wild). SPIN. Kỳ vọng: cuộn 3 KHÔNG rung; KHÔNG hiện popup reroll.');
-    }
-    async function qcSc07() {
-      await qcDoSetBalance(3);
-      await armSecondChoiceCheat();
-      qcGuide('<b>TC-SC-07 · Không đủ tiền reroll.</b> Đã set số dư = 3 và arm offer. Trong game đặt mức cược 5 (CV $0.01, CPL 1), SPIN → hiện popup → bấm ĐỒNG Ý. Kỳ vọng: báo thiếu số dư; popup vẫn còn; số dư KHÔNG bị trừ.');
-    }
-    async function qcSc08() {
-      await armSecondChoiceCheat();
-      qcGuide('<b>TC-SC-08 · Chi phí reroll = mức cược.</b> Đã arm offer. GHI số dư trước. SPIN → popup → ĐỒNG Ý. Kỳ vọng: số dư giảm đúng bằng mức cược (vd cược 10 → giảm 10), không hơn không kém.');
-    }
-
     // ═══════════════════════ RAW / VALIDATE TAB ═══════════════════════
     // Gửi request thô tới 3 endpoint debug (đề xuất J2) để test validate input.
     // Field rỗng → bỏ qua (= thiếu field). Chưa hoạt động đến khi backend thêm endpoint.
-    function rawBody() {
-      const b = { gameId: gameId() };
-      const sid = idv('raw-sid');
-      if (sid) b.sessionId = sid;
-      return b;
-    }
-
-    async function qcRawSpin() {
-      const b = rawBody();
-      const bet = idv('raw-bet'); if (bet !== '') b.betLevelId = bet;
-      const cv = idv('raw-cv'); if (cv !== '') b.coinValueId = cv;
-      const r = await debugCall('POST', `/api/v1/debug/spin/${agency()}/${userId()}`, b);
-      showJson('raw-spin-result', r.data);
-    }
-
-    async function qcRawPick() {
-      const b = rawBody();
-      const c = idv('raw-chest'); if (c !== '') b.chest = c;
-      const r = await debugCall('POST', `/api/v1/debug/jackpot-pick/${agency()}/${userId()}`, b);
-      showJson('raw-pick-result', r.data);
-    }
-
-    async function qcRawSecondChoice() {
-      const r = await debugCall('POST', `/api/v1/debug/second-choice/${agency()}/${userId()}`, rawBody());
-      showJson('raw-sc-result', r.data);
-    }
-
     /* ════════════════════════════════════════════════════════════════
        ⑤ VALIDATE (J2) + ⑥ TẤT ĐỊNH (J1/J3/J4)
        IDs dùng tiền tố VAL-/DET- để KHÔNG đụng card cùng tên ở tab ①–④.
        ════════════════════════════════════════════════════════════════ */
 
     // FORCE_GRID mở rộng (J1): kèm nagaEye / mults per-row trong CÙNG payload.
-    async function qcArmGridX(screen, extra) { await armCheat('FORCE_GRID', Object.assign({ screen }, extra || {})); }
-
     // Gửi 1 request validate → so mã lỗi trả về với kỳ vọng → tự đánh dấu Đạt/Lỗi + in JSON.
-    async function qcVal(markId, path, body, expected, outId) {
-      const r = await debugCall('POST', path, body);
-      if (outId) showJson(outId, r.data);
-      const got = (r.data && (r.data.error || r.data.expectedError)) || '';
-      const pass = got === expected;
-      qcGuide('<b>' + markId.replace('VAL-', 'TC-') + ' · Validate.</b> Gửi <code>' + escHtml(JSON.stringify(body)) +
-        '</code> · kỳ vọng <code>' + expected + '</code> · nhận <code>' + (got || '(không lỗi)') +
-        '</code> → ' + (pass ? '✅ <b>ĐẠT</b>' : '❌ <b>LỖI</b>') + '.');
-      return r;
-    }
-
-    function qcSpinPath() { return `/api/v1/debug/spin/${agency()}/${userId()}`; }
-    function qcPickPath() { return `/api/v1/debug/jackpot-pick/${agency()}/${userId()}`; }
-
     // BET-04…10 — đầu vào sai/thiếu
-    async function qcVBet04() { await qcVal('VAL-BET-04', qcSpinPath(), { gameId: gameId(), coinValueId: "1" }, 'MISSING_BET_LEVEL_ID', 'r-VAL-BET-04'); }
-    async function qcVBet05() { await qcVal('VAL-BET-05', qcSpinPath(), { gameId: gameId(), betLevelId: "1" }, 'MISSING_COIN_VALUE_ID', 'r-VAL-BET-05'); }
-    async function qcVBet06() { await qcVal('VAL-BET-06', qcSpinPath(), { gameId: gameId(), betLevelId: "abc", coinValueId: "1" }, 'INVALID_BET_LEVEL_ID', 'r-VAL-BET-06'); }
-    async function qcVBet07() { await qcVal('VAL-BET-07', qcSpinPath(), { gameId: gameId(), betLevelId: "1", coinValueId: "xyz" }, 'INVALID_COIN_VALUE_ID', 'r-VAL-BET-07'); }
-    async function qcVBet08() { await qcVal('VAL-BET-08', qcSpinPath(), { gameId: gameId(), betLevelId: "1", coinValueId: "3" }, 'INVALID_COIN_VALUE', 'r-VAL-BET-08'); }
-    async function qcVBet09() { await qcVal('VAL-BET-09', qcSpinPath(), { gameId: gameId(), betLevelId: "11", coinValueId: "1" }, 'INVALID_COIN_PER_LINE', 'r-VAL-BET-09'); }
-    async function qcVBet10() { await qcVal('VAL-BET-10', qcSpinPath(), { gameId: gameId(), betLevelId: "0", coinValueId: "1" }, 'INVALID_COIN_PER_LINE', 'r-VAL-BET-10'); }
-
     // BET-03 — tổ hợp HỢP LỆ → ok=true + totalBet
-    async function qcVBet03() {
-      const r = await debugCall('POST', qcSpinPath(), { gameId: gameId(), betLevelId: "10", coinValueId: "500" });
-      showJson('r-VAL-BET-03', r.data);
-      const ok = !!(r.data && r.data.ok === true);
-      qcGuide('<b>TC-BET-03 · Tổ hợp hợp lệ.</b> CV 500 × CPL 10 × 5 = <code>' + (r.data && r.data.totalBet) +
-        '</code> (kỳ vọng 25000) → ' + (ok ? '✅ <b>ĐẠT</b>' : '❌ <b>LỖI</b>') + '. Thử 70 tổ hợp khác ở tab Raw / Validate.');
-    }
-
     // JACK-09…11 — chọn rương sai (JACK-10/11 tự arm Phòng Kho Báu trước)
-    async function qcVJack09() { await qcVal('VAL-JACK-09', qcPickPath(), { gameId: gameId(), chest: "BRONZE" }, 'JACKPOT_NOT_TRIGGERED', 'r-VAL-JACK-09'); }
-    async function qcVJack10() { await armTreasureRoom(); await qcVal('VAL-JACK-10', qcPickPath(), { gameId: gameId(), chest: "" }, 'MISSING_CHEST', 'r-VAL-JACK-10'); }
-    async function qcVJack11() { await armTreasureRoom(); await qcVal('VAL-JACK-11', qcPickPath(), { gameId: gameId(), chest: "PLATINUM" }, 'INVALID_CHEST', 'r-VAL-JACK-11'); }
-
     // SC-09 — guard đang TẮT (J6): báo cáo trạng thái, không tự chấm
-    async function qcVSc09() {
-      const r = await debugCall('POST', `/api/v1/debug/second-choice/${agency()}/${userId()}`, { gameId: gameId() });
-      showJson('r-VAL-SC-09', r.data);
-      const exp = r.data ? r.data.expectedError : null;
-      qcGuide('<b>TC-SC-09 · ⚠ Guard đang TẮT (J6).</b> secondChoiceAvailable = <code>' + (r.data && r.data.secondChoiceAvailable) +
-        '</code>; theo GDD nên trả <code>' + (exp || 'SECOND_CHOICE_NOT_AVAILABLE') +
-        '</code> nhưng check trong NagaCommandHandler đang comment-out. <b>Chờ team chốt</b> rồi mới tự chấm.');
-    }
-
     // ── ⑥ TẤT ĐỊNH (J1/J3/J4) ──
     const QC_DET_ROWLABEL = ['GIỮA → ×5', 'TRÊN → ×2', 'DƯỚI → ×10', 'DƯỚI → ×10', 'TRÊN → ×2'];
-    async function qcDetR403(p) {
-      await qcArmGridX(qcGridForPayline(p, [1, 1, 1]), { mults: [2, 5, 10] });
-      qcGuide('<b>TC-R4-03 · Mapping ' + QC_PAY_LABELS[p] + ' (tất định).</b> Ép ' + QC_PAY_LABELS[p] +
-        ' thắng A-A-A + hệ số cuộn 4 cố định [trên×2 · giữa×5 · dưới×10]. SPIN. Kỳ vọng đường này nhận hệ số hàng <b>' +
-        QC_DET_ROWLABEL[p] + '</b> (Win = 200×CV×CPL × hệ số đó).');
-    }
-    async function qcDetR405() {
-      await qcArmGridX(qcGridTwoLines(1, [1, 1, 1], 2, [1, 1, 1]), { mults: [2, 5, 10] });
-      qcGuide('<b>TC-R4-05 · Nhiều đường hệ số riêng (tất định).</b> Ép P02 (trên) + P03 (dưới) thắng A-A-A + hệ số [trên×2 · dưới×10]. SPIN. Kỳ vọng: cuộn 4 hiện ×2 hàng trên & ×10 hàng dưới; P02 nhân ×2, P03 nhân ×10 — mỗi đường hệ số riêng.');
-    }
-    async function qcDetR407() {
-      await qcArmGridX(qcGridTwoLines(0, [1, 1, 1], 1, [1, 1, 1]), { nagaEye: true, mults: [5, 5, 5] });
-      qcGuide('<b>TC-R4-07 · Mắt Naga giữa → x1 (tất định).</b> Ép P01 (giữa) + P02 (trên) thắng + Mắt Naga giữa + hệ số nền ×5. SPIN. Kỳ vọng: ô giữa cuộn 4 hiện Mắt Naga; P01 (qua giữa) nhận <b>×1 cố định</b>, P02 (qua trên) vẫn ×5. (Lượt này cũng mở Phòng Kho Báu — đúng GDD.)');
-    }
-    async function qcDetJack03() {
-      await qcArmGridX(qcGridForPayline(1, [1, 1, 1]), { nagaEye: true, mults: [1, 1, 1] });
-      qcGuide('<b>TC-JACK-03 · Tổng = jackpot + thắng thường (tất định).</b> Ép P02 (trên) A-A-A thắng + Mắt Naga giữa + hệ số ×1. SPIN → có thắng thường VÀ Mắt Naga mở Phòng Kho Báu. Chọn rương. Kỳ vọng: Win = jackpot + thắng thường; số dư tăng đúng tổng.');
-    }
-    async function qcDetJack06() {
-      await qcArmGridX(qcGridForPayline(0, [1, 1, 1]), { nagaEye: true, mults: [5, 5, 5] });
-      qcGuide('<b>TC-JACK-06 · Đường giữa + Mắt Naga → x1 (tất định).</b> Ép P01 (giữa) A-A-A thắng + Mắt Naga giữa + hệ số nền ×5. SPIN. Kỳ vọng: P01 qua hàng giữa nhận <b>×1</b> (không ×5); cuộn 4 hiện Mắt Naga hàng giữa.');
-    }
-    async function qcDetJack02() {
-      await armCheat('FORCE_JACKPOT_TIER', { assign: { BRONZE: 'GRAND', SILVER: 'MAJOR', GOLD: 'MINOR' } });
-      await armTreasureRoom();
-      qcGuide('<b>TC-JACK-02 · Chọn rương nhận tier ép (tất định, J4).</b> Đã ép BRONZE→GRAND · SILVER→MAJOR · GOLD→MINOR và mở Phòng Kho Báu. Vào game chọn <b>rương Đồng (BRONZE)</b>. Kỳ vọng: nhận đúng <b>GRAND</b> + tiền hũ GRAND; 2 rương kia lộ MAJOR/MINOR; số dư tăng đúng.');
-    }
-    async function qcDetRush01() {
-      await armCheat('FORCE_RUSH_MODE_FILL', { energy: 5 });
-      qcGuide('<b>TC-RUSH-01 · Hụt → +1 (tất định, J3).</b> Đã đặt thanh Rush = <b>5/30</b>. Vào game SPIN 1 lượt <b>thua</b>. Kỳ vọng thanh lên <b>6/30</b>. (Nếu lượt đó thắng → thanh reset 0; bấm lại rồi SPIN.)');
-    }
-    async function qcDetRush06() {
-      await armCheat('FORCE_RUSH_MODE_FILL', { energy: 28 });
-      qcGuide('<b>TC-RUSH-06 · 28→29 chưa kích, 29→30 kích (tất định, J3).</b> Đã đặt thanh = <b>28/30</b>. SPIN thua → 29 (CHƯA kích). SPIN thua nữa → 30 (kích 5 free spin).');
-    }
-    async function qcDetRush06b() {
-      await armCheat('FORCE_RUSH_MODE_FILL', { energy: 29 });
-      qcGuide('<b>TC-RUSH-06 (mốc 29).</b> Đã đặt thanh = <b>29/30</b>. SPIN thua 1 lượt → 30 → kích 5 free spin ngay.');
-    }
-
   </script>
   <!-- ?v= là cache-busting: đổi URL thì bản cũ trong cache trình duyệt không khớp được nữa, khỏi
        phụ thuộc vào việc người dùng có hard-refresh hay không. Sửa 2 file này thì tăng số. -->
   <script src="js/ws-client.js?v=5"></script>
   <script src="js/ws-debug.js?v=5"></script>
-  <script src="js/test-catalog.js"></script>
-  <script src="js/cases/cases-core.js"></script>
-  <script src="js/cases/cases-features.js"></script>
-  <script src="js/cases/cases-economy.js"></script>
-  <script src="js/test-runner.js"></script>
 </body>
 
 </html>

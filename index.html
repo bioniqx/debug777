@@ -784,15 +784,11 @@
     }
 
     /* ═══ MAIN ═════════════════════════════════════════════════════ */
+    /* Không chặn bề ngang và không canh giữa: lưới cheat cần ăn hết chỗ để có thêm cột,
+       nhờ vậy các thẻ hàng dưới lấp được khoảng trống bên phải thay vì để hai lề rỗng. */
     #main {
       padding: 22px;
-      max-width: 1380px;
-      margin: 0 auto;
       animation: contentFade 0.5s ease;
-    }
-
-    .log-open #main {
-      max-width: none;
     }
 
     @keyframes contentFade {
@@ -1181,6 +1177,24 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(296px, 1fr));
       gap: 12px;
+    }
+
+    /* Nhóm "Cheat Core Engine" nằm chung một lưới với nhóm Naga. Vạch + nhãn chiếm trọn hàng nên
+       chúng đẩy 6 thẻ Core Engine xuống dòng mới — đúng bố cục 2 nhóm như cũ. */
+    .cheat-grid .section-sep,
+    .cheat-grid .section-lbl {
+      grid-column: 1 / -1;
+    }
+
+    /* Màn đủ rộng cho từ 3 cột trở lên: giấu vạch + nhãn đi, 6 thẻ Core Engine chảy tiếp vào
+       chỗ trống bên phải nhóm Naga thay vì để hàng cuối hụt. Hẹp hơn thì tự về lại 2 nhóm.
+       1290px là số đo thật: lưới = viewport − 372 (sidebar + padding), 3 cột cần 3×296 + 2×12
+       = 912px → viewport ≥ 1284. */
+    @media (min-width: 1284px) {
+      .cheat-grid .section-sep,
+      .cheat-grid .section-lbl {
+        display: none;
+      }
     }
 
     .cheat-c {
@@ -1883,12 +1897,6 @@
               <button class="btn btn-gold btn-sm btn-block" onclick="armVaultDoubleUp()">⚡ Cài Cheat Double-Up</button>
             </div>
 
-            <div class="cheat-c" style="display:none">
-              <div class="cheat-name">FORCE_NAGA_EYE</div>
-              <div class="cheat-hint">Ép Naga Eye xuất hiện ở giữa Reel 4 → kích jackpot nếu có winning line.</div>
-              <button class="btn btn-gold btn-sm btn-block" onclick="armCheat('FORCE_NAGA_EYE',{})">⚡ Cài Cheat</button>
-            </div>
-
             <div class="cheat-c">
               <div class="cheat-name">FORCE_RUSH_MODE_FILL</div>
               <div class="cheat-hint">Nạp Rush Mode energy counter. 30 = kích hoạt free spin.</div>
@@ -1901,68 +1909,6 @@
               <button class="btn btn-gold btn-sm btn-block"
                 onclick="armCheat('FORCE_RUSH_MODE_FILL',{energy:+document.getElementById('rm-energy').value})">⚡ Cài
                 Cheat</button>
-            </div>
-
-            <div class="cheat-c" style="display:none">
-              <div class="cheat-name">FORCE_FREE_SPIN_FROM_RUSH</div>
-              <div class="cheat-hint">Nạp đầy Rush Mode VÀ kích luôn 5 free spin bonus.</div>
-              <button class="btn btn-gold btn-sm btn-block" onclick="armCheat('FORCE_FREE_SPIN_FROM_RUSH',{})">⚡ Cài
-                Cheat</button>
-            </div>
-
-            <div class="cheat-c" style="display:none">
-              <div class="cheat-name">FORCE_WIN_STREAK</div>
-              <div class="cheat-hint">Pin winStreakCount = requiredStreak−1. Spin thắng tiếp theo sẽ hoàn thành streak.
-              </div>
-              <button class="btn btn-gold btn-sm btn-block" onclick="armCheat('FORCE_WIN_STREAK',{})">⚡ Cài
-                Cheat</button>
-            </div>
-
-            <div class="cheat-c" style="display:none">
-              <div class="cheat-name">FORCE_SPECIAL_FREE_SPIN</div>
-              <div class="cheat-hint">Đưa thẳng session vào SPECIAL_FREE_SPIN mode với 1 free spin.</div>
-              <button class="btn btn-gold btn-sm btn-block" onclick="armCheat('FORCE_SPECIAL_FREE_SPIN',{})">⚡ Cài
-                Cheat</button>
-            </div>
-
-            <div class="cheat-c" style="display:none">
-              <div class="cheat-name">FORCE_WIN_CAP</div>
-              <div class="cheat-hint">Test <b>trần PER-SPIN</b> (<code>winCapReached</code>). Lấp grid toàn Wild
-                (~3200× tổng cược) → luôn vượt trần thực là <b>20000×</b> khi override xuống thấp. Override mặc định =
-                1× (tức cắt ở <code>bet × 1</code>).<br>
-                Dùng được trong <b>MỌI mode</b>: base spin không cần chuẩn bị; free spin / hold&amp;win / rush /
-                special / bulk / buy-feature / Second Choice → vào mode đó trước, rồi mới bấm Cài Cheat, rồi
-                spin.</div>
-              <div class="frow mb8">
-                <div class="fg"><label>winCap override (×bet, mặc định 1)</label><input id="wincap-mult" type="number" value="1" min="1"></div>
-              </div>
-              <button class="btn btn-gold btn-sm btn-block"
-                onclick="armCheat('FORCE_WIN_CAP',{winCap:+idv('wincap-mult')})">⚡ Cài Cheat</button>
-            </div>
-
-            <div class="cheat-c" style="display:none">
-              <div class="cheat-name">FORCE_FREESPIN_CAP</div>
-              <div class="cheat-hint">Test <b>trần SEQUENCE free spin</b> (<code>winCapMilestone = MAXIMUM_WIN_CAP</code>).
-                <b>Sticky ~5 phút</b> — arm một lần, tồn tại suốt cả dãy free spin. Override mặc định = 1×.<br>
-                Thủ tục: vào free spin trước (trigger tự nhiên hoặc <code>FORCE_FREE_SPIN</code>), arm cheat này, sau
-                đó chơi hết các lượt free spin còn lại — tổng tích lũy sẽ đạt trần và trả
-                <code>winCapMilestone</code>.</div>
-              <div class="frow mb8">
-                <div class="fg"><label>winCap override (×bet, mặc định 1)</label><input id="fscap-mult" type="number" value="1" min="1"></div>
-              </div>
-              <button class="btn btn-gold btn-sm btn-block"
-                onclick="armCheat('FORCE_FREESPIN_CAP',{winCap:+idv('fscap-mult')})">⚡ Cài Cheat</button>
-            </div>
-
-            <div class="cheat-c" style="display:none">
-              <div class="cheat-name">FORCE_SECOND_CHOICE</div>
-              <div class="cheat-hint">
-                Vẽ grid <b>Wild reel 1&amp;2, reel 3 không Wild, không đường thắng</b> qua FORCE_GRID → spin <b>BASE</b>
-                kế tiếp trả
-                <code>secondChoiceAvailable=true</code>. Yêu cầu <code>secondChoice.enabled=true</code> trong YAML (GDD
-                §7). <i>(W-W-E vẫn thắng E-E-E nên không dùng.)</i>
-              </div>
-              <button class="btn btn-gold btn-sm btn-block" onclick="armSecondChoiceCheat()">⚡ Cài Cheat</button>
             </div>
 
             <!-- ── FORCE_WIN_STREAK_SEQUENCE ────────────────────────────── -->
@@ -2017,11 +1963,9 @@
                 <button class="btn btn-ghost btn-sm" onclick="fillFsMaxWin()">🐉 Toàn W + 10×</button>
               </div>
             </div>
-          </div>
 
-          <div class="section-sep"></div>
-          <div class="section-lbl">Cheat Core Engine</div>
-          <div class="cheat-grid">
+            <div class="section-sep"></div>
+            <div class="section-lbl">Cheat Core Engine</div>
 
             <div class="cheat-c">
               <div class="cheat-name">FORCE_FREE_SPIN</div>
@@ -2724,19 +2668,6 @@
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-
-    async function armSecondChoiceCheat() {
-      // GDD §7.2: Second Choice chỉ kích khi reel 1&2 có Wild, KHÔNG đường thắng, không hàng W-W-W.
-      // Lưu ý: W-W-E vẫn là đường thắng (E-E-E nhờ Wild thay thế) → KHÔNG dùng. Ở đây reel 1&2 có Wild
-      // hàng trên, reel 3 ô trên là Blank (W-W-Q không thắng), các ô khác đều khác nhau → không đường nào thắng.
-      const screen = [[10, 5, 1], [10, 4, 2], [0, 3, 5]];
-      document.querySelectorAll('.g-sel').forEach(sel => {
-        const c = +sel.dataset.c, r = +sel.dataset.r;
-        sel.value = screen[c][r];
-      });
-      await armCheat('FORCE_GRID', { screen });
-      showMsg('✅ Arm Second Choice (Wild reel 1&2, reel 3 không Wild, không đường thắng) — spin BASE kế tiếp trả secondChoiceAvailable=true');
-    }
 
     // Lưới THẮNG đúng 1 đường giữa (P01): trio nằm hàng giữa; hàng trên/dưới dùng
     // E(5)/Q(0) xen kẽ để không tạo đường thắng phụ và không trùng tổ hợp B+C+D.

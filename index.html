@@ -23,8 +23,6 @@
       --obsidian: #181d23;
       --temple: #1e242b;
       --carved: #232a31;
-      --slab: #2a323a;
-      --stone: #323b44;
 
       /* ── Borders ────────────────────────────────────────────── */
       --border: #333d47;
@@ -48,23 +46,14 @@
       --gold-glow: rgba(224, 178, 92, 0.15);
 
       /* ── Amethyst (gem highlights, jackpot) ─────────────────── */
-      --amethyst: #a78fd0;
-      --amethyst-bright: #c4b0e6;
-      --amethyst-soft: rgba(167, 143, 208, 0.13);
 
       /* ── Semantic ───────────────────────────────────────────── */
       --success: #6cc08a;
-      --success-bg: rgba(108, 192, 138, 0.10);
       --success-line: rgba(108, 192, 138, 0.32);
       --error: #e58484;
-      --error-bg: rgba(229, 132, 132, 0.10);
-      --error-line: rgba(229, 132, 132, 0.32);
       --warn: #e0a866;
-      --warn-bg: rgba(224, 168, 102, 0.10);
       --warn-line: rgba(224, 168, 102, 0.32);
       --info: #82b1e0;
-      --info-bg: rgba(130, 177, 224, 0.10);
-      --info-line: rgba(130, 177, 224, 0.32);
 
       /* ── Type ───────────────────────────────────────────────── */
       --text: #e8ecf0;
@@ -74,7 +63,6 @@
 
       /* ── Misc ───────────────────────────────────────────────── */
       --code-bg: rgba(0, 0, 0, 0.24);
-      --shadow-deep: 0 12px 40px rgba(0, 0, 0, 0.40);
       --shadow-soft: 0 2px 14px rgba(0, 0, 0, 0.24);
       --radius: 6px;
       --radius-lg: 10px;
@@ -121,12 +109,6 @@
       background-size: auto, auto, 96px 96px;
     }
 
-    /* ═══ TYPOGRAPHY HELPERS ═══════════════════════════════════════ */
-    .display {
-      font-family: 'Inter', system-ui, sans-serif;
-      letter-spacing: 0.08em;
-    }
-
     .mono {
       font-family: 'JetBrains Mono', monospace;
       letter-spacing: -0.005em;
@@ -166,8 +148,71 @@
     }
 
     /* ── Hướng dẫn nhanh (sidebar) ────────────────────────────── */
+    /* Hướng dẫn đọc một lần rồi thôi, nhưng trước đây chiếm nửa sidebar vĩnh viễn và ép danh
+       sách người chơi — thứ dùng liên tục — co lại. Thu gọn mặc định, bấm mới mở. */
     #sidebar .guide-card {
       margin-top: 12px;
+    }
+
+    #sidebar .guide-card > summary {
+      list-style: none;
+      cursor: pointer;
+      user-select: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    #sidebar .guide-card > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    #sidebar .guide-card[open] > summary {
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+    }
+
+    .guide-caret {
+      margin-left: auto;
+      flex: none;
+      font-size: 11px;
+      color: var(--text-dim);
+      transition: transform 0.2s ease;
+    }
+
+    #sidebar .guide-card[open] .guide-caret {
+      transform: rotate(180deg);
+    }
+
+    /* Cấu hình WS dùng đúng một lần mỗi phiên nhưng lại là dải rộng nhất trên đầu trang.
+       Nối xong thì thu thành một chip; bấm vào mở lại để sửa. */
+    #ws-summary {
+      display: none;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 14px;
+      border: 1px solid var(--jade-deep);
+      border-radius: 100px;
+      background: var(--jade-soft);
+      color: var(--jade-bright);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      cursor: pointer;
+      transition: border-color 0.18s ease, background 0.18s ease;
+    }
+
+    #ws-summary:hover {
+      border-color: var(--jade);
+      background: var(--jade-glow);
+    }
+
+    #ws-summary:focus-visible {
+      outline: 2px solid var(--jade-bright);
+      outline-offset: 2px;
+    }
+
+    #ws-summary .ws-sum-edit {
+      color: var(--text-dim);
+      font-size: 11px;
     }
 
     .guide-box {
@@ -756,33 +801,6 @@
       box-shadow: 0 0 0 1px var(--gold-soft);
     }
 
-    .tab.on {
-      color: var(--gold-bright);
-    }
-
-    .tab.on::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 18px;
-      right: 18px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      animation: tabSlide 0.35s ease;
-    }
-
-    @keyframes tabSlide {
-      from {
-        opacity: 0;
-        transform: scaleX(0.4);
-      }
-
-      to {
-        opacity: 1;
-        transform: scaleX(1);
-      }
-    }
-
     /* ═══ MAIN ═════════════════════════════════════════════════════ */
     /* Không chặn bề ngang và không canh giữa: lưới cheat cần ăn hết chỗ để có thêm cột,
        nhờ vậy các thẻ hàng dưới lấp được khoảng trống bên phải thay vì để hai lề rỗng. */
@@ -900,24 +918,8 @@
       filter: drop-shadow(0 0 6px var(--gold-soft));
     }
 
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-
     @media (max-width: 900px) {
 
-      .grid-2,
-      .grid-3 {
-        grid-template-columns: 1fr;
-      }
     }
 
     /* ═══ BUTTONS ══════════════════════════════════════════════════ */
@@ -958,67 +960,6 @@
     .btn-gold:hover {
       background: linear-gradient(180deg, #ecc77e 0%, #d9aa56 55%, #bd8b3a 100%);
       box-shadow: 0 1px 0 rgba(255, 242, 205, 0.32) inset, 0 4px 14px rgba(180, 140, 60, 0.34);
-    }
-
-    .btn-jade {
-      background: linear-gradient(180deg, #5cb3a6 0%, #3e8c80 55%, #2f6f64 100%);
-      color: #f1f7f5;
-      border-color: #469386;
-      box-shadow: 0 1px 0 rgba(190, 235, 226, 0.20) inset, 0 2px 9px rgba(47, 111, 100, 0.28);
-    }
-
-    .btn-jade:hover {
-      background: linear-gradient(180deg, #6ec4b7 0%, #4a9c8f 55%, #357d72 100%);
-      box-shadow: 0 1px 0 rgba(190, 235, 226, 0.28) inset, 0 4px 14px rgba(47, 111, 100, 0.38);
-    }
-
-    .btn-green {
-      /* legacy alias */
-      background: linear-gradient(180deg, #5cb3a6 0%, #3e8c80 55%, #2f6f64 100%);
-      color: #f1f7f5;
-      border-color: #469386;
-      box-shadow: 0 1px 0 rgba(190, 235, 226, 0.20) inset, 0 2px 9px rgba(47, 111, 100, 0.28);
-    }
-
-    .btn-green:hover {
-      background: linear-gradient(180deg, #6ec4b7 0%, #4a9c8f 55%, #357d72 100%);
-      box-shadow: 0 1px 0 rgba(190, 235, 226, 0.28) inset, 0 4px 14px rgba(47, 111, 100, 0.38);
-    }
-
-    .btn-red {
-      background: linear-gradient(180deg, #c84a4a 0%, #8c2828 50%, #5e1818 100%);
-      color: #fef0f0;
-      border-color: #a83838;
-      box-shadow: 0 1px 0 rgba(255, 180, 180, 0.18) inset, 0 4px 14px rgba(140, 40, 40, 0.35);
-    }
-
-    .btn-red:hover {
-      background: linear-gradient(180deg, #d85858 0%, #a03030 50%, #6e1c1c 100%);
-      box-shadow: 0 1px 0 rgba(255, 180, 180, 0.28) inset, 0 6px 22px rgba(140, 40, 40, 0.5);
-    }
-
-    .btn-orange {
-      background: linear-gradient(180deg, #d97847 0%, #a04a18 50%, #6c3008 100%);
-      color: #fff4e0;
-      border-color: #b85820;
-      box-shadow: 0 1px 0 rgba(255, 210, 170, 0.18) inset, 0 4px 14px rgba(160, 74, 24, 0.35);
-    }
-
-    .btn-orange:hover {
-      background: linear-gradient(180deg, #e88858 0%, #b85820 50%, #803810 100%);
-      box-shadow: 0 1px 0 rgba(255, 210, 170, 0.28) inset, 0 6px 22px rgba(160, 74, 24, 0.5);
-    }
-
-    .btn-blue {
-      background: linear-gradient(180deg, #5a85c2 0%, #2c5290 50%, #1c3868 100%);
-      color: #e8f0fb;
-      border-color: #3a66a8;
-      box-shadow: 0 1px 0 rgba(190, 210, 250, 0.2) inset, 0 4px 14px rgba(44, 82, 144, 0.35);
-    }
-
-    .btn-blue:hover {
-      background: linear-gradient(180deg, #6c95d0 0%, #3a62a0 50%, #244478 100%);
-      box-shadow: 0 1px 0 rgba(190, 210, 250, 0.3) inset, 0 6px 22px rgba(44, 82, 144, 0.5);
     }
 
     .btn-ghost {
@@ -1235,6 +1176,40 @@
       background: linear-gradient(180deg, rgba(212, 175, 58, 0.06) 0%, var(--obsidian) 100%);
     }
 
+    /* ── Đã cài ────────────────────────────────────────────────────
+       Bản chất của tool: một cheat sống đúng 1 lượt spin, và mỗi người chơi chỉ giữ được 1 cheat.
+       Trước đây cài xong không để lại dấu vết nào trên màn hình. Nhãn đặt tuyệt đối nên bật/tắt
+       không làm xô lệch bố cục cột. */
+    .cheat-c.is-armed {
+      border-color: var(--jade-deep);
+      box-shadow: inset 0 0 0 1px var(--jade-soft), 0 0 24px var(--jade-glow);
+    }
+
+    .cheat-c.is-armed::before {
+      background: linear-gradient(90deg, transparent, var(--jade) 30%, var(--jade) 70%, transparent);
+    }
+
+    .cheat-c.is-armed .cheat-name {
+      padding-right: 108px;
+    }
+
+    .cheat-c.is-armed::after {
+      content: attr(data-armed);
+      position: absolute;
+      top: 13px;
+      right: 14px;
+      padding: 2px 9px;
+      border: 1px solid var(--jade-deep);
+      border-radius: 100px;
+      background: var(--jade-soft);
+      color: var(--jade-bright);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
     .cheat-name {
       font-family: 'JetBrains Mono', monospace;
       font-weight: 600;
@@ -1395,10 +1370,6 @@
       color: var(--text);
     }
 
-    .tl {
-      color: var(--text-muted);
-    }
-
     .tb {
       color: var(--info);
       font-weight: 600;
@@ -1483,79 +1454,6 @@
       flex: none;
     }
 
-    /* ═══ MISC UI ══════════════════════════════════════════════════ */
-    .mode-btns {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .info {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 15px;
-      color: var(--text);
-      background: var(--carved);
-      border: 1px solid var(--border);
-      border-left: 2px solid var(--jade);
-      border-radius: var(--radius);
-      padding: 11px 14px;
-      line-height: 1.6;
-      letter-spacing: 0;
-    }
-
-    .info code {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14.5px;
-      background: var(--obsidian);
-      padding: 1px 6px;
-      border-radius: 3px;
-      border: 1px solid var(--border);
-      color: var(--gold-bright);
-      margin: 0 1px;
-    }
-
-    .info b {
-      color: var(--gold-bright);
-      font-weight: 700;
-      font-family: 'Inter', sans-serif;
-      font-size: 16px;
-    }
-
-    .hr {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 14px 0;
-    }
-
-    @keyframes resultPop {
-      from {
-        opacity: 0;
-        transform: scale(0.97);
-      }
-
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    @keyframes jpGlow {
-
-      0%,
-      100% {
-        box-shadow: 0 0 0 1px var(--amethyst-soft), 0 0 30px rgba(160, 124, 203, 0.18);
-      }
-
-      50% {
-        box-shadow: 0 0 0 1px var(--amethyst), 0 0 50px rgba(160, 124, 203, 0.32);
-      }
-    }
-
-    .win-color {
-      color: var(--success);
-      text-shadow: none;
-    }
-
     .section-sep {
       border-top: 1px solid var(--border);
       margin: 28px 0 22px;
@@ -1619,18 +1517,6 @@
     }
 
     /* ═══ LOAD ANIMATIONS ═══════════════════════════════════════════ */
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
     /* ═══ KBD ══════════════════════════════════════════════════════ */
     /* ═══ EMPTY STATE ══════════════════════════════════════════════ */
     .empty {
@@ -1669,10 +1555,6 @@
       }
     }
 
-    .qc-mini .btn-sm {
-      padding: 6px 10px;
-    }
-
     /* ═══════════════════════════════════════════════════════════════
    QC-FRIENDLY UX · dành cho QC không rành kỹ thuật
    ═══════════════════════════════════════════════════════════════ */
@@ -1706,8 +1588,8 @@
         </div>
       </div>
 
-      <div class="card guide-card">
-        <div class="card-h"><span class="glyph">✦</span>Hướng dẫn nhanh</div>
+      <details class="card guide-card" open>
+        <summary class="card-h"><span class="glyph">✦</span>Hướng dẫn nhanh<span class="guide-caret">▾</span></summary>
         <div class="guide-box">
           <ol class="guide-steps">
             <li><b>Chọn môi trường:</b> bấm <b>LOCAL</b> hoặc <b>STAG</b> trên hàng WS — WS URL và agentId tự điền.
@@ -1743,7 +1625,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </details>
 
     </aside>
 
@@ -1796,10 +1678,14 @@
               title="Mở WebSocket tới WS URL, AUTH rồi JOIN cmd 1005 — biết ngay cấu hình đúng hay sai">Kết
               nối</button>
           </div>
+          <div id="ws-summary" role="button" tabindex="0" onclick="expandWsConfig()"
+            onkeydown="wsSummaryKey(event)" title="Bấm để mở lại cấu hình WebSocket"></div>
         </div>
         <div id="hdr-status">
           <span class="sbadge sbadge-mute" id="st-mode">REST</span>
           <span class="sbadge sbadge-mute" id="st-session">Chưa chọn người chơi</span>
+          <span class="sbadge" id="st-armed" style="display:none"
+            title="Cheat đang chờ — chỉ áp cho 1 lượt spin kế tiếp rồi tự xoá"></span>
           <a class="sbadge sbadge-link"
             href="https://docs.google.com/document/d/1ofXIWycwCQJgNIuVJVMJDCzTEZMXXyVKg26XRYlaKb4/edit?usp=sharing"
             target="_blank" rel="noopener noreferrer" title="Mở tài liệu thiết kế game (GDD) trong tab mới">📄 GDD</a>
@@ -1818,13 +1704,10 @@
         </div>
       </header>
 
-
       <!-- ════════════════════════════════════════════════════════════
      MAIN
      ════════════════════════════════════════════════════════════ -->
       <main id="main">
-
-
 
         <!-- ── CHEAT ─────────────────────────────────────────────────── -->
         <div id="tc-cheat" class="tc on">
@@ -1984,59 +1867,6 @@
                 onclick="armCheat('FORCE_FREE_SPIN',{spins:+idv('fs-spins')})">⚡ Cài Cheat</button>
             </div>
 
-            <div class="cheat-c">
-              <div class="cheat-name">FORCE_HOLD_AND_WIN</div>
-              <div class="cheat-hint">Ép vào HOLD_AND_WIN bonus.</div>
-              <div class="frow mb8">
-                <div class="fg"><label>Respins</label><input id="hw-rs" type="number" value="3"></div>
-                <div class="fg"><label>Locked Count</label><input id="hw-lc" type="number" value="6"></div>
-              </div>
-              <button class="btn btn-gold btn-sm btn-block"
-                onclick="armCheat('FORCE_HOLD_AND_WIN',{respins:+idv('hw-rs'),lockedCount:+idv('hw-lc')})">⚡ Cài
-                Cheat</button>
-            </div>
-
-            <div class="cheat-c">
-              <div class="cheat-name">FORCE_JACKPOT</div>
-              <div class="cheat-hint">Kích Naga Eye + giải jackpot theo tier.</div>
-              <div class="fgroup mb8">
-                <label>Tier Jackpot</label>
-                <select id="jp-tier">
-                  <option value="GRAND">GRAND (lớn nhất)</option>
-                  <option value="MAJOR">MAJOR</option>
-                  <option value="MINOR">MINOR</option>
-                  <option value="MINI">MINI</option>
-                </select>
-              </div>
-              <button class="btn btn-gold btn-sm btn-block" onclick="armCheat('FORCE_JACKPOT',{tier:idv('jp-tier')})">⚡
-                Cài Cheat</button>
-            </div>
-
-            <div class="cheat-c">
-              <div class="cheat-name">FORCE_WIN</div>
-              <div class="cheat-hint">Ép thắng với multiplier + symbolId gợi ý.</div>
-              <div class="frow mb8">
-                <div class="fg"><label>Multiplier</label><input id="fw-mult" type="number" value="200"></div>
-                <div class="fg"><label>Symbol ID</label><input id="fw-sym" type="number" value="2"></div>
-              </div>
-              <button class="btn btn-gold btn-sm btn-block"
-                onclick="armCheat('FORCE_WIN',{multiplier:+idv('fw-mult'),symbolId:+idv('fw-sym')})">⚡ Cài
-                Cheat</button>
-            </div>
-
-            <div class="cheat-c">
-              <div class="cheat-name">FORCE_LOSS</div>
-              <div class="cheat-hint">Ép thua (0 win). Nạp năng lượng Rush Mode bar.</div>
-              <button class="btn btn-gold btn-sm btn-block" onclick="armCheat('FORCE_LOSS',{})">⚡ Cài Cheat</button>
-            </div>
-
-            <div class="cheat-c">
-              <div class="cheat-name">FORCE_SCATTER</div>
-              <div class="cheat-hint">Ép scatter (kích free spin trigger).</div>
-              <div class="fgroup mb8"><label>Số Scatter</label><input id="sc-cnt" type="number" value="3"></div>
-              <button class="btn btn-gold btn-sm btn-block" onclick="armCheat('FORCE_SCATTER',{count:+idv('sc-cnt')})">⚡
-                Cài Cheat</button>
-            </div>
           </div>
 
         </div>
@@ -2389,6 +2219,7 @@
       selectedSession = { agency: btn.dataset.ag || '', username: btn.dataset.uname || '' };
       useSession(btn.dataset.ag, btn.dataset.uid, btn.dataset.gid, btn.dataset.tok, btn.dataset.uname, btn.dataset.sid);
       paintSelectedCard();
+      clearArmed();   // cheat gắn với 1 người chơi — đổi người thì dấu "đã cài" cũ không còn đúng
     }
 
     // Bỏ bind user hiện tại: xóa agency/user/game/token và reset trạng thái.
@@ -2402,6 +2233,7 @@
       });
       updateStatus('session', 'mute', 'Chưa chọn người chơi');
       paintSelectedCard();   // bỏ chọn cũng phải gỡ viền ngay, không đợi poll
+      clearArmed();
     }
 
     // stableId: khóa nghiệp vụ mà backend dùng để tra cheat/session/ví (= memberId ?? username ?? userId).
@@ -2469,9 +2301,51 @@
       document.querySelectorAll('#fss-trigger-wrap .fs-r4-sel, #fss-rounds-wrap .fs-r4-sel').forEach(sel => { sel.value = '10'; });
     }
 
+    // Server chỉ giữ 1 cheat cho mỗi người chơi và cheat chỉ sống 1 lượt spin, nên tool cũng chỉ
+    // cần nhớ đúng một ô. Đây là trạng thái phía tool ("vừa cài gì, lúc nào") — không đọc lại từ
+    // server, nên không bao giờ khẳng định cheat vẫn còn sống sau khi người chơi đã quay.
+    let armedCheat = null;
+
+    function markArmed(code) {
+      armedCheat = { code, at: new Date() };
+      paintArmed();
+    }
+
+    function clearArmed() {
+      armedCheat = null;
+      paintArmed();
+    }
+
+    function paintArmed() {
+      document.querySelectorAll('.cheat-c.is-armed').forEach(c => {
+        c.classList.remove('is-armed');
+        c.removeAttribute('data-armed');
+      });
+      const chip = document.getElementById('st-armed');
+      if (!armedCheat) {
+        if (chip) chip.style.display = 'none';
+        return;
+      }
+      const stamp = armedCheat.at.toLocaleTimeString('vi-VN', { hour12: false });
+      const card = [...document.querySelectorAll('.cheat-c')].find(c => {
+        const name = c.querySelector('.cheat-name');
+        return name && name.textContent.trim() === armedCheat.code;
+      });
+      if (card) {
+        card.classList.add('is-armed');
+        card.setAttribute('data-armed', '◆ ' + stamp);
+      }
+      if (chip) {
+        chip.style.display = '';
+        chip.className = 'sbadge sbadge-ok';
+        chip.textContent = armedCheat.code + ' · chờ 1 spin · ' + stamp;
+      }
+    }
+
     async function armCheat(code, value) {
       const r = await debugCall('POST', `/api/v1/debug/cheat/${agency()}/${userId()}`, { cheat: code, value });
       if (r.ok) {
+        markArmed(code);
         showMsg('✅ Đã cài cho 1 lượt quay tiếp theo, TTL 5 phút');
       }
     }
@@ -2737,8 +2611,8 @@
   </script>
   <!-- ?v= là cache-busting: đổi URL thì bản cũ trong cache trình duyệt không khớp được nữa, khỏi
        phụ thuộc vào việc người dùng có hard-refresh hay không. Sửa 2 file này thì tăng số. -->
-  <script src="js/ws-client.js?v=5"></script>
-  <script src="js/ws-debug.js?v=5"></script>
+  <script src="js/ws-client.js?v=6"></script>
+  <script src="js/ws-debug.js?v=6"></script>
 </body>
 
 </html>

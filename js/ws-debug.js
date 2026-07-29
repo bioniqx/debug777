@@ -84,15 +84,40 @@ function transportMode() {
   return _transportMode;
 }
 
+// Cấu hình WS chỉ dùng một lần mỗi phiên. Nối xong thì thu lại thành chip cho gọn đầu trang;
+// bấm chip là mở lại. Hai trạng thái (mode + đã thu) phải quyết định chung một chỗ, nếu để mỗi
+// nơi tự set display thì đổi mode sẽ bung lại hàng vừa thu.
+let wsCfgCollapsed = false;
+
+function applyWsRowVisibility() {
+  if (!hasDom()) return;
+  const isWs = transportMode() === 'ws';
+  const row = document.getElementById('ws-cfg-row');
+  const sum = document.getElementById('ws-summary');
+  if (row) row.style.display = (isWs && !wsCfgCollapsed) ? '' : 'none';
+  if (sum) sum.style.display = (isWs && wsCfgCollapsed) ? 'inline-flex' : 'none';
+}
+
+function expandWsConfig() {
+  wsCfgCollapsed = false;
+  applyWsRowVisibility();
+}
+
+// Chip là <div role="button"> nên phải tự nhận Enter/Space, <button> thật thì trình duyệt lo sẵn.
+function wsSummaryKey(e) {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  e.preventDefault();
+  expandWsConfig();
+}
+
 function setTransportMode(mode) {
   _transportMode = mode;
   if (!hasDom()) return;
   const restBtn = document.getElementById('btn-mode-rest');
   const wsBtn = document.getElementById('btn-mode-ws');
-  const wsRow = document.getElementById('ws-cfg-row');
   if (restBtn) restBtn.style.opacity = mode === 'rest' ? '1' : '.5';
   if (wsBtn) wsBtn.style.opacity = mode === 'ws' ? '1' : '.5';
-  if (wsRow) wsRow.style.display = mode === 'ws' ? '' : 'none';
+  applyWsRowVisibility();
   updateRestVisibility(mode);
   const badge = document.getElementById('st-mode');
   if (badge) {
@@ -256,6 +281,19 @@ async function wsConnect() {
     }
 
     setBtn('Đã nối ✓', false);
+    // Nối được rồi thì hàng cấu hình hết việc — thu lại, nhường chỗ cho vùng làm việc.
+    const sum = hasDom() ? document.getElementById('ws-summary') : null;
+    if (sum) {
+      sum.innerHTML = '';
+      sum.append('● ' + (wsIsLocal() ? 'WS local' : 'WS staging') + ' · ' + (j.userId || wsCfgAgent()));
+      const edit = document.createElement('span');
+      edit.className = 'ws-sum-edit';
+      edit.textContent = 'sửa';
+      sum.append(edit);
+    }
+    wsCfgCollapsed = true;
+    applyWsRowVisibility();
+
     const msg = 'Đã kết nối WS · sessionId=' + client.sessionId + ' · ' + who
       + (found === null ? ' · không lấy được danh sách user' : ' · ' + found + ' user đang kết nối');
     if (typeof toast === 'function') toast(msg, 'success'); else console.log(msg);

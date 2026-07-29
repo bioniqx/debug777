@@ -1173,20 +1173,24 @@
     }
 
     /* ═══ CHEAT GRID ═══════════════════════════════════════════════ */
+    /* Bố cục multi-column (kiểu "gạch xây") thay cho grid: grid xếp theo hàng nên thẻ ngắn đứng
+       cạnh thẻ cao sẽ để lại một mảng trống tới hết hàng. Multi-column xếp dồn theo cột nên
+       không còn lỗ. Bề rộng cột 450px là mức tối thiểu để bảng 4 reel không bị bóp vỡ. */
     .cheat-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(296px, 1fr));
-      gap: 12px;
-      /* Mặc định của grid là stretch: thẻ ngắn bị kéo cao bằng thẻ cao nhất cùng hàng, chừa
-         một mảng rỗng trông rất xấu. start = mỗi thẻ giữ đúng chiều cao nội dung của nó. */
-      align-items: start;
+      columns: 450px;
+      column-gap: 12px;
     }
 
-    /* Nhóm "Cheat Core Engine" nằm chung một lưới với nhóm Naga. Vạch + nhãn chiếm trọn hàng nên
-       chúng đẩy 6 thẻ Core Engine xuống dòng mới — đúng bố cục 2 nhóm như cũ. */
+    /* Không cho thẻ bị cắt đôi qua 2 cột; margin thay cho row-gap vốn có của grid. */
+    .cheat-grid > * {
+      break-inside: avoid;
+      margin-bottom: 12px;
+    }
+
+    /* Nhóm "Cheat Core Engine": vạch + nhãn vắt ngang toàn bộ cột nên nó tách 2 nhóm như cũ. */
     .cheat-grid .section-sep,
     .cheat-grid .section-lbl {
-      grid-column: 1 / -1;
+      column-span: all;
     }
 
     /* Màn đủ rộng cho từ 3 cột trở lên: giấu vạch + nhãn đi, 6 thẻ Core Engine chảy tiếp vào

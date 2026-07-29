@@ -574,6 +574,48 @@
       transition: all 0.18s ease;
     }
 
+    /* Hàng cấu hình WS nằm cùng hàng với thanh header, tuyệt đối không xuống dòng. Ở mode WS các
+       ô REST đã bị ẩn nên chỗ trống đủ dùng. Width bên dưới là kích thước mong muốn, nhưng cho
+       phép co lại (flex-shrink 1 + min-width 0) để cửa sổ hẹp vẫn giữ đúng một hàng. */
+    #ws-cfg-row {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+    }
+
+    #ws-cfg-row input {
+      flex: 0 1 auto;
+      min-width: 0;
+    }
+
+    #ws-cfg-row .btn {
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
+
+    /* Nhãn đánh dấu phiên WS của chính cheatTool trong danh sách người chơi — nó là kết nối thật
+       nên vẫn hiện, nhưng phải nhìn ra ngay để không bấm "Dùng" nhầm vào nó. */
+    /* Nằm ngoài .uc-name, vì .uc-name cắt chữ bằng ellipsis và sẽ nuốt luôn nhãn nếu đặt bên trong. */
+    /* Thẻ hẹp, nhãn chữ "TOOL" ăn hết chỗ của tên (tên bị cắt còn "te…"). Dùng ký hiệu nhỏ cộng
+       viền vàng quanh thẻ: nhận ra ngay mà gần như không tốn bề ngang. */
+    .uc-tool {
+      flex: 0 0 auto;
+      margin-left: 4px;
+      color: var(--warn);
+      font-size: 13px;
+      line-height: 1;
+      cursor: help;
+    }
+
+    .user-card.is-tool {
+      border-color: var(--warn);
+      background: color-mix(in srgb, var(--warn) 6%, transparent);
+    }
+
+    #i-ws-url { width: 456px; }
+    #i-ws-agent { width: 150px; }
+    #i-ws-user { width: 190px; }
+    #i-ws-pass { width: 170px; }
+
     .cfg-inputs input:hover {
       border-color: var(--border-strong);
     }
@@ -2276,21 +2318,47 @@
               <span class="qc-badge">Happy Testing</span>
             </div>
           </div>
-          <div class="cfg-inputs">
+          <div id="rest-cfg-row" class="cfg-inputs">
             <input id="i-base" placeholder="Base URL (rỗng = stag)"
               title="Base URL — để trống dùng URL staging mặc định" onchange="saveBase()">
-            <button class="btn btn-gold btn-sm" type="button"
+            <button id="btn-base-stag" class="btn btn-gold btn-sm" type="button"
               onclick="setBase('https://stag.osyamazakiglobel.club/api/game/nagas-fortune-777')"
               title="Điền URL staging rồi tự Tải Danh Sách">STAG</button>
-            <button class="btn btn-gold btn-sm" type="button" onclick="setBase('http://172.10.10.50:3000')"
+            <button id="btn-base-local" class="btn btn-gold btn-sm" type="button"
+              onclick="setBase('http://172.10.10.50:3000')"
               title="Điền URL local rồi tự Tải Danh Sách">LOCAL</button>
+            <button id="btn-mode-rest" class="btn btn-gold btn-sm" type="button" onclick="setTransportMode('rest')"
+              title="Chế độ REST (mặc định) — đường HTTP cũ, giữ nguyên">REST</button>
+            <button id="btn-mode-ws" class="btn btn-gold btn-sm" type="button" onclick="setTransportMode('ws')"
+              title="Chế độ WebSocket — đường mới qua cmd 1900 (gRPC), có thể chuyển lại REST bất cứ lúc nào">WS</button>
             <input id="i-agency" type="hidden">
             <input id="i-user" type="hidden">
             <input id="i-game" type="hidden">
             <input id="i-tok" type="hidden">
           </div>
+          <div id="ws-cfg-row" class="cfg-inputs" style="display:none">
+            <input id="i-ws-url" placeholder="WS URL (toolWs — phiên debug riêng)" onchange="saveWsConfig()">
+            <button class="btn btn-gold btn-sm" type="button" onclick="setWsPreset('local')"
+              title="ws://localhost:9099/websocket · agentId=1">LOCAL</button>
+            <button class="btn btn-gold btn-sm" type="button" onclick="setWsPreset('stag')"
+              title="wss://gob02-ws.relaxwmestu.xyz/websocket · agentId=AGENCY_001">STAG</button>
+            <input id="i-ws-agent" placeholder="agentId" onchange="saveWsConfig()">
+            <!-- Không có ô accessToken: local dùng thẳng seed token, staging tự đăng nhập lấy token
+                 theo đúng luồng 2 bước của agency-platform. Hai ô dưới chỉ hiện khi trỏ staging. -->
+            <input id="i-ws-user" placeholder="username" onchange="saveWsConfig()">
+            <!-- Để chữ thường, không che: đây là tài khoản test dùng chung, che chỉ gây vướng khi
+                 QC cần đọc lại xem mình gõ đúng chưa. -->
+            <input id="i-ws-pass" placeholder="password" onchange="saveWsConfig()">
+            <button id="btn-ws-token" class="btn btn-gold btn-sm" type="button" onclick="wsFetchToken()"
+              title="Đăng nhập lại agency-platform để làm mới token (token staging hết hạn sau ~1 giờ)">Lấy
+              token</button>
+            <button id="btn-ws-connect" class="btn btn-gold btn-sm" type="button" onclick="wsConnect()"
+              title="Mở WebSocket tới WS URL, AUTH rồi JOIN cmd 1005 — biết ngay cấu hình đúng hay sai">Kết
+              nối</button>
+          </div>
         </div>
         <div id="hdr-status">
+          <span class="sbadge sbadge-mute" id="st-mode">REST</span>
           <span class="sbadge sbadge-mute" id="st-session">Chưa chọn người chơi</span>
           <a class="sbadge sbadge-link"
             href="https://docs.google.com/document/d/1ofXIWycwCQJgNIuVJVMJDCzTEZMXXyVKg26XRYlaKb4/edit?usp=sharing"
@@ -4200,6 +4268,13 @@
     // - Local/LAN dùng http → ws://<host>:9099/websocket (WsProxy cổng 9099)
     // - Staging dùng https → wss://<host>/websocket (host 443 chung, không cổng tường minh)
     function wsUrl() {
+      // Ở mode WS, ô Base URL bị ẩn nên không còn là nguồn cấu hình hợp lệ — Test Runner lấy luôn
+      // ô WS URL, cùng WsProxy với các debug op. Mode REST giữ nguyên cách suy từ Base như cũ.
+      if (typeof transportMode === 'function' && transportMode() === 'ws') {
+        const wsEl = document.getElementById('i-ws-url');
+        const v = wsEl ? wsEl.value.trim() : '';
+        if (v) return v;
+      }
       try {
         const u = new URL(base());
         const h = u.hostname;
@@ -4328,6 +4403,13 @@
 
     // ═══════════════════════ API ═══════════════════════
     async function call(method, path, body, extraHeaders = {}) {
+      // Chế độ WS: nếu path map được 1 op debug thì đi qua cmd 1900 (js/ws-debug.js), trả về đúng
+      // khuôn {ok,status,data} như REST nên renderer không cần biết. Không map được (VD 3 tab
+      // endpoint chết, hoặc host agency-platform khác) → rơi xuống fetch REST như cũ.
+      if (transportMode() === 'ws') {
+        const wsResult = await wsDebugCall(method, path, body);
+        if (wsResult) return wsResult;
+      }
       const url = base() + path;
       const headers = { 'Content-Type': 'application/json', ...extraHeaders };
       const opts = { method, headers, cache: 'no-store' };
@@ -4431,7 +4513,7 @@
       if (users.length === 0) {
         box.innerHTML = EMPTY_LIST_HTML;
         syncSelectedSession([]);
-        return;
+        return 0;
       }
       // Đồng bộ user đang chọn + tự chọn khi danh sách chỉ có 1 user — làm TRƯỚC render để thẻ tô đúng trạng thái.
       syncSelectedSession(users);
@@ -4460,9 +4542,11 @@
         const isOpen = expandedUsers.has(ukey);
         const sid = u.stableId || u.userId;
         const noStableId = !u.stableId;
-        return `<div class="user-card${isSel ? ' on' : ''}${isOpen ? ' open' : ''}" data-key="${escAttr(ukey)}" data-sid="${escAttr(sid)}">
+        const isTool = typeof isToolSession === 'function' && isToolSession(u);
+        return `<div class="user-card${isSel ? ' on' : ''}${isOpen ? ' open' : ''}${isTool ? ' is-tool' : ''}" data-key="${escAttr(ukey)}" data-sid="${escAttr(sid)}">
       <div class="uc-top">
         <div class="uc-name" title="Bấm để xổ/thu thông tin · ${escAttr(u.username || '')}" onclick="toggleUserCard(this)">${escHtml(u.username || '—')}</div>
+        ${isTool ? '<span class="uc-tool" title="Phiên WebSocket của chính cheatTool, không phải người chơi">⚙</span>' : ''}
         <button class="btn btn-gold btn-sm" ${noStableId ? 'title="stableId thiếu — cheat bind theo userId (có thể sai khóa trên staging)" style="opacity:.7"' : ''} data-ag="${escAttr(u.agency)}" data-uid="${escAttr(u.userId)}" data-sid="${escAttr(sid)}" data-gid="${escAttr(u.gameId)}" data-tok="${escAttr(u.sessionToken)}" data-uname="${escAttr(u.username)}" onclick="useSessionFromBtn(this)">Dùng</button>
       </div>
       <div class="uc-meta">
@@ -4476,6 +4560,7 @@
       </div>
     </div>`;
       }).join('');
+      return users.length; // nút "Kết nối" báo lại số user tìm thấy; các lời gọi cũ bỏ qua giá trị này
     }
 
     // Nếu user đang chọn (cùng agency + username) xuất hiện với userId/token/game
@@ -5361,7 +5446,10 @@
     }
 
   </script>
-  <script src="js/ws-client.js"></script>
+  <!-- ?v= là cache-busting: đổi URL thì bản cũ trong cache trình duyệt không khớp được nữa, khỏi
+       phụ thuộc vào việc người dùng có hard-refresh hay không. Sửa 2 file này thì tăng số. -->
+  <script src="js/ws-client.js?v=2"></script>
+  <script src="js/ws-debug.js?v=2"></script>
   <script src="js/test-catalog.js"></script>
   <script src="js/cases/cases-core.js"></script>
   <script src="js/cases/cases-features.js"></script>

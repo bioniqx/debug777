@@ -90,6 +90,22 @@ class NagaWsClient {
     return msg.payload;
   }
 
+  /* ── Debug op (cmd 1900) — cheatTool dùng cho mọi thao tác debug ─── */
+
+  /**
+   * Gửi 1 debug op qua cmd 1900. params: {token, agency, userId, gameId, args}.
+   * Trả về payload.data khi ok=true; throw Error(payload.error) khi ok=false.
+   */
+  async debug(op, params = {}, timeoutMs = 8000) {
+    const reqId = 'dbg-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8);
+    this.sendCmd({ cmd: 1900, op, reqId, ...params });
+    const msg = await this.waitFor(
+      (m) => m.cmd === 1900 && m.payload && m.payload.reqId === reqId,
+      timeoutMs, 'DEBUG_OP ' + op);
+    if (msg.payload.ok === false) throw new Error(msg.payload.error || ('DEBUG_OP ' + op + ' thất bại'));
+    return msg.payload.data;
+  }
+
   /* ── Nhận & chờ ───────────────────────────────────────────── */
 
   /**

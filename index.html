@@ -2308,7 +2308,7 @@
         <div class="guide-box">
           <ol class="guide-steps">
             <li><b>Chọn môi trường:</b> bấm <b>LOCAL</b> hoặc <b>STAG</b> trên hàng WS — WS URL và agentId tự điền.
-              Trỏ staging thì hiện thêm ô username/password (mặc định <code>KOL-001</code>); local dùng seed token
+              Trỏ staging thì hiện thêm ô username/password (mặc định <code>Admin101</code>); local dùng seed token
               nên hai ô đó tự ẩn.</li>
             <li>Bấm <b>Kết nối</b> — mở WebSocket, đăng nhập, JOIN rồi tải luôn danh sách người chơi.</li>
             <li><b>Mở game</b> trên thiết bị/trình duyệt test — đăng nhập tài khoản thật vào game.</li>
@@ -2428,7 +2428,6 @@
         <button class="tab" onclick="showTab('qc5')" style="display:none">⑤ Validate</button>
         <button class="tab" onclick="showTab('qc6')" style="display:none">⑥ Tất Định</button>
         <button class="tab" onclick="showTab('raw')" style="display:none">Raw / Validate</button>
-        <button class="tab" onclick="showTab('history')">Lịch Sử</button>
         <button class="tab" onclick="showTab('runner')" style="display:none">⚡ Test Runner</button>
       </nav>
 
@@ -4146,65 +4145,6 @@
 
         </div>
 
-        <!-- ── HISTORY ───────────────────────────────────────────────── -->
-        <div id="tc-history" class="tc">
-          <div class="card">
-            <div class="card-h"><span class="glyph">⌗</span>Lịch Sử Spin Gần Đây</div>
-            <div class="frow mb8">
-              <div class="fg" style="max-width:140px"><label>Limit</label><input id="h-limit" type="number" value="20"
-                  min="1" max="100"></div>
-              <div class="fg" style="max-width:140px"><label>Offset</label><input id="h-offset" type="number" value="0"
-                  min="0"></div>
-              <div style="flex:none;display:flex;gap:8px;align-items:flex-end">
-                <button class="btn btn-gold" onclick="loadHistory()">Tải</button>
-                <button class="btn btn-ghost btn-sm" onclick="prevPage()">◀ Trước</button>
-                <button class="btn btn-ghost btn-sm" onclick="nextPage()">Sau ▶</button>
-              </div>
-            </div>
-            <div class="tbl-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Round ID</th>
-                    <th>Mode</th>
-                    <th>Next</th>
-                    <th>Bet</th>
-                    <th>Win</th>
-                    <th>Type</th>
-                    <th>JP</th>
-                    <th>Thời Gian</th>
-                  </tr>
-                </thead>
-                <tbody id="hist-tbody">
-                  <tr>
-                    <td colspan="9" class="empty">— chưa tải —</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div id="hist-detail" class="json-box mt8" style="display:none"></div>
-          </div>
-
-          <div class="grid-2">
-            <div class="card">
-              <div class="card-h"><span class="glyph">⚒</span>Tạo Lịch Sử Giả · Spin</div>
-              <div class="info mb8">Tạo N bản ghi history fake để test phân trang.</div>
-              <div class="fgroup"><label>Số bản ghi</label><input id="hgen-n" type="number" value="100"></div>
-              <button class="btn btn-blue" onclick="genHistory()">Tạo History</button>
-              <div id="hgen-result" class="json-box mt8" style="display:none"></div>
-            </div>
-            <div class="card">
-              <div class="card-h"><span class="glyph">⚒</span>Tạo Lịch Sử Giả · Jackpot</div>
-              <div class="info mb8">Tạo N bản ghi jackpot audit GRAND / MAJOR.</div>
-              <div class="fgroup"><label>Số bản ghi · max 50</label><input id="jpgen-n" type="number" value="20"
-                  max="50"></div>
-              <button class="btn btn-blue" onclick="genJackpotHistory()">Tạo JP History</button>
-              <div id="jpgen-result" class="json-box mt8" style="display:none"></div>
-            </div>
-          </div>
-        </div>
-
         <!-- ── TEST RUNNER ───────────────────────────────────────────── -->
         <div id="tc-runner" class="tc">
           <div class="card">
@@ -4416,7 +4356,6 @@
         let hidden = false; try { hidden = localStorage.getItem('naga_start_hide') === '1'; } catch (e) { }
         start.style.display = (/^qc[1-6]$/.test(name) && !hidden) ? '' : 'none';
       }
-      if (name === 'history') loadHistory();
     }
 
     // Ẩn banner hướng dẫn (nhớ lựa chọn qua localStorage).
@@ -4946,64 +4885,6 @@
       if (r.ok) showMsg('✅ Treasure Room armed — bây giờ gọi Jackpot Pick');
     }
 
-    // ═══════════════════════ HISTORY TAB ═══════════════════════
-    async function loadHistory() {
-      const limit = +idv('h-limit') || 20;
-      const offset = +idv('h-offset') || 0;
-      const gid = gameId();
-      const url = `/api/v1/gameplay-history/rounds?agency=${agency()}&userId=${userId()}&gameId=${gid}&limit=${limit}&offset=${offset}`;
-      const r = await call('GET', url);
-      const tbody = document.getElementById('hist-tbody');
-      if (!r.ok || !r.data.rounds) { tbody.innerHTML = `<tr><td colspan="9" style="color:var(--error)">${JSON.stringify(r.data)}</td></tr>`; return; }
-      if (!r.data.rounds.length) { tbody.innerHTML = `<tr><td colspan="9" class="empty">Không có dữ liệu</td></tr>`; return; }
-      tbody.innerHTML = r.data.rounds.map((rr, i) => `<tr style="cursor:pointer" onclick="loadRoundDetail('${rr.roundId}')">
-    <td>${offset + i + 1}</td>
-    <td style="font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--text-muted)">${rr.roundId.slice(-12)}</td>
-    <td>${rr.mode || '—'}</td>
-    <td class="${rr.nextMode && rr.nextMode !== 'BASE' ? 'tb' : ''}">${rr.nextMode || '—'}</td>
-    <td>${Number(rr.betAmount || 0).toLocaleString()}</td>
-    <td class="${(rr.totalWin || 0) > 0 ? 'tw' : 'tl'}">${Number(rr.totalWin || 0).toLocaleString()}</td>
-    <td>${rr.spinType || '—'}</td>
-    <td>${rr.hasJackpot ? '◆' : '—'}</td>
-    <td style="font-size:14px;font-family:'JetBrains Mono',monospace;color:var(--text-muted)">${rr.timestamp ? new Date(rr.timestamp).toLocaleTimeString() : ''}</td>
-  </tr>`).join('');
-    }
-
-    async function loadRoundDetail(roundId) {
-      const r = await call('GET', `/api/v1/gameplay-history/rounds/${roundId}?agency=${agency()}`);
-      showJson('hist-detail', r.data);
-    }
-
-    function prevPage() {
-      const el = document.getElementById('h-offset');
-      const limit = +idv('h-limit') || 20;
-      el.value = Math.max(0, (+el.value || 0) - limit);
-      loadHistory();
-    }
-
-    function nextPage() {
-      const el = document.getElementById('h-offset');
-      const limit = +idv('h-limit') || 20;
-      el.value = (+el.value || 0) + limit;
-      loadHistory();
-    }
-
-    async function genHistory() {
-      const n = +idv('hgen-n') || 100;
-      const url = `/api/v1/debug/history/bulk-generate?agency=${agency()}&userId=${userId()}&gameId=${gameId()}&count=${n}`;
-      const r = await debugCall('POST', url);
-      showJson('hgen-result', r.data);
-      if (r.ok) showMsg('✅ Đã tạo ' + (r.data.generated || 0) + ' history rows');
-    }
-
-    async function genJackpotHistory() {
-      const n = +idv('jpgen-n') || 20;
-      const url = `/api/v1/debug/jackpot-history/bulk-generate?agency=${agency()}&gameId=${gameId()}&count=${n}`;
-      const r = await debugCall('POST', url);
-      showJson('jpgen-result', r.data);
-      if (r.ok) showMsg('✅ Đã tạo ' + (r.data.generated || 0) + ' jackpot history rows');
-    }
-
     // ═══════════════════════ QC TEST CASES TAB ═══════════════════════
     // Mỗi nút "⚡ Dựng case" cài sẵn cheat phù hợp rồi hiện hướng dẫn thao tác
     // tiếp theo (trong game) ở khung #qc-guide.
@@ -5499,8 +5380,8 @@
   </script>
   <!-- ?v= là cache-busting: đổi URL thì bản cũ trong cache trình duyệt không khớp được nữa, khỏi
        phụ thuộc vào việc người dùng có hard-refresh hay không. Sửa 2 file này thì tăng số. -->
-  <script src="js/ws-client.js?v=3"></script>
-  <script src="js/ws-debug.js?v=3"></script>
+  <script src="js/ws-client.js?v=4"></script>
+  <script src="js/ws-debug.js?v=4"></script>
   <script src="js/test-catalog.js"></script>
   <script src="js/cases/cases-core.js"></script>
   <script src="js/cases/cases-features.js"></script>

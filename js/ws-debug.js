@@ -34,7 +34,9 @@ function hasDom() { return typeof document !== 'undefined'; }
 
 const WS_CFG_LS = { url: 'naga_qc_ws_url', agent: 'naga_qc_ws_agent', user: 'naga_qc_ws_user', pass: 'naga_qc_ws_pass' };
 
-// Giá trị lấy nguyên từ local_login.md và staging_login.md — hai tài liệu đó là nguồn đúng.
+// Giá trị lấy từ local_login.md và staging_login.md. Riêng tài khoản staging dùng Admin101 chứ
+// không phải KOL-001 như trong tài liệu: đó là tài khoản riêng của tool, để tool không giành
+// phiên với QC đang test (xem lý do ở comment 'local' ngay dưới — TokenRegistry khoá theo username).
 // Local có seed token cố định nên không phải đăng nhập; staging phải qua luồng 2 bước.
 const WS_PRESETS = {
   // Token 100 chứ không phải 001: TokenRegistry của BE khoá theo username, nên nếu tool JOIN trùng
@@ -46,7 +48,7 @@ const WS_PRESETS = {
     url: 'wss://gob02-ws.relaxwmestu.xyz/websocket',
     agent: 'AGENCY_001',
     authHost: 'https://agency001.relaxwmestu.xyz',
-    user: 'KOL-001',
+    user: 'Admin101',
     pass: '12345',
   },
 };
@@ -167,6 +169,12 @@ function setWsPreset(which) {
   const agentEl = document.getElementById('i-ws-agent');
   if (urlEl) urlEl.value = p.url;
   if (agentEl) agentEl.value = p.agent;
+  // Preset phải trả về trọn bộ của môi trường đó, kể cả tài khoản. Trước đây chỉ đổi url+agent
+  // nên bấm STAG xong vẫn còn tài khoản của lần gõ trước nằm lại trong ô (và trong localStorage).
+  const userEl = document.getElementById('i-ws-user');
+  const passEl = document.getElementById('i-ws-pass');
+  if (p.user && userEl) userEl.value = p.user;
+  if (p.pass && passEl) passEl.value = p.pass;
   stagToken = null;              // đổi môi trường thì token cũ không còn đúng chỗ
   saveWsConfig();
   updateWsAuthVisibility();

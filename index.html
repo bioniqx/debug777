@@ -2452,7 +2452,6 @@
         <div id="tc-cheat" class="tc on">
           <div class="section-lbl">Cheat Naga Fortune 777</div>
           <div class="cheat-grid">
-
             <div class="cheat-c arm" style="grid-column: span 2;">
               <div class="cheat-name">FORCE_GRID <span class="badge b-full">Full</span></div>
               <div class="cheat-hint">Vẽ lưới 3×3 tùy chỉnh cho lần spin tiếp theo. Đọc trái→phải, trên→dưới giống giao
@@ -2488,6 +2487,43 @@
                 <button class="btn btn-ghost btn-sm" onclick="fillGrid(2)">Tất cả B (50×)</button>
                 <button class="btn btn-ghost btn-sm" onclick="fillGrid(5)">Tất cả E (10×)</button>
               </div>
+            </div>
+
+            <div class="cheat-c">
+              <div class="cheat-name">FORCE_VAULT_DOUBLE_UP <span class="badge b-full">Full</span></div>
+              <div class="cheat-hint">Ép kết quả từng ván x2. Khai báo front-prefix: điền liên tiếp từ Ván 1, dừng tại ô đầu tiên để "—".</div>
+              <div class="frow mb8">
+                <div class="fg"><label>Ván 1</label>
+                  <select id="vdu-r1">
+                    <option value="WIN" selected>WIN</option>
+                    <option value="LOSS">LOSS</option>
+                    <option value="">—</option>
+                  </select>
+                </div>
+                <div class="fg"><label>Ván 2</label>
+                  <select id="vdu-r2">
+                    <option value="">—</option>
+                    <option value="WIN">WIN</option>
+                    <option value="LOSS">LOSS</option>
+                  </select>
+                </div>
+                <div class="fg"><label>Ván 3</label>
+                  <select id="vdu-r3">
+                    <option value="">—</option>
+                    <option value="WIN">WIN</option>
+                    <option value="LOSS">LOSS</option>
+                  </select>
+                </div>
+              </div>
+              <div class="frow mb8" style="align-items:center;gap:12px;">
+                <label style="font-size:13px;color:var(--text-muted);white-space:nowrap;">Overflow:</label>
+                <select id="vdu-overflow" style="flex:0 0 auto;width:auto;">
+                  <option value="RNG" selected>RNG</option>
+                  <option value="REPEAT_LAST">REPEAT_LAST</option>
+                  <option value="LOOP">LOOP</option>
+                </select>
+              </div>
+              <button class="btn btn-gold btn-sm btn-block" onclick="armVaultDoubleUp()">⚡ Cài Cheat Double-Up</button>
             </div>
 
             <div class="cheat-c" style="display:none">
@@ -2694,56 +2730,6 @@
                 Cài Cheat</button>
             </div>
           </div>
-
-          <div class="section-sep"></div>
-          <div class="section-lbl">🔐 Rush Vault</div>
-          <div class="cheat-hint" style="margin-bottom:8px;">
-            Chỉ giữ <b>1 cheat / người chơi</b> (agency:userId) → <b>không arm Grid + Double-Up cùng lúc</b>.<br>
-            Trình tự: arm <b>Grid</b> (ở tab ⚙ Cheat Core) → vào game <b>mua+mở két (cmd 1512)</b> → arm <b>Double-Up</b> → bấm <b>x2 (cmd 1513)</b> từng ván.<br>
-            Double-Up & Grid mở két: <b>đều đã chạy thật</b> (BE đã hoàn thiện).<br>
-            Quy ước: <b>arm ở đây (REST), rồi vào game thật để chơi.</b>
-          </div>
-          <div class="cheat-grid">
-
-            <div class="cheat-c">
-              <div class="cheat-name">FORCE_VAULT_DOUBLE_UP <span class="badge b-full">Full</span></div>
-              <div class="cheat-hint">Ép kết quả từng ván x2. Khai báo front-prefix: điền liên tiếp từ Ván 1, dừng tại ô đầu tiên để "—".</div>
-              <div class="frow mb8">
-                <div class="fg"><label>Ván 1</label>
-                  <select id="vdu-r1">
-                    <option value="WIN" selected>WIN</option>
-                    <option value="LOSS">LOSS</option>
-                    <option value="">—</option>
-                  </select>
-                </div>
-                <div class="fg"><label>Ván 2</label>
-                  <select id="vdu-r2">
-                    <option value="">—</option>
-                    <option value="WIN">WIN</option>
-                    <option value="LOSS">LOSS</option>
-                  </select>
-                </div>
-                <div class="fg"><label>Ván 3</label>
-                  <select id="vdu-r3">
-                    <option value="">—</option>
-                    <option value="WIN">WIN</option>
-                    <option value="LOSS">LOSS</option>
-                  </select>
-                </div>
-              </div>
-              <div class="frow mb8" style="align-items:center;gap:12px;">
-                <label style="font-size:13px;color:var(--text-muted);white-space:nowrap;">Overflow:</label>
-                <select id="vdu-overflow" style="flex:0 0 auto;width:auto;">
-                  <option value="RNG" selected>RNG</option>
-                  <option value="REPEAT_LAST">REPEAT_LAST</option>
-                  <option value="LOOP">LOOP</option>
-                </select>
-              </div>
-              <button class="btn btn-gold btn-sm btn-block" onclick="armVaultDoubleUp()">⚡ Cài Cheat Double-Up</button>
-            </div>
-
-          </div>
-          <div class="cheat-hint" style="margin-bottom:8px;">Dùng card lưới FORCE_GRID ở tab ⚙ Cheat Core để ép lưới mở két.</div>
 
         </div>
 
@@ -3252,7 +3238,7 @@
               <p class="qline"><span class="qlbl qlbl-do">Cách làm</span></p>
               <ol class="qsteps">
                 <li>Bấm <b>Xem hướng dẫn</b> để biết cách thu thập dữ liệu.</li>
-                <li>Chạy nhiều lượt thắng, tra log / tab Lịch Sử để thống kê hệ số.</li>
+                <li>Chạy nhiều lượt thắng, tra log để thống kê hệ số.</li>
               </ol>
               <p class="qline"><span class="qlbl qlbl-exp">Đúng khi</span>Sau ~100 lượt thắng, tỉ lệ xấp xỉ:
                 x1=<code>5%</code> · x2=<code>30%</code> · x5=<code>42%</code> · x10=<code>23%</code>.</p>
@@ -5145,7 +5131,7 @@
       qcGuide('<b>TC-R4-05 · Nhiều đường, hệ số riêng.</b> Ép P02 (hàng trên) + P03 (hàng dưới) cùng thắng. SPIN. Đọc hệ số <b>hàng trên</b> và <b>hàng dưới</b> trên cuộn 4 → mỗi đường nhân hệ số hàng riêng. <i>Ép cứng x2/x10 cần J1.</i>');
     }
     async function qcR406() {
-      qcGuide('<b>TC-R4-06 · Tỉ lệ hệ số (thống kê).</b> Quay nhiều lượt CÓ thắng, ghi hệ số mỗi hàng cuộn 4 (xem tab <b>Lịch Sử</b> hoặc log). Kỳ vọng ≈ x1 5% · x2 30% · x5 42% · x10 23%. Cần mẫu lớn (vài trăm lượt).');
+      qcGuide('<b>TC-R4-06 · Tỉ lệ hệ số (thống kê).</b> Quay nhiều lượt CÓ thắng, ghi hệ số mỗi hàng cuộn 4 (xem log). Kỳ vọng ≈ x1 5% · x2 30% · x5 42% · x10 23%. Cần mẫu lớn (vài trăm lượt).');
     }
     async function qcR407() {
       await armCheat('FORCE_NAGA_EYE', {});

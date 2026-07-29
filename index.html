@@ -1177,6 +1177,9 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(296px, 1fr));
       gap: 12px;
+      /* Mặc định của grid là stretch: thẻ ngắn bị kéo cao bằng thẻ cao nhất cùng hàng, chừa
+         một mảng rỗng trông rất xấu. start = mỗi thẻ giữ đúng chiều cao nội dung của nó. */
+      align-items: start;
     }
 
     /* Nhóm "Cheat Core Engine" nằm chung một lưới với nhóm Naga. Vạch + nhãn chiếm trọn hàng nên

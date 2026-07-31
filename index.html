@@ -65,11 +65,15 @@
       --jade-dim: rgba(79, 196, 126, 0.11);
       --jade-glow: rgba(79, 196, 126, 0.18);
 
-      /* ── Chữ ── trắng ngà ánh tím, không phải trắng tinh ────────── */
-      --bone: #ded7e8;
-      --bone-2: #bab2cc;
-      --bone-3: #8d85a0;
-      --bone-4: #6a6280;
+      /* ── Chữ ── trắng, gần như trung tính ─────────────────────────
+         Trước đây ám tím khá nặng (R-B lệch 17 điểm) nên trên nền tím nhìn
+         như bị mờ. Nay kéo về gần trung tính (lệch 5-7 điểm): sáng hơn và
+         "trắng" hơn hẳn mà không phải dùng #fff — trắng tinh trên nền tối
+         là mức bắt đầu loé viền chữ. */
+      --bone: #f1eff6;
+      --bone-2: #d6d2e2;
+      --bone-3: #a29cb2;
+      --bone-4: #78718a;
 
       /* Ruby của nút SPIN trong game, kéo sáng lên cho đọc được trên nền tím. */
       --alert: #e0596f;
@@ -627,6 +631,39 @@
     .ws-sum-edit {
       color: var(--bone-4);
       font-size: 11px;
+    }
+
+    /* Lưu ý đi kèm nút "Kết nối" — hiện đúng lúc nút đó hiện (xem applyWsRowVisibility
+       trong ws-debug.js). Nối xong hàng cấu hình thu lại thì dòng này cũng đi theo. */
+    #ws-note {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      font-size: var(--t-meta);
+      line-height: 1.45;
+      color: var(--bone);
+    }
+
+    #ws-note::before {
+      content: '!';
+      flex: none;
+      width: 15px;
+      height: 15px;
+      display: grid;
+      place-items: center;
+      align-self: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--void);
+      background: var(--gold);
+      border-radius: 50%;
+    }
+
+    /* Không set color cho <b>: nó thừa hưởng đúng màu trắng của cả dòng. Đặt riêng một màu
+       tối hơn ở đây sẽ làm chữ đậm nhìn CHÌM hơn chữ thường — ngược với ý nghĩa của nó. */
+    #ws-note b {
+      font-weight: 600;
     }
 
     /* ── Huy hiệu trạng thái ─────────────────────────────────────── */
@@ -1569,15 +1606,14 @@
           <li>Quay lại game bấm <b>SPIN</b>. Cheat áp đúng <b>1 lượt</b> rồi tự xoá.</li>
         </ol>
         <div class="tips">
-          <div class="tip">Mở tool lên là ở <b>mode WS</b>. Cần đường REST cũ thì bấm <b>REST</b>; F5 quay lại WS.</div>
+          <div class="tip">Tool chạy cố định qua <b>WebSocket</b> (cmd 1900). Huy hiệu <b>WS</b> trên thanh trên là
+            xác nhận đường đang dùng.</div>
           <div class="tip">Dòng <b>mờ, viền đứt, có nhãn TOOL</b> là phiên WebSocket của chính tool, không phải người
             chơi — tool không bao giờ tự chọn dòng đó.</div>
           <div class="tip">Danh sách tự tải lại mỗi <b>5 giây</b>; chuột rời khỏi trang thì tạm dừng.</div>
           <div class="tip">Token staging hết hạn sau <b>~1 giờ</b> — gặp lỗi AUTH thì bấm <b>Kết nối</b> lại.</div>
           <div class="tip">Chưa chọn người chơi mà bấm cài → tool nhắc <b>"Vui lòng chọn user"</b>.</div>
           <div class="tip">Mỗi người chơi chỉ giữ được <b>một</b> cheat. Cài cái mới là đè lên cái cũ.</div>
-          <div class="tip">Ở mode <b>REST</b>, nút <b>LOCAL</b> cạnh ô Base URL trỏ <code>172.10.10.50</code> — cần mạng
-            nội bộ hoặc VPN.</div>
         </div>
       </details>
     </aside>
@@ -1597,21 +1633,27 @@
               title="Điền URL staging rồi tự tải lại danh sách">STAG</button>
             <button id="btn-base-local" class="btn btn-ghost btn-sm" type="button"
               onclick="setBase('http://172.10.10.50:3000')" title="Điền URL local rồi tự tải lại danh sách">LOCAL</button>
-            <button id="btn-mode-rest" class="btn btn-ghost btn-sm" type="button" onclick="setTransportMode('rest')"
-              title="Chế độ REST — đường HTTP cũ, giữ nguyên">REST</button>
-            <button id="btn-mode-ws" class="btn btn-ghost btn-sm" type="button" onclick="setTransportMode('ws')"
-              title="Chế độ WebSocket — đường mới qua cmd 1900 (gRPC)">WS</button>
+            <!-- Hai nút chuyển mode được ẩn: tool chạy WS cố định. Giữ lại trong DOM vì
+                 ws-debug.js còn set opacity lên chúng, và mở lại REST chỉ là bỏ hai style
+                 display:none này. Đường REST bên dưới KHÔNG bị đụng — call() vẫn tự rơi
+                 xuống fetch REST khi một path không map được sang cmd 1900. -->
+            <button id="btn-mode-rest" class="btn btn-ghost btn-sm" type="button" style="display:none"
+              onclick="setTransportMode('rest')" title="Chế độ REST — đường HTTP cũ, giữ nguyên">REST</button>
+            <button id="btn-mode-ws" class="btn btn-ghost btn-sm" type="button" style="display:none"
+              onclick="setTransportMode('ws')" title="Chế độ WebSocket — đường mới qua cmd 1900 (gRPC)">WS</button>
             <input id="i-agency" type="hidden">
             <input id="i-user" type="hidden">
             <input id="i-game" type="hidden">
             <input id="i-tok" type="hidden">
           </div>
           <div id="ws-cfg-row" class="cfg-inputs" style="display:none">
-            <input id="i-ws-url" placeholder="WS URL (phiên debug riêng của tool)" onchange="saveWsConfig()">
+            <!-- Preset đứng trước ô URL: chọn môi trường là việc làm ĐẦU TIÊN mỗi phiên, và hai
+                 nút này ghi đè luôn nội dung ô URL bên phải — đặt sau ô đó thì đọc ngược chiều thao tác. -->
             <button class="btn btn-ghost btn-sm" type="button" onclick="setWsPreset('local')"
               title="ws://localhost:9099/websocket · agentId=1">LOCAL</button>
             <button class="btn btn-ghost btn-sm" type="button" onclick="setWsPreset('stag')"
               title="wss://gob02-ws.relaxwmestu.xyz/websocket · agentId=AGENCY_001">STAG</button>
+            <input id="i-ws-url" placeholder="WS URL (phiên debug riêng của tool)" onchange="saveWsConfig()">
             <input id="i-ws-agent" placeholder="agentId" onchange="saveWsConfig()">
             <!-- Không có ô accessToken: local dùng thẳng seed token, staging tự đăng nhập lấy token
                  theo luồng 2 bước của agency-platform. Hai ô dưới chỉ hiện khi trỏ staging. -->
@@ -1623,6 +1665,10 @@
           </div>
           <div id="ws-summary" role="button" tabindex="0" onclick="expandWsConfig()" onkeydown="wsSummaryKey(event)"
             title="Bấm để mở lại cấu hình WebSocket"></div>
+        </div>
+        <div id="ws-note">
+          <span>Bấm <b>Kết nối</b> là chiếm phiên debug của tài khoản này — tool đang mở ở tab hoặc máy khác sẽ
+            ngừng tác dụng cho tới khi bấm <b>Kết nối</b> lại ở đó.</span>
         </div>
         <div id="hdr-status">
           <span class="sbadge sbadge-mute" id="st-mode">REST</span>
@@ -2520,8 +2566,8 @@
   </script>
   <!-- ?v= là cache-busting: đổi URL thì bản cũ trong cache trình duyệt không khớp được nữa.
        Sửa hai file này thì tăng số. -->
-  <script src="js/ws-client.js?v=7"></script>
-  <script src="js/ws-debug.js?v=7"></script>
+  <script src="js/ws-client.js?v=8"></script>
+  <script src="js/ws-debug.js?v=8"></script>
 </body>
 
 </html>

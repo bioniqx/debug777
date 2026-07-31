@@ -75,9 +75,9 @@ function wsIsLocal() {
 // một token cũ nằm lại sau khi đóng tab chỉ gây lỗi AUTH khó hiểu ở lần mở sau.
 let stagToken = null;
 
-// Mở tool lên là vào thẳng WS. Cố ý KHÔNG lưu localStorage: lưu thì lần bấm REST gần nhất sẽ
-// dính lại và lần mở sau không còn mặc định WS nữa. Bấm REST vẫn có hiệu lực trong phiên, F5
-// là quay về WS.
+// Tool chạy cố định WS: nút chuyển mode đã ẩn ở index.html. Cố ý KHÔNG lưu localStorage —
+// lưu thì một lần đặt 'rest' sẽ dính lại và lần mở sau không còn mặc định WS nữa.
+// Nhánh 'rest' vẫn giữ nguyên vì call() còn rơi xuống fetch REST khi path không map được op.
 let _transportMode = 'ws';
 
 function transportMode() {
@@ -94,8 +94,11 @@ function applyWsRowVisibility() {
   const isWs = transportMode() === 'ws';
   const row = document.getElementById('ws-cfg-row');
   const sum = document.getElementById('ws-summary');
+  // Lưu ý về việc chiếm phiên chỉ có nghĩa khi nút "Kết nối" đang hiện — bám theo cùng hàng.
+  const note = document.getElementById('ws-note');
   if (row) row.style.display = (isWs && !wsCfgCollapsed) ? '' : 'none';
   if (sum) sum.style.display = (isWs && wsCfgCollapsed) ? 'inline-flex' : 'none';
+  if (note) note.style.display = (isWs && !wsCfgCollapsed) ? '' : 'none';
 }
 
 function expandWsConfig() {

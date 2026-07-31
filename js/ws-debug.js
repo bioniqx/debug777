@@ -160,8 +160,6 @@ function restoreWsConfig() {
 
 // Ở mode WS thì Base URL và 2 nút preset của nó không còn điều khiển gì nữa — ẩn đi để QC không
 // sửa nhầm một ô vô tác dụng rồi ngồi đoán vì sao không ăn.
-// Ô Base vốn còn nuôi wsUrl() cho Test Runner, nên wsUrl() đã được cho đọc ô WS URL khi ở mode WS
-// (index.html) — ẩn ở đây mới an toàn, không cắt mất control mà Test Runner đang dùng.
 function updateRestVisibility(mode) {
   if (!hasDom()) return;
   const display = mode === 'ws' ? 'none' : '';

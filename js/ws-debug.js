@@ -1,24 +1,22 @@
 /* ════════════════════════════════════════════════════════════════
-   ws-debug.js — Chế độ WebSocket cho cheatTool (mới, cộng thêm bên
-   cạnh REST). Không đụng gì tới nhánh fetch REST cũ trong call() —
-   index.html chỉ thêm 1 nhánh rẽ ở đầu call(), gọi wsDebugCall() ở
-   đây; nếu path không map được op nào thì trả về falsy để call()
-   rơi về fetch REST như cũ.
+   ws-debug.js — Đường truyền DUY NHẤT của cheatTool: mọi thao tác debug
+   đi qua WebSocket cmd 1900. call() trong index.html gọi thẳng
+   wsDebugCall() ở đây; path không map được op nào là lỗi lập trình
+   (thiếu route trong WS_ROUTES), không còn đường REST để rơi xuống.
 
    Gồm:
      - toolWs: 1 NagaWsClient dùng chung cho mọi debug op, tự AUTH+JOIN
        ở lần gọi đầu, tự nối lại khi rớt.
      - WS_ROUTES: bảng (method, path) → (op, params) cho cả 31 op debug.
-     - 4 adapter cho các op có "data" khác REST body (đổi từ handler gRPC
+     - 4 adapter cho các op có "data" khác khuôn cũ (đổi từ handler gRPC
        tái dùng thay vì controller cũ): HISTORY_ROUNDS, HISTORY_ROUND_DETAIL,
        HISTORY_ROUND_REPLAY, JACKPOT_LEADERBOARD.
-     - UI glue: mode toggle (REST/WS, mặc định WS mỗi lần tải trang), cấu hình
-       WS URL/agentId/đăng nhập (localStorage), preset LOCAL/STAG, nút "Kết nối".
+     - UI glue: cấu hình WS URL/agentId/đăng nhập (localStorage),
+       preset LOCAL/STAG, nút "Kết nối".
 
-   Chạy được cả trong browser (index.html nạp qua <script src>, sau
-   ws-client.js) lẫn Node (require() để viết script probe/so sánh
-   REST vs WS — xem cheatTool/run-headless.js cho cách dùng NagaWsClient
-   ngoài browser).
+   Các mốc "REST ..." trong comment bên dưới nói về khuôn dữ liệu của
+   controller REST cũ (đã xoá) — giữ lại vì chúng giải thích vì sao các
+   adapter phải nắn dữ liệu như hiện tại.
    ════════════════════════════════════════════════════════════════ */
 
 const NagaWsClientRef = (typeof NagaWsClient !== 'undefined')
@@ -46,8 +44,8 @@ const WS_CFG_LS = { url: 'naga_qc_ws_url', agent: 'naga_qc_ws_agent', user: 'nag
 const WS_PRESETS = {
   // Token 100 chứ không phải 001: TokenRegistry của BE khoá theo username, nên nếu tool JOIN trùng
   // danh tính với một người chơi thật thì nó GHI ĐÈ phiên của người đó — người chơi biến mất khỏi
-  // danh sách và cheat nhắm vào họ cũng trượt. Dải 001-046 là của run-headless.js và của QC khi
-  // test tay, nên tool lấy đuôi 100 cho khỏi đụng.
+  // danh sách và cheat nhắm vào họ cũng trượt. Dải 001-046 là của QC khi test tay, nên tool
+  // lấy đuôi 100 cho khỏi đụng.
   local: { url: 'ws://localhost:9099/websocket', agent: '1', token: '1-valid-token-100' },
   stag: {
     url: 'wss://gob02-ws.relaxwmestu.xyz/websocket',
@@ -80,30 +78,19 @@ function wsIsLocal() {
 // một token cũ nằm lại sau khi đóng tab chỉ gây lỗi AUTH khó hiểu ở lần mở sau.
 let stagToken = null;
 
-// Tool chạy cố định WS: nút chuyển mode đã ẩn ở index.html. Cố ý KHÔNG lưu localStorage —
-// lưu thì một lần đặt 'rest' sẽ dính lại và lần mở sau không còn mặc định WS nữa.
-// Nhánh 'rest' vẫn giữ nguyên vì call() còn rơi xuống fetch REST khi path không map được op.
-let _transportMode = 'ws';
-
-function transportMode() {
-  return _transportMode;
-}
-
 // Cấu hình WS chỉ dùng một lần mỗi phiên. Nối xong thì thu lại thành chip cho gọn đầu trang;
-// bấm chip là mở lại. Hai trạng thái (mode + đã thu) phải quyết định chung một chỗ, nếu để mỗi
-// nơi tự set display thì đổi mode sẽ bung lại hàng vừa thu.
+// bấm chip là mở lại.
 let wsCfgCollapsed = false;
 
 function applyWsRowVisibility() {
   if (!hasDom()) return;
-  const isWs = transportMode() === 'ws';
   const row = document.getElementById('ws-cfg-row');
   const sum = document.getElementById('ws-summary');
   // Lưu ý về việc chiếm phiên chỉ có nghĩa khi nút "Kết nối" đang hiện — bám theo cùng hàng.
   const note = document.getElementById('ws-note');
-  if (row) row.style.display = (isWs && !wsCfgCollapsed) ? '' : 'none';
-  if (sum) sum.style.display = (isWs && wsCfgCollapsed) ? 'inline-flex' : 'none';
-  if (note) note.style.display = (isWs && !wsCfgCollapsed) ? '' : 'none';
+  if (row) row.style.display = wsCfgCollapsed ? 'none' : '';
+  if (sum) sum.style.display = wsCfgCollapsed ? 'inline-flex' : 'none';
+  if (note) note.style.display = wsCfgCollapsed ? 'none' : '';
 }
 
 function expandWsConfig() {
@@ -116,22 +103,6 @@ function wsSummaryKey(e) {
   if (e.key !== 'Enter' && e.key !== ' ') return;
   e.preventDefault();
   expandWsConfig();
-}
-
-function setTransportMode(mode) {
-  _transportMode = mode;
-  if (!hasDom()) return;
-  const restBtn = document.getElementById('btn-mode-rest');
-  const wsBtn = document.getElementById('btn-mode-ws');
-  if (restBtn) restBtn.style.opacity = mode === 'rest' ? '1' : '.5';
-  if (wsBtn) wsBtn.style.opacity = mode === 'ws' ? '1' : '.5';
-  applyWsRowVisibility();
-  updateRestVisibility(mode);
-  const badge = document.getElementById('st-mode');
-  if (badge) {
-    badge.textContent = mode === 'ws' ? 'WS' : 'REST';
-    badge.className = 'sbadge ' + (mode === 'ws' ? 'sbadge-warn' : 'sbadge-mute');
-  }
 }
 
 function saveWsConfig() {
@@ -162,23 +133,8 @@ function restoreWsConfig() {
     const el = document.getElementById('i-ws-' + k);
     if (el) el.value = localStorage.getItem(WS_CFG_LS[k]) || WS_CFG_DEFAULTS[k] || '';
   });
-  setTransportMode(transportMode());
+  applyWsRowVisibility();
   updateWsAuthVisibility();
-}
-
-// Ở mode WS thì Base URL và 2 nút preset của nó không còn điều khiển gì nữa — ẩn đi để QC không
-// sửa nhầm một ô vô tác dụng rồi ngồi đoán vì sao không ăn.
-function updateRestVisibility(mode) {
-  if (!hasDom()) return;
-  const display = mode === 'ws' ? 'none' : '';
-  ['i-base', 'btn-base-stag', 'btn-base-local'].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = display;
-  });
-  // Ẩn các ô con thôi chưa đủ: khối REST vẫn giữ `flex: 1` nên nó ôm hết chỗ trống và đẩy hàng WS
-  // dạt sang phải. Ở mode WS cho nó co về đúng bề rộng 2 nút REST/WS còn hiện.
-  const restRow = document.getElementById('rest-cfg-row');
-  if (restRow) restRow.style.flex = mode === 'ws' ? '0 0 auto' : '';
 }
 
 // Local không cần đăng nhập nên ẩn hẳn username/password — bớt thứ gây phân tâm và bớt cơ hội
@@ -326,7 +282,7 @@ function isToolSession(u) {
 let toolWs = null;
 let toolWsConnecting = null;
 
-// Seed token local theo quy ước có sẵn của run-headless.js/test-catalog: '1-valid-token-NNN' ↔
+// Seed token local theo quy ước có sẵn của BE: '1-valid-token-NNN' ↔
 // userId 'test-user-NNN'. JOIN chỉ cần MỘT danh tính hợp lệ để tạo TokenRegistry.Entry (§2.3) —
 // debug op tự mang agency/userId/gameId đích riêng trong payload (quyết định #6), không dùng entry
 // của người gọi, nên danh tính JOIN ở đây không cần khớp người chơi đang bị tác động.
@@ -539,7 +495,7 @@ function adaptJackpotLeaderboard(r, ctx) {
 }
 
 /* ── Bảng (method, path) → (op, params) — cả 31 op debug ──────────────── */
-/* Đường dẫn theo đúng @RequestMapping của 4 controller REST hiện có
+/* Đường dẫn giữ nguyên theo @RequestMapping của 4 controller REST cũ (nay đã xoá)
    (DebugController /api/v1/debug, GameConfigController /api/v1/config,
    GameplayHistoryController /api/v1/gameplay-history, JackpotHistoryController
    /api/v1/jackpot) và args khớp đúng tên field DebugCommandHandler đọc. */
@@ -633,10 +589,9 @@ function matchWsRoute(method, path) {
 }
 
 /**
- * Điểm vào duy nhất mà call() (index.html) gọi ở chế độ WS.
+ * Điểm vào duy nhất mà call() (index.html) gọi.
  * Trả về {ok, status, data} nếu path map được 1 op; trả về null nếu không
- * map được (VD 3 tab endpoint chết, hoặc host agency-platform khác) — khi
- * đó call() tự rơi về fetch REST như cũ.
+ * map được — call() biến null đó thành lỗi tường minh cho người dùng.
  */
 async function wsDebugCall(method, path, body) {
   const hit = matchWsRoute(method, path);

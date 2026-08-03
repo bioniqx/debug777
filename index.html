@@ -1625,27 +1625,12 @@
            ════════════════════════════════════════════════════════════ -->
       <header id="hdr">
         <div id="hdr-top">
-          <div id="rest-cfg-row" class="cfg-inputs">
-            <input id="i-base" placeholder="Base URL (rỗng = stag)" title="Base URL — để trống dùng URL staging mặc định"
-              onchange="saveBase()">
-            <button id="btn-base-stag" class="btn btn-ghost btn-sm" type="button"
-              onclick="setBase('https://stag.osyamazakiglobel.club/api/game/nagas-fortune-777')"
-              title="Điền URL staging rồi tự tải lại danh sách">STAG</button>
-            <button id="btn-base-local" class="btn btn-ghost btn-sm" type="button"
-              onclick="setBase('http://172.10.10.50:3000')" title="Điền URL local rồi tự tải lại danh sách">LOCAL</button>
-            <!-- Hai nút chuyển mode được ẩn: tool chạy WS cố định. Giữ lại trong DOM vì
-                 ws-debug.js còn set opacity lên chúng, và mở lại REST chỉ là bỏ hai style
-                 display:none này. Đường REST bên dưới KHÔNG bị đụng — call() vẫn tự rơi
-                 xuống fetch REST khi một path không map được sang cmd 1900. -->
-            <button id="btn-mode-rest" class="btn btn-ghost btn-sm" type="button" style="display:none"
-              onclick="setTransportMode('rest')" title="Chế độ REST — đường HTTP cũ, giữ nguyên">REST</button>
-            <button id="btn-mode-ws" class="btn btn-ghost btn-sm" type="button" style="display:none"
-              onclick="setTransportMode('ws')" title="Chế độ WebSocket — đường mới qua cmd 1900 (gRPC)">WS</button>
-            <input id="i-agency" type="hidden">
-            <input id="i-user" type="hidden">
-            <input id="i-game" type="hidden">
-            <input id="i-tok" type="hidden">
-          </div>
+          <!-- Người chơi đang chọn. Không bọc trong .cfg-inputs: class đó có flex:1 nên một
+               hàng chỉ chứa input ẩn vẫn ôm hết chỗ trống và đẩy hàng WS dạt sang phải. -->
+          <input id="i-agency" type="hidden">
+          <input id="i-user" type="hidden">
+          <input id="i-game" type="hidden">
+          <input id="i-tok" type="hidden">
           <div id="ws-cfg-row" class="cfg-inputs" style="display:none">
             <!-- Preset đứng trước ô URL: chọn môi trường là việc làm ĐẦU TIÊN mỗi phiên, và hai
                  nút này ghi đè luôn nội dung ô URL bên phải — đặt sau ô đó thì đọc ngược chiều thao tác. -->
@@ -1671,7 +1656,6 @@
             ngừng tác dụng cho tới khi bấm <b>Kết nối</b> lại ở đó.</span>
         </div>
         <div id="hdr-status">
-          <span class="sbadge sbadge-mute" id="st-mode">REST</span>
           <span class="sbadge sbadge-mute" id="st-session">Chưa chọn người chơi</span>
           <span id="poll-paused" class="sbadge sbadge-paused" style="display:none"
             title="Auto-refresh đang tạm dừng — di chuột vào trang để tiếp tục">Tạm dừng tải lại</span>
@@ -1921,7 +1905,6 @@
     const R4_EYE = { id: 'eye', ch: 'EYE', pay: 'naga', name: 'Naga Eye', kind: 'eye' };
 
     const DBG_TOKEN = 'slot-engine-debug';
-    const DEFAULT_BASE = 'https://stag.osyamazakiglobel.club/api/game/nagas-fortune-777';
     const CHEAT_TTL_MS = 5 * 60 * 1000;
     const EMPTY_LIST_HTML = '<div class="empty">Chưa có ai đang mở game. Mở game ở thiết bị test rồi bấm ↻.</div>';
 
@@ -1930,7 +1913,6 @@
     }
     function idv(id) { return (document.getElementById(id) || { value: '' }).value; }
 
-    function base() { return (cfg('base') || DEFAULT_BASE).replace(/\/+$/, ''); }
     function agency() { return cfg('agency', 'demo'); }
     function userId() { return cfg('user', 'player_001'); }
     function gameId() { return cfg('game', 'game-naga-fortune-777'); }
@@ -1969,11 +1951,8 @@
       window.addEventListener('blur', stopPoll);
     });
 
-    // Khi F5: GIỮ Base URL đã lưu, nhưng XOÁ người chơi đã chọn để không thao tác nhầm
-    // lên người của lần trước.
+    // Khi F5: XOÁ người chơi đã chọn để không thao tác nhầm lên người của lần trước.
     function restoreConfigOnLoad() {
-      const savedBase = localStorage.getItem('naga_qc_base');
-      document.getElementById('i-base').value = (savedBase && savedBase.trim()) ? savedBase : DEFAULT_BASE;
       ['agency', 'user', 'game', 'tok'].forEach(k => {
         localStorage.removeItem('naga_qc_' + k);
         const el = document.getElementById('i-' + k);
@@ -1981,49 +1960,23 @@
       });
     }
 
-    function saveBase() {
-      localStorage.setItem('naga_qc_base', document.getElementById('i-base').value.trim());
-    }
-
     function saveConfig() {
-      ['base', 'agency', 'user', 'game', 'tok'].forEach(k => {
+      ['agency', 'user', 'game', 'tok'].forEach(k => {
         const el = document.getElementById('i-' + k);
         if (el) localStorage.setItem('naga_qc_' + k, el.value);
       });
     }
 
-    // Nút STAG/LOCAL cạnh ô Base URL: đổi server → bỏ hẳn người chơi đang chọn rồi tải mới.
-    function setBase(url) {
-      document.getElementById('i-base').value = url;
-      clearSession();
-      saveConfig();
-      // Xoá danh sách cũ NGAY để không bị "giữ nguyên" khi server mới chậm hoặc không phản hồi.
-      const box = document.getElementById('session-list-body');
-      if (box) box.innerHTML = EMPTY_LIST_HTML;
-      listSessions();
-    }
-
     // ═══════════════════════ GỌI SERVER ═══════════════════════
-    async function call(method, path, body, extraHeaders = {}) {
-      // Mode WS: path nào map được op debug thì đi qua cmd 1900 (js/ws-debug.js) và trả về đúng
-      // khuôn {ok,status,data} như REST. Không map được thì rơi xuống fetch REST như cũ.
-      if (transportMode() === 'ws') {
-        const wsResult = await wsDebugCall(method, path, body);
-        if (wsResult) return wsResult;
+    async function call(method, path, body) {
+      // Mọi lời gọi đều đi qua cmd 1900 (js/ws-debug.js) và trả về khuôn {ok,status,data}.
+      const wsResult = await wsDebugCall(method, path, body);
+      // wsDebugCall trả null khi path không map được op nào. Báo thẳng thay vì im lặng:
+      // đây là lỗi lập trình (thiếu route trong WS_ROUTES), không phải lỗi vận hành.
+      if (!wsResult) {
+        return { ok: false, status: 0, data: { error: 'Không có route WS cho ' + method + ' ' + path } };
       }
-      const headers = { 'Content-Type': 'application/json', ...extraHeaders };
-      const opts = { method, headers, cache: 'no-store' };
-      if (body !== undefined && body !== null) opts.body = JSON.stringify(body);
-      let res, text = '';
-      try {
-        res = await fetch(base() + path, opts);
-        text = await res.text();
-      } catch (e) {
-        return { ok: false, status: 0, data: { error: e.message } };
-      }
-      let data;
-      try { data = JSON.parse(text); } catch { data = { raw: text }; }
-      return { ok: res.ok, status: res.status, data };
+      return wsResult;
     }
 
     // Phải xem trực tiếp ô i-user vì userId() có giá trị mặc định.
@@ -2037,7 +1990,8 @@
         toast('Vui lòng chọn user', 'warn');
         return Promise.resolve({ ok: false, status: 0, data: {}, noUser: true });
       }
-      return call(method, path, body, { 'X-Debug-Token': DBG_TOKEN });
+      // Token debug do ws-debug.js tự gắn vào từng op (cmd 1900), không đi qua header nữa.
+      return call(method, path, body);
     }
 
     function escHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -2074,7 +2028,7 @@
 
     function userCardKey(agency, username) { return (agency || '') + '|' + (username || ''); }
 
-    // ws-debug.js chỉ có ở mode WS nên phải kiểm tra trước khi gọi; mode REST luôn trả false.
+    // isToolSession sống ở ws-debug.js — kiểm tra tồn tại để trang không vỡ nếu file đó chưa nạp.
     function isOwnToolSession(u) {
       return typeof isToolSession === 'function' && isToolSession(u);
     }
@@ -2582,7 +2536,7 @@
   <!-- ?v= là cache-busting: đổi URL thì bản cũ trong cache trình duyệt không khớp được nữa.
        Sửa hai file này thì tăng số. -->
   <script src="js/ws-client.js?v=8"></script>
-  <script src="js/ws-debug.js?v=9"></script>
+  <script src="js/ws-debug.js?v=10"></script>
 </body>
 
 </html>

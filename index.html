@@ -1397,8 +1397,9 @@
       cursor: default;
     }
 
-    /* Nút cài cheat — hành động chính. Dùng --gold chứ KHÔNG dùng --ember: sáu nút này
-       luôn hiện cùng lúc, còn --ember phải để dành cho đúng một thứ là cheat đang cài. */
+    /* Hành động chính — 6 nút "Cài cheat", nút ↻ tải lại danh sách và nút "Kết nối". Dùng --gold
+       chứ KHÔNG dùng --ember: các nút này luôn hiện cùng lúc, còn --ember phải để dành cho đúng
+       một thứ là cheat đang cài. */
     .btn-arm {
       background: var(--gold);
       border-color: var(--gold);
@@ -1624,7 +1625,7 @@
         <div class="stn-h">
           <span class="stn">01</span>
           <span class="stn-t">Chọn người chơi</span>
-          <button class="btn btn-ghost btn-icon" data-needs-ws onclick="listSessions()"
+          <button class="btn btn-arm btn-icon" data-needs-ws onclick="reloadSessions()"
             title="Tải lại danh sách người chơi" aria-label="Tải lại danh sách">↻</button>
         </div>
         <div id="session-list-body" class="user-list">
@@ -1661,7 +1662,7 @@
           <div class="tip">Mọi lỗi đều hiện ở <b>dải đỏ</b> đầu trang và nằm đó tới khi nối lại được — bấm
             <b>Copy</b> để gửi nguyên văn cho dev.</div>
           <div class="tip">Token staging hết hạn sau <b>~1 giờ</b> — gặp lỗi AUTH thì bấm <b>Kết nối</b> lại.</div>
-          <div class="tip">Chưa chọn người chơi mà bấm cài → tool nhắc <b>"Vui lòng chọn user"</b>.</div>
+          <div class="tip">Chưa chọn người chơi thì 6 nút <b>Cài cheat</b> cũng xám — chọn xong là sáng lên.</div>
           <div class="tip">Mỗi người chơi chỉ giữ được <b>một</b> cheat. Cài cái mới là đè lên cái cũ.</div>
         </div>
       </details>
@@ -1773,7 +1774,7 @@
             <div class="cheat-hint">Vẽ sẵn lưới 3×3 cho lượt spin kế tiếp. Bấm vào ô để đổi ký hiệu.</div>
             <div id="grid-ui"></div>
             <div class="cheat-foot">
-              <button class="btn btn-arm" data-needs-ws onclick="armGridCheat()">Cài cheat</button>
+              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armGridCheat()">Cài cheat</button>
               <button class="btn btn-ghost btn-sm" onclick="fillGrid(10)">Toàn Wild</button>
               <button class="btn btn-ghost btn-sm" onclick="fillGrid(2)">Toàn B · 50×</button>
               <button class="btn btn-ghost btn-sm" onclick="fillGrid(5)">Toàn E · 10×</button>
@@ -1800,7 +1801,7 @@
             <div class="sub-h">Lưới Special Free Spin</div>
             <div id="wss-grid-wrap"></div>
             <div class="cheat-foot">
-              <button class="btn btn-arm" data-needs-ws onclick="armWinStreakSeq()">Cài cheat</button>
+              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armWinStreakSeq()">Cài cheat</button>
             </div>
           </div>
 
@@ -1843,7 +1844,7 @@
               trên chưa tạo khác biệt quan sát được trong game. Đây là lưới an toàn cho hành vi luôn xác định.
             </div>
             <div class="cheat-foot">
-              <button class="btn btn-arm" data-needs-ws onclick="armFsSeq()">Cài cheat</button>
+              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armFsSeq()">Cài cheat</button>
               <button class="btn btn-ghost btn-sm" onclick="resetFsSeq()">Đặt lại về random</button>
               <button class="btn btn-ghost btn-sm" onclick="fillFsMaxWin()">Toàn Wild + 10×</button>
             </div>
@@ -1889,7 +1890,7 @@
               </select>
             </div>
             <div class="cheat-foot">
-              <button class="btn btn-arm btn-block" data-needs-ws onclick="armVaultDoubleUp()">Cài cheat</button>
+              <button class="btn btn-arm btn-block" data-needs-ws data-needs-user onclick="armVaultDoubleUp()">Cài cheat</button>
             </div>
           </div>
 
@@ -1908,7 +1909,7 @@
               <span class="readout-l">/ 30 điểm</span>
             </div>
             <div class="cheat-foot">
-              <button class="btn btn-arm btn-block" data-needs-ws
+              <button class="btn btn-arm btn-block" data-needs-ws data-needs-user
                 onclick="armCheat('FORCE_RUSH_MODE_FILL',{energy:+idv('rm-energy')})">Cài cheat</button>
             </div>
           </div>
@@ -1923,7 +1924,7 @@
             <div class="fg"><label for="fs-spins">Số vòng</label><input id="fs-spins" type="number" value="10" min="1">
             </div>
             <div class="cheat-foot">
-              <button class="btn btn-arm btn-block" data-needs-ws onclick="armCheat('FORCE_FREE_SPIN',{spins:+idv('fs-spins')})">Cài
+              <button class="btn btn-arm btn-block" data-needs-ws data-needs-user onclick="armCheat('FORCE_FREE_SPIN',{spins:+idv('fs-spins')})">Cài
                 cheat</button>
             </div>
           </div>
@@ -2114,17 +2115,25 @@
       }
     }
 
-    // ═══════════════════ KHOÁ NÚT KHI CHƯA NỐI ═══════════════════
-    // Nguồn sự thật là wsState trong js/ws-debug.js; ở đây chỉ vẽ ra.
+    // ═══════════════════ KHOÁ NÚT ═══════════════════
+    // Hai điều kiện độc lập: data-needs-ws cần phiên WS (nguồn sự thật là wsState trong
+    // js/ws-debug.js), data-needs-user cần một người chơi đang được chọn. Nút "Cài cheat" mang
+    // cả hai. Nút ↻ và "Dùng" cố ý CHỈ cần WS — bắt chúng đợi người chơi thì không bao giờ
+    // chọn được ai.
     const NEED_WS_TIP = 'Chưa kết nối WS — bấm "Kết nối" ở thanh trên';
+    const NEED_USER_TIP = 'Chưa chọn người chơi — bấm "Dùng" ở cột trái';
 
-    function applyConnGating() {
-      const off = !wsConnected();
-      document.querySelectorAll('[data-needs-ws]').forEach(el => {
+    function applyGating() {
+      const noWs = !wsConnected();
+      const noUser = !hasSelectedUser();
+      document.querySelectorAll('[data-needs-ws], [data-needs-user]').forEach(el => {
         // Nhớ title gốc ngay lần đầu gặp, nếu không lần bật lại sẽ xoá mất chú thích của nút.
         if (el.dataset.titleOn === undefined) el.dataset.titleOn = el.title;
-        el.disabled = off;
-        el.title = off ? NEED_WS_TIP : el.dataset.titleOn;
+        // Thiếu kết nối nói trước: chưa nối thì cũng chưa thể chọn được người chơi nào.
+        const why = (noWs && el.hasAttribute('data-needs-ws')) ? NEED_WS_TIP
+          : (noUser && el.hasAttribute('data-needs-user')) ? NEED_USER_TIP : '';
+        el.disabled = !!why;
+        el.title = why || el.dataset.titleOn;
       });
     }
 
@@ -2147,6 +2156,15 @@
       const key = card.dataset.key || '';
       if (expandedUsers.has(key)) { expandedUsers.delete(key); card.classList.remove('open'); }
       else { expandedUsers.add(key); card.classList.add('open'); }
+    }
+
+    // Đường bấm tay của nút ↻ — báo thành công để QC biết lệnh đã chạy, kể cả khi danh sách
+    // trông y hệt lần trước. Nhịp poll 5 giây gọi thẳng listSessions() nên không nhảy toast.
+    async function reloadSessions() {
+      const n = await listSessions();
+      // Chỉ có số khi thật sự thành công. undefined nghĩa là hoặc lỗi (dải đỏ đã báo rồi), hoặc
+      // nhịp poll chen ngang làm kết quả này bị bỏ — báo "thành công" lúc đó là nói dối.
+      if (typeof n === 'number') toast('Đã tải lại · ' + n + ' người chơi đang kết nối', 'success');
     }
 
     let _listSeq = 0;
@@ -2214,7 +2232,7 @@
       </div>
     </div>`;
       }).join('');
-      applyConnGating();  // các nút "Dùng" vừa dựng lại phải theo đúng trạng thái kết nối
+      applyGating();  // các nút "Dùng" vừa dựng lại phải theo đúng trạng thái hiện tại
       return users.length; // nút "Kết nối" báo lại số user tìm thấy
     }
 
@@ -2264,6 +2282,7 @@
         localStorage.setItem('naga_qc_' + k, '');
       });
       updateStatus('session', 'mute', 'Chưa chọn người chơi');
+      applyGating();
       paintSelectedCard();
       clearArmed();
     }
@@ -2277,6 +2296,7 @@
       document.getElementById('i-game').value = gid;
       document.getElementById('i-tok').value = tok;
       saveConfig();
+      applyGating();
       updateStatus('session', 'ok', (uname || uid || '—') + '@' + (ag || '—'));
       showMsg('✅ Đã chọn người chơi: ' + (uname || uid || '—'));
     }

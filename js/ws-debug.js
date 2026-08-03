@@ -82,7 +82,7 @@ function wsConnected() { return wsState === 'connected'; }
 
 function setWsState(state) {
   wsState = state;
-  applyConnGating();  // index.html: xám/sáng mọi nút [data-needs-ws]
+  applyGating();  // index.html: xám/sáng mọi nút [data-needs-ws] / [data-needs-user]
   const btn = document.getElementById('btn-ws-connect');
   if (btn) {
     btn.textContent = state === 'connecting' ? 'Đang nối…' : (state === 'connected' ? 'Đã nối ✓' : 'Kết nối');

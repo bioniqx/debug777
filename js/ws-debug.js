@@ -19,19 +19,9 @@
    adapter phải nắn dữ liệu như hiện tại.
    ════════════════════════════════════════════════════════════════ */
 
-const NagaWsClientRef = (typeof NagaWsClient !== 'undefined')
-  ? NagaWsClient
-  : (typeof require === 'function' ? require('./ws-client.js').NagaWsClient : undefined);
-
-// DBG_TOKEN đã có sẵn ở index.html (cùng scope global của trang); Node không có nên fallback literal.
-const DEBUG_TOKEN = (typeof DBG_TOKEN !== 'undefined') ? DBG_TOKEN : 'slot-engine-debug';
-
-function hasDom() { return typeof document !== 'undefined'; }
-
-// gameId() cũng là hàm global của index.html; cùng lý do fallback như DBG_TOKEN ở trên.
-function toolGameId() {
-  return (typeof gameId === 'function' ? gameId() : '') || 'game-naga-fortune-777';
-}
+// DBG_TOKEN và gameId() là global của index.html, khai báo trong thẻ <script> đứng trước
+// file này nên luôn sẵn sàng khi đoạn dưới chạy.
+const DEBUG_TOKEN = DBG_TOKEN;
 
 /* ── Cấu hình phiên WS của tool (WS URL / accessToken / agentId) ──────── */
 
@@ -56,13 +46,9 @@ const WS_PRESETS = {
   },
 };
 
-// Ngoài browser (Node probe script), đọc từ globalThis.WS_TOOL_CONFIG = {url, agent, user, pass}.
 function wsCfgRaw(key) {
-  if (hasDom()) {
-    const el = document.getElementById('i-ws-' + key);
-    return el ? el.value.trim() : '';
-  }
-  return String((globalThis.WS_TOOL_CONFIG || {})[key] || '').trim();
+  const el = document.getElementById('i-ws-' + key);
+  return el ? el.value.trim() : '';
 }
 function wsCfgUrl() { return wsCfgRaw('url') || WS_PRESETS.local.url; }
 function wsCfgAgent() { return wsCfgRaw('agent') || WS_PRESETS.local.agent; }
@@ -83,7 +69,6 @@ let stagToken = null;
 let wsCfgCollapsed = false;
 
 function applyWsRowVisibility() {
-  if (!hasDom()) return;
   const row = document.getElementById('ws-cfg-row');
   const sum = document.getElementById('ws-summary');
   // Lưu ý về việc chiếm phiên chỉ có nghĩa khi nút "Kết nối" đang hiện — bám theo cùng hàng.
@@ -106,7 +91,6 @@ function wsSummaryKey(e) {
 }
 
 function saveWsConfig() {
-  if (!hasDom()) return;
   Object.keys(WS_CFG_LS).forEach((k) => {
     const el = document.getElementById('i-ws-' + k);
     if (el) localStorage.setItem(WS_CFG_LS[k], el.value.trim());
@@ -128,7 +112,6 @@ const WS_CFG_DEFAULTS = {
 };
 
 function restoreWsConfig() {
-  if (!hasDom()) return;
   Object.keys(WS_CFG_LS).forEach((k) => {
     const el = document.getElementById('i-ws-' + k);
     if (el) el.value = localStorage.getItem(WS_CFG_LS[k]) || WS_CFG_DEFAULTS[k] || '';
@@ -140,7 +123,6 @@ function restoreWsConfig() {
 // Local không cần đăng nhập nên ẩn hẳn username/password — bớt thứ gây phân tâm và bớt cơ hội
 // QC tưởng phải điền mới chạy được.
 function updateWsAuthVisibility() {
-  if (!hasDom()) return;
   const display = wsIsLocal() ? 'none' : '';
   ['i-ws-user', 'i-ws-pass'].forEach((id) => {
     const el = document.getElementById(id);
@@ -149,7 +131,6 @@ function updateWsAuthVisibility() {
 }
 
 function setWsPreset(which) {
-  if (!hasDom()) return;
   const p = WS_PRESETS[which];
   if (!p) return;
   const urlEl = document.getElementById('i-ws-url');
@@ -184,7 +165,7 @@ async function stagLogin() {
   const loginToken = loginData && (loginData.token || (loginData.data && loginData.data.token));
   if (!loginRes.ok || !loginToken) throw new Error('Đăng nhập thất bại: ' + JSON.stringify(loginData));
 
-  const gid = toolGameId();
+  const gid = gameId();
   const playRes = await fetch(host + '/api/v1/play-game', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + loginToken },
@@ -208,7 +189,7 @@ async function resolveWsToken(forceRefresh) {
  *  mở WebSocket → AUTH (frame 1) → JOIN (cmd 1005). Nối lười vẫn giữ nguyên cho các op,
  *  nút này chỉ để QC biết ngay cấu hình đúng hay sai thay vì đợi tới lệnh debug đầu tiên. */
 async function wsConnect() {
-  const btn = hasDom() ? document.getElementById('btn-ws-connect') : null;
+  const btn = document.getElementById('btn-ws-connect');
   const setBtn = (text, disabled) => {
     if (!btn) return;
     btn.textContent = text;
@@ -244,7 +225,7 @@ async function wsConnect() {
 
     setBtn('Đã nối ✓', false);
     // Nối được rồi thì hàng cấu hình hết việc — thu lại, nhường chỗ cho vùng làm việc.
-    const sum = hasDom() ? document.getElementById('ws-summary') : null;
+    const sum = document.getElementById('ws-summary');
     if (sum) {
       sum.innerHTML = '';
       sum.append('● ' + (wsIsLocal() ? 'WS local' : 'WS staging') + ' · ' + (j.userId || wsCfgAgent()));
@@ -307,7 +288,7 @@ async function ensureToolWs() {
   if (toolWsConnecting) return toolWsConnecting;
   toolWsConnecting = (async () => {
     const token = await resolveWsToken(false);
-    const client = new NagaWsClientRef({ url: wsCfgUrl() });
+    const client = new NagaWsClient({ url: wsCfgUrl() });
     await client.connect();
     await client.auth(token, wsCfgAgent());
     let joined;
@@ -379,22 +360,13 @@ function toMinor(display) {
   return isNaN(n) ? display : Math.round(n * 100);
 }
 
-// REST serialize Instant thành số giây-epoch có phần thập phân (Jackson mặc định); WS (SpinListHandler/
-// SpinDetailHandler) trả chuỗi ISO-8601. Quy về cùng dạng REST (số giây) cho đúng nghĩa "REST shape",
-// để bên gọi không phải phân biệt 2 chế độ. Tab Lịch Sử đã bỏ, giờ chỉ còn Node probe dùng route này.
+// Controller REST cũ serialize Instant thành số giây-epoch có phần thập phân (Jackson mặc định);
+// WS (SpinListHandler/SpinDetailHandler) trả chuỗi ISO-8601. Adapter quy về số giây để giữ đúng
+// khuôn dữ liệu mà phần render lịch sử vẫn đang mong đợi.
 function toEpochSecondsRaw(iso) {
   if (!iso) return iso;
   const t = Date.parse(iso);
   return isNaN(t) ? iso : t / 1000;
-}
-
-// userId hiện tại: HISTORY_ROUND_DETAIL đi qua delegateHistoryOp ở BE — handler dùng chung với
-// HISTORY_ROUNDS nên đòi cả agency LẪN userId ở top-level, dù REST /rounds/{roundId} chỉ cần agency.
-// Lấy từ người chơi đang chọn trên header — Node probe không có DOM nên fallback
-// globalThis.WS_TOOL_CONFIG.
-function currentUserId(q) {
-  if (typeof userId === 'function') return userId();
-  return (globalThis.WS_TOOL_CONFIG && globalThis.WS_TOOL_CONFIG.userId) || (q && q.get('userId')) || '';
 }
 
 /* ── 3 (thực ra 4 — xem HISTORY_ROUND_REPLAY) adapter: data khác REST body ── */
@@ -505,7 +477,7 @@ const WS_ROUTES = [
   // FORCE_WIN_STREAK_SEQUENCE theo bảng symbol của game, và tra GameRegistry bằng gameId
   // null thì nổ NPE (backing map là ConcurrentHashMap) chứ không trả lỗi tử tế.
   { method: 'POST', re: /^\/api\/v1\/debug\/cheat\/([^/]+)\/([^/]+)$/, op: 'ARM_CHEAT',
-    build: (m, q, body) => ({ agency: m[1], userId: m[2], gameId: toolGameId(), args: body }) },
+    build: (m, q, body) => ({ agency: m[1], userId: m[2], gameId: gameId(), args: body }) },
   { method: 'GET', re: /^\/api\/v1\/debug\/cheat\/([^/]+)\/([^/]+)$/, op: 'PEEK_CHEAT',
     build: (m) => ({ agency: m[1], userId: m[2] }) },
   { method: 'GET', re: /^\/api\/v1\/debug\/cheat-codes$/, op: 'CHEAT_CATALOG', build: () => ({}) },
@@ -560,8 +532,9 @@ const WS_ROUTES = [
     adapt: adaptHistoryRoundReplay },
   { method: 'GET', re: /^\/api\/v1\/gameplay-history\/rounds\/([^/]+)$/, op: 'HISTORY_ROUND_DETAIL',
     // BE's delegateHistoryOp() đòi cả agency LẪN userId (dùng chung validation với HISTORY_ROUNDS) dù
-    // REST /rounds/{roundId} chỉ cần agency — xem currentUserId() ở trên.
-    build: (m, q) => ({ agency: q.get('agency'), userId: currentUserId(q), args: { roundId: m[1] } }),
+    // HISTORY_ROUND_DETAIL đi qua delegateHistoryOp ở BE — handler dùng chung với HISTORY_ROUNDS
+    // nên đòi cả agency LẪN userId ở top-level, dù đường dẫn /rounds/{roundId} chỉ cần agency.
+    build: (m, q) => ({ agency: q.get('agency'), userId: userId(), args: { roundId: m[1] } }),
     adapt: adaptHistoryRoundDetail },
 
   // ── JackpotHistoryController (1 op) — data khác REST body, cần adapter ──
@@ -602,13 +575,4 @@ async function wsDebugCall(method, path, body) {
   return route.adapt ? route.adapt(result, { m, q, args: params.args || {} }) : result;
 }
 
-if (hasDom()) {
-  document.addEventListener('DOMContentLoaded', restoreWsConfig);
-}
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    wsDebugCall, matchWsRoute, WS_ROUTES, ensureToolWs, resetToolWs, wsDebugExec, toMinor,
-    adaptHistoryRounds, adaptHistoryRoundDetail, adaptHistoryRoundReplay, adaptJackpotLeaderboard,
-  };
-}
+document.addEventListener('DOMContentLoaded', restoreWsConfig);

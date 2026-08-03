@@ -1,6 +1,5 @@
 /* ════════════════════════════════════════════════════════════════
-   NagaWsClient — WebSocket client cho wsproxy (Test Runner dùng)
-   Chạy được cả trong browser lẫn Node >= 22 (global WebSocket).
+   NagaWsClient — WebSocket client cho wsproxy, dùng bởi ws-debug.js.
 
    Giao thức frame (xem WEBSOCKET_GUIDE.md):
      C→S  AUTH  : [1, zone, "", "", {accessToken, agentId, reconnect}]
@@ -199,9 +198,4 @@ class NagaWsClient {
       else w.reject(new Error('Kết nối đã được đóng chủ động'));
     });
   }
-}
-
-/* Cho phép smoke-test bằng Node: node --check / harness CLI */
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { NagaWsClient };
 }

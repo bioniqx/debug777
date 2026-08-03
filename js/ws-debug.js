@@ -30,6 +30,11 @@ const DEBUG_TOKEN = (typeof DBG_TOKEN !== 'undefined') ? DBG_TOKEN : 'slot-engin
 
 function hasDom() { return typeof document !== 'undefined'; }
 
+// gameId() cũng là hàm global của index.html; cùng lý do fallback như DBG_TOKEN ở trên.
+function toolGameId() {
+  return (typeof gameId === 'function' ? gameId() : '') || 'game-naga-fortune-777';
+}
+
 /* ── Cấu hình phiên WS của tool (WS URL / accessToken / agentId) ──────── */
 
 const WS_CFG_LS = { url: 'naga_qc_ws_url', agent: 'naga_qc_ws_agent', user: 'naga_qc_ws_user', pass: 'naga_qc_ws_pass' };
@@ -223,7 +228,7 @@ async function stagLogin() {
   const loginToken = loginData && (loginData.token || (loginData.data && loginData.data.token));
   if (!loginRes.ok || !loginToken) throw new Error('Đăng nhập thất bại: ' + JSON.stringify(loginData));
 
-  const gid = (typeof gameId === 'function' ? gameId() : '') || 'game-naga-fortune-777';
+  const gid = toolGameId();
   const playRes = await fetch(host + '/api/v1/play-game', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + loginToken },
@@ -540,8 +545,11 @@ function adaptJackpotLeaderboard(r, ctx) {
    /api/v1/jackpot) và args khớp đúng tên field DebugCommandHandler đọc. */
 const WS_ROUTES = [
   // ── DebugController (21 op) ──
+  // ARM_CHEAT bắt buộc mang gameId: BE validate lưới của FORCE_FREESPIN_SEQUENCE và
+  // FORCE_WIN_STREAK_SEQUENCE theo bảng symbol của game, và tra GameRegistry bằng gameId
+  // null thì nổ NPE (backing map là ConcurrentHashMap) chứ không trả lỗi tử tế.
   { method: 'POST', re: /^\/api\/v1\/debug\/cheat\/([^/]+)\/([^/]+)$/, op: 'ARM_CHEAT',
-    build: (m, q, body) => ({ agency: m[1], userId: m[2], args: body }) },
+    build: (m, q, body) => ({ agency: m[1], userId: m[2], gameId: toolGameId(), args: body }) },
   { method: 'GET', re: /^\/api\/v1\/debug\/cheat\/([^/]+)\/([^/]+)$/, op: 'PEEK_CHEAT',
     build: (m) => ({ agency: m[1], userId: m[2] }) },
   { method: 'GET', re: /^\/api\/v1\/debug\/cheat-codes$/, op: 'CHEAT_CATALOG', build: () => ({}) },

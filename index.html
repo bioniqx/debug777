@@ -2490,6 +2490,9 @@
       if (r.ok) {
         markArmed(code);
         showMsg('✅ Đã cài — áp cho lượt quay kế tiếp, hết hạn sau 5 phút');
+      } else if (!r.noUser) {
+        // debugCall() đã tự báo khi chưa chọn user; mọi lỗi còn lại phải hiện ra, không được nuốt.
+        showMsg('❌ Cài cheat thất bại: ' + ((r.data && r.data.error) || ('HTTP ' + r.status)));
       }
     }
 
@@ -2579,7 +2582,7 @@
   <!-- ?v= là cache-busting: đổi URL thì bản cũ trong cache trình duyệt không khớp được nữa.
        Sửa hai file này thì tăng số. -->
   <script src="js/ws-client.js?v=8"></script>
-  <script src="js/ws-debug.js?v=8"></script>
+  <script src="js/ws-debug.js?v=9"></script>
 </body>
 
 </html>

@@ -10,6 +10,23 @@
      S→C  ERROR : [0, ...]
    ════════════════════════════════════════════════════════════════ */
 
+/* Trình duyệt không cho JS đọc lý do thật của onerror (chặn vì lý do bảo mật), nên close code
+   là manh mối DUY NHẤT để biết vì sao rớt — phải giữ lại và dịch ra tiếng người. */
+const WS_CLOSE_TEXT = {
+  1000: 'đóng bình thường',
+  1001: 'phía kia rời đi',
+  1005: 'không có mã đóng',
+  1006: 'đóng bất thường — mất mạng hoặc server chết',
+  1011: 'server gặp lỗi',
+  1015: 'bắt tay TLS thất bại',
+};
+
+function describeClose(c) {
+  if (!c) return '';
+  return 'close ' + c.code + ' (' + (WS_CLOSE_TEXT[c.code] || 'không rõ') + ')'
+    + (c.reason ? ' · ' + c.reason : '');
+}
+
 class NagaWsClient {
   constructor(opts = {}) {
     this.url = opts.url;
@@ -22,6 +39,9 @@ class NagaWsClient {
     this.waiters = [];                 // {match, resolve, reject, timer, label}
     this.frames = [];                  // transcript đầy đủ {dir, at, frame}
     this.intendedClose = false;
+    this.opened = false;               // đã onopen ít nhất một lần
+    this.lastClose = null;             // {code, reason, wasClean} của lần đóng gần nhất
+    this.onDisconnect = opts.onDisconnect || null;  // fn(closeInfo) — chỉ gọi khi rớt ngoài ý muốn
   }
 
   /* ── Kết nối ──────────────────────────────────────────────── */
@@ -39,14 +59,24 @@ class NagaWsClient {
       }
       this.ws.onopen = () => {
         clearTimeout(timer);
+        this.opened = true;
         if (!settled) { settled = true; resolve(); }
       };
       this.ws.onmessage = (ev) => this._onMessage(ev.data);
-      this.ws.onerror = () => fail('Lỗi WebSocket khi kết nối ' + this.url);
-      this.ws.onclose = () => {
+      // onerror KHÔNG reject ngay: theo chuẩn WebSocket, sau error luôn có close — và chỉ close
+      // mới mang code/reason. Chốt lỗi ở đây là vứt mất đúng thứ QC cần đọc (ví dụ 1006 = server
+      // chưa bật). Nếu close không tới thì đã có timer 6 giây đỡ.
+      let sawError = false;
+      this.ws.onerror = () => { sawError = true; };
+      this.ws.onclose = (ev) => {
         clearTimeout(timer);
-        fail('WebSocket đóng trước khi mở xong');
-        this._flushWaiters('WebSocket đã đóng');
+        this.lastClose = { code: ev.code, reason: ev.reason, wasClean: ev.wasClean };
+        const why = describeClose(this.lastClose);
+        fail((sawError ? 'Không mở được WebSocket ' + this.url : 'WebSocket đóng trước khi mở xong') + ' · ' + why);
+        this._flushWaiters('WebSocket đã đóng · ' + why);
+        // Rớt SAU khi đã mở xong thì không còn ai đang await connect() để nhận lỗi — im lặng ở
+        // đây là lý do tool cứ tưởng mình vẫn nối cho tới lệnh debug kế tiếp.
+        if (this.opened && !this.intendedClose && this.onDisconnect) this.onDisconnect(this.lastClose);
       };
     });
   }

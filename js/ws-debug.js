@@ -5,8 +5,11 @@
    (thiếu route trong WS_ROUTES), không còn đường REST để rơi xuống.
 
    Gồm:
-     - toolWs: 1 NagaWsClient dùng chung cho mọi debug op, tự AUTH+JOIN
-       ở lần gọi đầu, tự nối lại khi rớt.
+     - toolWs: 1 NagaWsClient dùng chung cho mọi debug op, chỉ dựng được
+       bằng nút "Kết nối" (AUTH+JOIN). KHÔNG nối ngầm và KHÔNG tự nối lại:
+       rớt là xám hết nút gọi server cho tới khi QC bấm "Kết nối".
+     - wsState + reportWsError: mọi lỗi đều nổi lên dải đỏ ở đầu trang
+       (showWsError của index.html), không còn lỗi nào chỉ nằm trong console.
      - WS_ROUTES: bảng (method, path) → (op, params) cho cả 31 op debug.
      - 4 adapter cho các op có "data" khác khuôn cũ (đổi từ handler gRPC
        tái dùng thay vì controller cũ): HISTORY_ROUNDS, HISTORY_ROUND_DETAIL,
@@ -68,6 +71,34 @@ let stagToken = null;
 // bấm chip là mở lại.
 let wsCfgCollapsed = false;
 
+/* ── Trạng thái kết nối — nguồn sự thật cho nút cheat và dải lỗi ──────── */
+
+// 'idle' chưa nối lần nào · 'connecting' đang nối · 'connected' đã AUTH+JOIN · 'error' hỏng/rớt
+let wsState = 'idle';
+
+function wsConnected() { return wsState === 'connected'; }
+
+function setWsState(state) {
+  wsState = state;
+  applyConnGating();  // index.html: xám/sáng mọi nút [data-needs-ws]
+  const btn = document.getElementById('btn-ws-connect');
+  if (btn) {
+    btn.textContent = state === 'connecting' ? 'Đang nối…' : (state === 'connected' ? 'Đã nối ✓' : 'Kết nối');
+    btn.disabled = state === 'connecting';
+  }
+  // Nối xong thì hàng cấu hình tự thu lại, tức nút "Kết nối" bị ẩn. Mất kết nối mà cứ để thu
+  // thì QC không còn đường nào bấm nối lại — phải bung ra.
+  if (state !== 'connected' && state !== 'connecting' && wsCfgCollapsed) expandWsConfig();
+}
+
+/** Đẩy 1 lỗi lên dải đỏ đầu trang. Mọi đường lỗi của tool đều đi qua đây. */
+function reportWsError(title, message, extra) {
+  const lines = [];
+  if (extra) lines.push(extra);
+  lines.push('WS URL: ' + wsCfgUrl());
+  showWsError({ title, message: String(message), detail: lines.join('\n') });
+}
+
 function applyWsRowVisibility() {
   const row = document.getElementById('ws-cfg-row');
   const sum = document.getElementById('ws-summary');
@@ -95,11 +126,10 @@ function saveWsConfig() {
     const el = document.getElementById('i-ws-' + k);
     if (el) localStorage.setItem(WS_CFG_LS[k], el.value.trim());
   });
-  resetToolWs(); // cấu hình đổi -> phiên cũ (nếu có) không còn hợp lệ, nối lại ở lần gọi kế tiếp
+  resetToolWs(); // cấu hình đổi -> phiên cũ (nếu có) không còn hợp lệ, phải bấm "Kết nối" lại
+  setWsState('idle'); // nhãn "Đã nối ✓" của phiên vừa bị huỷ sẽ nói dối nếu để nguyên
+  stopPoll();
   updateWsAuthVisibility(); // gõ tay URL sang staging cũng phải hiện ô đăng nhập
-  // Nhãn "Đã nối ✓" của phiên vừa bị huỷ sẽ nói dối nếu để nguyên.
-  const connBtn = document.getElementById('btn-ws-connect');
-  if (connBtn) { connBtn.textContent = 'Kết nối'; connBtn.disabled = false; }
 }
 
 // Mặc định lấy thẳng từ local_login.md / staging_login.md — mở tool lên là chạy được ngay,
@@ -148,32 +178,48 @@ function setWsPreset(which) {
   updateWsAuthVisibility();
 }
 
+// Hai lỗi hay gặp nhất khi đăng nhập staging đều từng hiện ra dưới dạng khó hiểu: fetch() nổ
+// "Failed to fetch" (mạng/CORS/host sai) và res.json() nổ "Unexpected token <" khi server trả
+// trang HTML lỗi. Bọc lại để câu lỗi nói đúng chuyện gì đã xảy ra ở đâu.
+async function postJson(url, headers, body) {
+  let res;
+  try {
+    res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...headers },
+      body: JSON.stringify(body),
+    });
+  } catch (e) {
+    throw new Error('Không gọi được ' + url + ' — ' + e.message + ' (mạng, CORS hoặc host sai)');
+  }
+  const text = await res.text();
+  let data;
+  try { data = JSON.parse(text); } catch (e) { data = text; }
+  return { res, data };
+}
+
 // Luồng 2 bước của agency-platform theo staging_login.md: /user/login lấy token tài khoản, rồi
 // /play-game đổi sang token game — chính token game mới dùng để AUTH vào WebSocket.
 // Host này là nền tảng của khách hàng, không phải game backend, nên gọi HTTP ở đây là đúng và
 // không đi ngược mục tiêu bỏ REST vào game BE.
 async function stagLogin() {
   const host = WS_PRESETS.stag.authHost;
-  const username = wsCfgUser();
-  const password = wsCfgPass();
 
-  const loginRes = await fetch(host + '/api/v1/user/login', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
-  });
-  const loginData = await loginRes.json();
-  const loginToken = loginData && (loginData.token || (loginData.data && loginData.data.token));
-  if (!loginRes.ok || !loginToken) throw new Error('Đăng nhập thất bại: ' + JSON.stringify(loginData));
+  const loginUrl = host + '/api/v1/user/login';
+  const login = await postJson(loginUrl, {}, { username: wsCfgUser(), password: wsCfgPass() });
+  const loginToken = login.data && (login.data.token || (login.data.data && login.data.data.token));
+  if (!login.res.ok || !loginToken) {
+    throw new Error('Đăng nhập thất bại · HTTP ' + login.res.status + ' POST ' + loginUrl
+      + ' · ' + JSON.stringify(login.data));
+  }
 
-  const gid = gameId();
-  const playRes = await fetch(host + '/api/v1/play-game', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + loginToken },
-    body: JSON.stringify({ gameId: gid }),
-  });
-  const playData = await playRes.json();
-  const gameToken = playData && (playData.token || (playData.data && playData.data.token));
-  if (!playRes.ok || !gameToken) throw new Error('play-game thất bại: ' + JSON.stringify(playData));
+  const playUrl = host + '/api/v1/play-game';
+  const play = await postJson(playUrl, { Authorization: 'Bearer ' + loginToken }, { gameId: gameId() });
+  const gameToken = play.data && (play.data.token || (play.data.data && play.data.data.token));
+  if (!play.res.ok || !gameToken) {
+    throw new Error('play-game thất bại · HTTP ' + play.res.status + ' POST ' + playUrl
+      + ' · ' + JSON.stringify(play.data));
+  }
   return gameToken;
 }
 
@@ -185,23 +231,19 @@ async function resolveWsToken(forceRefresh) {
   return stagToken;
 }
 
-/** Nút "Kết nối": dựng phiên WS ngay theo local_login.md / staging_login.md —
- *  mở WebSocket → AUTH (frame 1) → JOIN (cmd 1005). Nối lười vẫn giữ nguyên cho các op,
- *  nút này chỉ để QC biết ngay cấu hình đúng hay sai thay vì đợi tới lệnh debug đầu tiên. */
+/** Nút "Kết nối": dựng phiên WS theo local_login.md / staging_login.md —
+ *  mở WebSocket → AUTH (frame 1) → JOIN (cmd 1005). Đây là ĐƯỜNG DUY NHẤT tạo phiên:
+ *  không bấm nút này thì mọi nút gọi server đều xám. */
 async function wsConnect() {
-  const btn = document.getElementById('btn-ws-connect');
-  const setBtn = (text, disabled) => {
-    if (!btn) return;
-    btn.textContent = text;
-    btn.disabled = !!disabled;
-  };
-  setBtn('Đang nối…', true);
+  setWsState('connecting');
   try {
     // Bấm lại là nối lại từ đầu: bỏ cả token staging đang nhớ trong phiên, để token hết hạn
     // (~1 giờ) được đăng nhập lấy mới — đây là cách duy nhất làm mới token mà không phải F5.
     resetToolWs();
     stagToken = null;
-    const client = await ensureToolWs();
+    const client = await openToolWs();
+    setWsState('connected');
+    clearWsError();  // dải đỏ của lần hỏng trước không còn đúng nữa
     const j = client.joined || {};
     // Hiện cả stableId: đó mới là giá trị các debug op dùng để nhắm mục tiêu, còn userId là tên
     // đăng nhập. Lẫn hai cái này là mất thời gian ngồi dò vì sao cheat không ăn.
@@ -223,7 +265,7 @@ async function wsConnect() {
       found = null;  // danh sách hỏng không làm hỏng kết nối vừa dựng được
     }
 
-    setBtn('Đã nối ✓', false);
+    startPoll(false);  // listSessions() vừa chạy ngay trên, chỉ cần bật nhịp 5 giây
     // Nối được rồi thì hàng cấu hình hết việc — thu lại, nhường chỗ cho vùng làm việc.
     const sum = document.getElementById('ws-summary');
     if (sum) {
@@ -241,9 +283,9 @@ async function wsConnect() {
       + (found === null ? ' · không lấy được danh sách user' : ' · ' + found + ' user đang kết nối');
     if (typeof toast === 'function') toast(msg, 'success'); else console.log(msg);
   } catch (e) {
-    setBtn('Kết nối', false);
-    const msg = 'Kết nối WS thất bại: ' + e.message;
-    if (typeof toast === 'function') toast(msg, 'error'); else alert(msg);
+    setWsState('error');
+    reportWsError('Kết nối WS thất bại', e.message);
+    if (typeof toast === 'function') toast('Kết nối WS thất bại — chi tiết ở dải đỏ đầu trang', 'error');
   }
 }
 
@@ -261,7 +303,6 @@ function isToolSession(u) {
 /* ── toolWs — 1 NagaWsClient dùng chung cho mọi debug op ──────────────── */
 
 let toolWs = null;
-let toolWsConnecting = null;
 
 // Seed token local theo quy ước có sẵn của BE: '1-valid-token-NNN' ↔
 // userId 'test-user-NNN'. JOIN chỉ cần MỘT danh tính hợp lệ để tạo TokenRegistry.Entry (§2.3) —
@@ -279,77 +320,58 @@ function wsIsOpen(client) {
 function resetToolWs() {
   if (toolWs) { try { toolWs.close(); } catch (e) { /* bỏ qua */ } }
   toolWs = null;
-  toolWsConnecting = null;
 }
 
-/** Trả về 1 toolWs đã AUTH+JOIN xong. Tự nối (lười) ở lần gọi đầu, tự nối lại khi rớt. */
-async function ensureToolWs() {
-  if (wsIsOpen(toolWs)) return toolWs;
-  if (toolWsConnecting) return toolWsConnecting;
-  toolWsConnecting = (async () => {
-    const token = await resolveWsToken(false);
-    const client = new NagaWsClient({ url: wsCfgUrl() });
-    await client.connect();
-    await client.auth(token, wsCfgAgent());
-    let joined;
-    if (wsIsLocal()) {
-      const identity = toolIdentityFromToken(token);
-      joined = await client.join(identity, identity);
-    } else {
-      // staging_login.md: JOIN chỉ gửi cmd 1005, danh tính suy từ token AUTH chứ không tự khai.
-      joined = await client.join(undefined, undefined);
-    }
-    client.joined = joined;  // nút "Kết nối" hiện lại danh tính thật mà server cấp
-    toolWs = client;
-    return client;
-  })();
-  try {
-    return await toolWsConnecting;
-  } finally {
-    toolWsConnecting = null;
+/** Rớt ngoài ý muốn. Không tự nối lại: lệnh đang bay có thể đã tới server, nối lại rồi gửi lại
+ *  là làm thêm một lần thật (sinh dữ liệu, quay spin, trừ tiền). Xám nút và để QC quyết. */
+function onToolWsDropped(closeInfo) {
+  setWsState('error');
+  stopPoll();
+  reportWsError('Mất kết nối WebSocket', describeClose(closeInfo),
+    'Lệnh đang chạy (nếu có) chưa chắc đã tới server — kiểm tra kết quả trước khi bấm lại.'
+    + '\nBấm "Kết nối" để dựng phiên mới.');
+}
+
+/** Dựng phiên WS mới: mở socket → AUTH → JOIN. CHỈ nút "Kết nối" được gọi hàm này. */
+async function openToolWs() {
+  const token = await resolveWsToken(false);
+  const client = new NagaWsClient({ url: wsCfgUrl(), onDisconnect: onToolWsDropped });
+  await client.connect();
+  await client.auth(token, wsCfgAgent());
+  let joined;
+  if (wsIsLocal()) {
+    const identity = toolIdentityFromToken(token);
+    joined = await client.join(identity, identity);
+  } else {
+    // staging_login.md: JOIN chỉ gửi cmd 1005, danh tính suy từ token AUTH chứ không tự khai.
+    joined = await client.join(undefined, undefined);
   }
+  client.joined = joined;  // nút "Kết nối" hiện lại danh tính thật mà server cấp
+  toolWs = client;
+  return client;
+}
+
+/** Trả về phiên đang mở. KHÔNG tự nối: nối ngầm thì QC không biết mình đang bắn lệnh vào
+ *  môi trường nào, và một cheat đi nhầm sang staging là mất thời gian của cả team đi dò. */
+function ensureToolWs() {
+  if (!wsIsOpen(toolWs)) throw new Error('Chưa kết nối WS — bấm "Kết nối" ở thanh trên');
+  return toolWs;
 }
 
 /** Gọi 1 debug op, trả về {ok, status, data} — cùng khuôn REST call() để renderer không đổi. */
-// Timeout KHÔNG có nghĩa là lệnh chưa chạy — reply có thể mất trong khi server đã thực thi xong.
-// Với các op này, gọi lại là làm thêm một lần thật: sinh thêm một lô dữ liệu, quay thêm một loạt
-// spin và trừ tiền thật. Nối lại thì được, nhưng tuyệt đối không tự gửi lại lệnh.
-const NO_RETRY_OPS = new Set([
-  'HISTORY_BULK_GENERATE',
-  'JACKPOT_HISTORY_BULK_GENERATE',
-  'BULK_BUY_DEBUG',
-  'SESSION_REGISTER',
-]);
-
-function isTimeoutOrDropped(err) {
-  const m = String((err && err.message) || '');
-  return m.startsWith('Timeout') || m.includes('WebSocket') || m.includes('đóng');
-}
-
 async function wsDebugExec(op, params) {
-  const call = async () => {
-    const client = await ensureToolWs();
-    return client.debug(op, { token: DEBUG_TOKEN, ...params }, 8000);
-  };
   try {
-    return { ok: true, status: 200, data: await call() };
+    const client = ensureToolWs();
+    return { ok: true, status: 200, data: await client.debug(op, { token: DEBUG_TOKEN, ...params }, 8000) };
   } catch (e) {
-    if (!isTimeoutOrDropped(e)) return { ok: false, status: 0, data: { error: e.message } };
-
-    // Phiên gần như chắc chắn đã hỏng — dựng lại để lần gọi sau không dính tiếp.
-    resetToolWs();
-
-    if (NO_RETRY_OPS.has(op)) {
-      return { ok: false, status: 0, data: {
-        error: e.message + ' — đã kết nối lại nhưng KHÔNG tự gửi lại "' + op
-          + '" vì lệnh có thể đã chạy ở server. Kiểm tra kết quả rồi tự bấm lại nếu cần.',
-      } };
-    }
-    try {
-      return { ok: true, status: 200, data: await call(), retried: true };
-    } catch (e2) {
-      return { ok: false, status: 0, data: { error: e2.message + ' (đã thử kết nối lại 1 lần)' } };
-    }
+    const msg = String(e.message || e);
+    // Timeout KHÔNG có nghĩa là lệnh chưa chạy — reply có thể mất trong khi server đã thực thi
+    // xong. Với HISTORY_BULK_GENERATE, BULK_BUY_DEBUG… bấm lại là sinh thêm một lô dữ liệu và
+    // trừ tiền thật lần nữa, nên phải cảnh báo trước khi QC bấm lại.
+    const mayHaveRun = msg.startsWith('Timeout');
+    reportWsError('Lệnh ' + op + ' thất bại', msg,
+      mayHaveRun ? 'Không nhận được trả lời, nhưng lệnh có thể ĐÃ chạy ở server — kiểm tra kết quả trước khi bấm lại.' : '');
+    return { ok: false, status: 0, data: { error: msg } };
   }
 }
 
@@ -575,4 +597,7 @@ async function wsDebugCall(method, path, body) {
   return route.adapt ? route.adapt(result, { m, q, args: params.args || {} }) : result;
 }
 
-document.addEventListener('DOMContentLoaded', restoreWsConfig);
+document.addEventListener('DOMContentLoaded', () => {
+  restoreWsConfig();
+  setWsState('idle');  // mở trang là chưa nối: xám sẵn mọi nút gọi server
+});

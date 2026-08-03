@@ -1509,6 +1509,50 @@
       color: var(--bone-3);
     }
 
+    /* ═══ DẢI LỖI KẾT NỐI ══════════════════════════════════════════
+       Toast tắt sau 3.5 giây và bị toast sau ghi đè — không hợp với lỗi kết nối, thứ QC
+       cần đọc lại nguyên văn để gửi dev. Dải này sống tới khi nối lại được hoặc tự đóng. */
+    #ws-error {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--alert);
+      border-left-width: 3px;
+      border-radius: var(--r-lg);
+      background: rgba(224, 89, 111, 0.10);
+    }
+
+    #ws-error-icon {
+      flex: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 15px;
+      color: var(--alert);
+    }
+
+    /* min-width:0 để <pre> dài không bung rộng cả header. */
+    #ws-error-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    #ws-error-title {
+      font-size: var(--t-ui);
+      font-weight: 600;
+      color: var(--bone);
+    }
+
+    #ws-error-detail {
+      margin: 4px 0 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--t-meta);
+      line-height: 1.55;
+      color: var(--bone-2);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
     /* ═══ TRỐNG ════════════════════════════════════════════════════ */
     .empty {
       padding: 22px 10px;
@@ -1580,11 +1624,11 @@
         <div class="stn-h">
           <span class="stn">01</span>
           <span class="stn-t">Chọn người chơi</span>
-          <button class="btn btn-ghost btn-icon" onclick="listSessions()" title="Tải lại danh sách người chơi"
-            aria-label="Tải lại danh sách">↻</button>
+          <button class="btn btn-ghost btn-icon" data-needs-ws onclick="listSessions()"
+            title="Tải lại danh sách người chơi" aria-label="Tải lại danh sách">↻</button>
         </div>
         <div id="session-list-body" class="user-list">
-          <div class="empty">Bấm ↻ để xem ai đang mở game, rồi bấm <b>Dùng</b> ở đúng người.</div>
+          <div class="empty">Chưa kết nối WS — bấm <b>Kết nối</b> ở thanh trên, danh sách sẽ tự hiện.</div>
         </div>
       </section>
 
@@ -1611,6 +1655,10 @@
           <div class="tip">Dòng <b>mờ, viền đứt, có nhãn TOOL</b> là phiên WebSocket của chính tool, không phải người
             chơi — tool không bao giờ tự chọn dòng đó.</div>
           <div class="tip">Danh sách tự tải lại mỗi <b>5 giây</b>; chuột rời khỏi trang thì tạm dừng.</div>
+          <div class="tip">Chưa nối hoặc vừa rớt thì <b>mọi nút gọi server bị xám</b> — bấm <b>Kết nối</b> là sáng lại.
+            Tool không bao giờ tự nối ngầm.</div>
+          <div class="tip">Mọi lỗi đều hiện ở <b>dải đỏ</b> đầu trang và nằm đó tới khi nối lại được — bấm
+            <b>Copy</b> để gửi nguyên văn cho dev.</div>
           <div class="tip">Token staging hết hạn sau <b>~1 giờ</b> — gặp lỗi AUTH thì bấm <b>Kết nối</b> lại.</div>
           <div class="tip">Chưa chọn người chơi mà bấm cài → tool nhắc <b>"Vui lòng chọn user"</b>.</div>
           <div class="tip">Mỗi người chơi chỉ giữ được <b>một</b> cheat. Cài cái mới là đè lên cái cũ.</div>
@@ -1650,6 +1698,19 @@
           </div>
           <div id="ws-summary" role="button" tabindex="0" onclick="expandWsConfig()" onkeydown="wsSummaryKey(event)"
             title="Bấm để mở lại cấu hình WebSocket"></div>
+        </div>
+        <!-- Mọi lỗi của tool đổ về đây: mở socket, AUTH, JOIN, rớt giữa chừng, đăng nhập
+             staging, và từng lệnh cmd 1900. Xem showWsError() bên dưới. -->
+        <div id="ws-error" role="alert" style="display:none">
+          <span id="ws-error-icon">✕</span>
+          <div id="ws-error-body">
+            <div id="ws-error-title"></div>
+            <pre id="ws-error-detail"></pre>
+          </div>
+          <button class="btn btn-ghost btn-sm" type="button" onclick="copyWsError()"
+            title="Chép toàn bộ nội dung lỗi để gửi dev">Copy</button>
+          <button class="btn btn-ghost btn-sm" type="button" onclick="clearWsError()"
+            aria-label="Đóng dải lỗi">×</button>
         </div>
         <div id="ws-note">
           <span>Bấm <b>Kết nối</b> là chiếm phiên debug của tài khoản này — tool đang mở ở tab hoặc máy khác sẽ
@@ -1711,7 +1772,7 @@
             <div class="cheat-hint">Vẽ sẵn lưới 3×3 cho lượt spin kế tiếp. Bấm vào ô để đổi ký hiệu.</div>
             <div id="grid-ui"></div>
             <div class="cheat-foot">
-              <button class="btn btn-arm" onclick="armGridCheat()">Cài cheat</button>
+              <button class="btn btn-arm" data-needs-ws onclick="armGridCheat()">Cài cheat</button>
               <button class="btn btn-ghost btn-sm" onclick="fillGrid(10)">Toàn Wild</button>
               <button class="btn btn-ghost btn-sm" onclick="fillGrid(2)">Toàn B · 50×</button>
               <button class="btn btn-ghost btn-sm" onclick="fillGrid(5)">Toàn E · 10×</button>
@@ -1738,7 +1799,7 @@
             <div class="sub-h">Lưới Special Free Spin</div>
             <div id="wss-grid-wrap"></div>
             <div class="cheat-foot">
-              <button class="btn btn-arm" onclick="armWinStreakSeq()">Cài cheat</button>
+              <button class="btn btn-arm" data-needs-ws onclick="armWinStreakSeq()">Cài cheat</button>
             </div>
           </div>
 
@@ -1781,7 +1842,7 @@
               trên chưa tạo khác biệt quan sát được trong game. Đây là lưới an toàn cho hành vi luôn xác định.
             </div>
             <div class="cheat-foot">
-              <button class="btn btn-arm" onclick="armFsSeq()">Cài cheat</button>
+              <button class="btn btn-arm" data-needs-ws onclick="armFsSeq()">Cài cheat</button>
               <button class="btn btn-ghost btn-sm" onclick="resetFsSeq()">Đặt lại về random</button>
               <button class="btn btn-ghost btn-sm" onclick="fillFsMaxWin()">Toàn Wild + 10×</button>
             </div>
@@ -1827,7 +1888,7 @@
               </select>
             </div>
             <div class="cheat-foot">
-              <button class="btn btn-arm btn-block" onclick="armVaultDoubleUp()">Cài cheat</button>
+              <button class="btn btn-arm btn-block" data-needs-ws onclick="armVaultDoubleUp()">Cài cheat</button>
             </div>
           </div>
 
@@ -1846,7 +1907,7 @@
               <span class="readout-l">/ 30 điểm</span>
             </div>
             <div class="cheat-foot">
-              <button class="btn btn-arm btn-block"
+              <button class="btn btn-arm btn-block" data-needs-ws
                 onclick="armCheat('FORCE_RUSH_MODE_FILL',{energy:+idv('rm-energy')})">Cài cheat</button>
             </div>
           </div>
@@ -1861,7 +1922,7 @@
             <div class="fg"><label for="fs-spins">Số vòng</label><input id="fs-spins" type="number" value="10" min="1">
             </div>
             <div class="cheat-foot">
-              <button class="btn btn-arm btn-block" onclick="armCheat('FORCE_FREE_SPIN',{spins:+idv('fs-spins')})">Cài
+              <button class="btn btn-arm btn-block" data-needs-ws onclick="armCheat('FORCE_FREE_SPIN',{spins:+idv('fs-spins')})">Cài
                 cheat</button>
             </div>
           </div>
@@ -1920,11 +1981,13 @@
     // ═══════════════════════ KHỞI ĐỘNG ═══════════════════════
     let _pollTimer = null;
 
-    function startPoll() {
-      if (_pollTimer) return;
+    // Chưa nối thì không poll: không còn nối ngầm nữa nên mỗi nhịp 5 giây chỉ sinh thêm một lỗi
+    // và ghi đè dải lỗi thật. runNow=false cho wsConnect(), nơi listSessions() vừa chạy xong.
+    function startPoll(runNow = true) {
+      if (_pollTimer || !wsConnected()) return;
       const ind = document.getElementById('poll-paused');
       if (ind) ind.style.display = 'none';
-      listSessions();
+      if (runNow) listSessions();
       _pollTimer = setInterval(listSessions, 5000);
     }
 
@@ -1933,7 +1996,8 @@
       clearInterval(_pollTimer);
       _pollTimer = null;
       const ind = document.getElementById('poll-paused');
-      if (ind) ind.style.display = '';
+      // Chưa nối thì dải đỏ và các nút xám đã nói rõ rồi — thêm huy hiệu "tạm dừng" chỉ gây nhiễu.
+      if (ind) ind.style.display = wsConnected() ? '' : 'none';
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -1942,12 +2006,11 @@
       document.getElementById('wss-trigger-wrap').appendChild(buildReel({ allowRandom: true }));
       document.getElementById('wss-grid-wrap').appendChild(buildReel({ allowRandom: true }));
       initFsSeq();
-      listSessions();
-      _pollTimer = setInterval(listSessions, 5000);
-
-      document.addEventListener('mouseenter', startPoll);
+      // Danh sách người chơi và nhịp poll chỉ bắt đầu sau khi bấm "Kết nối" — xem wsConnect().
+      // Bọc trong arrow function: startPoll nhận tham số runNow, không được lấy event làm tham số.
+      document.addEventListener('mouseenter', () => startPoll());
       document.addEventListener('mouseleave', stopPoll);
-      window.addEventListener('focus', startPoll);
+      window.addEventListener('focus', () => startPoll());
       window.addEventListener('blur', stopPoll);
     });
 
@@ -1974,7 +2037,9 @@
       // wsDebugCall trả null khi path không map được op nào. Báo thẳng thay vì im lặng:
       // đây là lỗi lập trình (thiếu route trong WS_ROUTES), không phải lỗi vận hành.
       if (!wsResult) {
-        return { ok: false, status: 0, data: { error: 'Không có route WS cho ' + method + ' ' + path } };
+        const err = 'Không có route WS cho ' + method + ' ' + path;
+        showWsError({ title: 'Lỗi lập trình của tool', message: err, detail: 'Thiếu route trong WS_ROUTES (js/ws-debug.js).' });
+        return { ok: false, status: 0, data: { error: err } };
       }
       return wsResult;
     }
@@ -2018,6 +2083,48 @@
         t.classList.remove('show');
         setTimeout(() => t.remove(), 300);
       }, 3500);
+    }
+
+    // ═══════════════════ DẢI LỖI KẾT NỐI ═══════════════════
+    // Giữ nguyên văn lỗi gần nhất để nút Copy gửi được cho dev.
+    let lastWsError = '';
+
+    function showWsError({ title, message, detail }) {
+      const stamp = new Date().toLocaleTimeString('vi-VN', { hour12: false });
+      const body = [message, detail].filter(Boolean).join('\n') + '\n' + stamp;
+      lastWsError = title + '\n' + body;
+      document.getElementById('ws-error-title').textContent = title;
+      document.getElementById('ws-error-detail').textContent = body;
+      document.getElementById('ws-error').style.display = 'flex';
+    }
+
+    function clearWsError() {
+      lastWsError = '';
+      document.getElementById('ws-error').style.display = 'none';
+    }
+
+    async function copyWsError() {
+      try {
+        await navigator.clipboard.writeText(lastWsError);
+        toast('Đã chép nội dung lỗi', 'success');
+      } catch (e) {
+        // clipboard API chỉ chạy trên HTTPS hoặc localhost — mở tool qua http thuần là hỏng.
+        toast('Trình duyệt chặn chép tự động — bôi đen dải lỗi rồi Ctrl+C', 'warn');
+      }
+    }
+
+    // ═══════════════════ KHOÁ NÚT KHI CHƯA NỐI ═══════════════════
+    // Nguồn sự thật là wsState trong js/ws-debug.js; ở đây chỉ vẽ ra.
+    const NEED_WS_TIP = 'Chưa kết nối WS — bấm "Kết nối" ở thanh trên';
+
+    function applyConnGating() {
+      const off = !wsConnected();
+      document.querySelectorAll('[data-needs-ws]').forEach(el => {
+        // Nhớ title gốc ngay lần đầu gặp, nếu không lần bật lại sẽ xoá mất chú thích của nút.
+        if (el.dataset.titleOn === undefined) el.dataset.titleOn = el.title;
+        el.disabled = off;
+        el.title = off ? NEED_WS_TIP : el.dataset.titleOn;
+      });
     }
 
     // ═══════════════════════ NGƯỜI CHƠI ═══════════════════════
@@ -2093,7 +2200,7 @@
       <div class="uc-top">
         <div class="uc-name"${nameTip ? ` title="${nameTip}"` : ''} onclick="toggleUserCard(this)">${escHtml(u.username || '—')}</div>
         ${isTool ? '<span class="uc-tool">TOOL</span>' : ''}
-        <button class="btn btn-ghost btn-sm" ${noStableId ? 'title="stableId thiếu — cheat bind theo userId, có thể sai khoá trên staging"' : ''} data-ag="${escAttr(u.agency)}" data-uid="${escAttr(u.userId)}" data-sid="${escAttr(sid)}" data-gid="${escAttr(u.gameId)}" data-tok="${escAttr(u.sessionToken)}" data-uname="${escAttr(u.username)}" onclick="useSessionFromBtn(this)">Dùng</button>
+        <button class="btn btn-ghost btn-sm" data-needs-ws ${noStableId ? 'title="stableId thiếu — cheat bind theo userId, có thể sai khoá trên staging"' : ''} data-ag="${escAttr(u.agency)}" data-uid="${escAttr(u.userId)}" data-sid="${escAttr(sid)}" data-gid="${escAttr(u.gameId)}" data-tok="${escAttr(u.sessionToken)}" data-uname="${escAttr(u.username)}" onclick="useSessionFromBtn(this)">Dùng</button>
       </div>
       <div class="uc-meta">
         <div class="uc-row"><span class="uc-k">Agency</span><span class="uc-v">${agencyVal}</span></div>
@@ -2106,6 +2213,7 @@
       </div>
     </div>`;
       }).join('');
+      applyConnGating();  // các nút "Dùng" vừa dựng lại phải theo đúng trạng thái kết nối
       return users.length; // nút "Kết nối" báo lại số user tìm thấy
     }
 
@@ -2535,8 +2643,8 @@
   </script>
   <!-- ?v= là cache-busting: đổi URL thì bản cũ trong cache trình duyệt không khớp được nữa.
        Sửa hai file này thì tăng số. -->
-  <script src="js/ws-client.js?v=9"></script>
-  <script src="js/ws-debug.js?v=10"></script>
+  <script src="js/ws-client.js?v=10"></script>
+  <script src="js/ws-debug.js?v=11"></script>
 </body>
 
 </html>

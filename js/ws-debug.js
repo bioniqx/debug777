@@ -9,7 +9,9 @@
        bằng nút "Kết nối" (AUTH+JOIN). KHÔNG nối ngầm và KHÔNG tự nối lại:
        rớt là xám hết nút gọi server cho tới khi QC bấm "Kết nối".
      - wsState + reportWsError: mọi lỗi đều nổi lên dải đỏ ở đầu trang
-       (showWsError của index.html), không còn lỗi nào chỉ nằm trong console.
+       (showWsError của index.html) VÀ hạ trạng thái xuống 'error' — kể cả
+       khi socket còn mở và BE chỉ trả ok:false. Nhịp poll 5 giây lấy danh
+       sách user vì thế cũng là thước đo sức khoẻ kết nối.
      - WS_ROUTES: bảng (method, path) → (op, params) cho cả 31 op debug.
      - 4 adapter cho các op có "data" khác khuôn cũ (đổi từ handler gRPC
        tái dùng thay vì controller cũ): HISTORY_ROUNDS, HISTORY_ROUND_DETAIL,
@@ -262,8 +264,11 @@ async function wsConnect() {
         found = typeof n === 'number' ? n : null;
       }
     } catch (e) {
-      found = null;  // danh sách hỏng không làm hỏng kết nối vừa dựng được
+      // Không nuốt lỗi: wsDebugExec đã vẽ dải đỏ và hạ trạng thái rồi, ở đây chỉ mất con số để khoe.
+      found = null;
     }
+    // Lấy danh sách hỏng nghĩa là mất kết nối — đừng khoe "Đã nối ✓" đè lên dải đỏ vừa hiện.
+    if (!wsConnected()) return;
 
     startPoll(false);  // listSessions() vừa chạy ngay trên, chỉ cần bật nhịp 5 giây
     // Nối được rồi thì hàng cấu hình hết việc — thu lại, nhường chỗ cho vùng làm việc.
@@ -354,7 +359,9 @@ async function openToolWs() {
 /** Trả về phiên đang mở. KHÔNG tự nối: nối ngầm thì QC không biết mình đang bắn lệnh vào
  *  môi trường nào, và một cheat đi nhầm sang staging là mất thời gian của cả team đi dò. */
 function ensureToolWs() {
-  if (!wsIsOpen(toolWs)) throw new Error('Chưa kết nối WS — bấm "Kết nối" ở thanh trên');
+  // Xét cả wsState: một lệnh lỗi là hạ trạng thái xuống 'error' dù socket còn mở, và khi đó
+  // tool phải im cho tới khi nối lại — nếu không, nút thì xám mà lệnh vẫn lọt qua được.
+  if (!wsConnected() || !wsIsOpen(toolWs)) throw new Error('Chưa kết nối WS — bấm "Kết nối" ở thanh trên');
   return toolWs;
 }
 
@@ -365,12 +372,17 @@ async function wsDebugExec(op, params) {
     return { ok: true, status: 200, data: await client.debug(op, { token: DEBUG_TOKEN, ...params }, 8000) };
   } catch (e) {
     const msg = String(e.message || e);
+    // Lệnh nào lỗi cũng coi là mất kết nối — kể cả khi socket còn mở và BE chỉ trả ok:false.
+    // Quy tắc một chiều như vậy để QC không phải đoán: nút xám nghĩa là bấm "Kết nối".
+    setWsState('error');
+    stopPoll();
     // Timeout KHÔNG có nghĩa là lệnh chưa chạy — reply có thể mất trong khi server đã thực thi
     // xong. Với HISTORY_BULK_GENERATE, BULK_BUY_DEBUG… bấm lại là sinh thêm một lô dữ liệu và
     // trừ tiền thật lần nữa, nên phải cảnh báo trước khi QC bấm lại.
     const mayHaveRun = msg.startsWith('Timeout');
     reportWsError('Lệnh ' + op + ' thất bại', msg,
-      mayHaveRun ? 'Không nhận được trả lời, nhưng lệnh có thể ĐÃ chạy ở server — kiểm tra kết quả trước khi bấm lại.' : '');
+      (mayHaveRun ? 'Không nhận được trả lời, nhưng lệnh có thể ĐÃ chạy ở server — kiểm tra kết quả trước khi bấm lại.\n' : '')
+      + 'Tool đã ngắt kết nối — bấm "Kết nối" để dựng phiên mới.');
     return { ok: false, status: 0, data: { error: msg } };
   }
 }

@@ -667,13 +667,6 @@
     }
 
     /* ── Huy hiệu trạng thái ─────────────────────────────────────── */
-    #hdr-status {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      flex-wrap: wrap;
-    }
-
     .sbadge {
       display: inline-flex;
       align-items: center;
@@ -698,21 +691,6 @@
       box-shadow: 0 0 7px currentColor;
     }
 
-    .sbadge-ok {
-      border-color: var(--jade);
-      color: var(--jade-hi);
-    }
-
-    .sbadge-warn {
-      border-color: var(--gold);
-      color: var(--gold-hi);
-    }
-
-    .sbadge-mute::before {
-      box-shadow: none;
-      opacity: 0.45;
-    }
-
     /* Không nhấp nháy: viền đứt đã đủ nói "đang tạm dừng", còn một vật nhấp nháy vĩnh
        viễn ở rìa tầm nhìn thì suốt buổi làm việc rất mệt. */
     .sbadge-paused {
@@ -725,11 +703,17 @@
     }
 
     /* ── Tài liệu tham chiếu ──────────────────────────────────────
-       Nằm ở thanh trên vì thanh này sticky — cuộn tới đâu vẫn thấy — và nửa phải hàng trạng
-       thái vốn bỏ trống. Để chữ trơn, không viền: chúng là đường dẫn ra ngoài, không phải
-       trạng thái, nên không được nhìn giống huy hiệu bên trái. */
+       Nằm ở thanh trên vì thanh này sticky — cuộn tới đâu vẫn thấy — và nửa phải hàng kết nối
+       vốn bỏ trống. Để chữ trơn, không viền: chúng là đường dẫn ra ngoài, không phải trạng
+       thái, nên không được nhìn giống huy hiệu bên trái.
+
+       Vạch ngăn bên trái là bắt buộc chứ không phải trang trí: hàng kết nối co giãn tới sát
+       mép nên margin-left:auto không còn chỗ để đẩy, thiếu vạch thì nút "Kết nối" dính luôn
+       vào chữ "Tài liệu" và đọc ra như một cụm. */
     .hdr-docs {
       margin-left: auto;
+      padding-left: 15px;
+      border-left: 1px solid var(--rule);
       display: flex;
       align-items: center;
       gap: 2px;
@@ -1820,6 +1804,24 @@
           </div>
           <div id="ws-summary" role="button" tabindex="0" onclick="expandWsConfig()" onkeydown="wsSummaryKey(event)"
             title="Bấm để mở lại cấu hình WebSocket"></div>
+          <span id="poll-paused" class="sbadge sbadge-paused" style="display:none"
+            title="Auto-refresh đang tạm dừng — di chuột vào trang để tiếp tục">Tạm dừng tải lại</span>
+          <!-- Đứng chung hàng kết nối, dồn về mép phải bằng margin-left:auto — nửa phải hàng này
+               vốn bỏ trống, tách riêng một dòng chỉ để bốn đường dẫn là phí một dòng thanh trên. -->
+          <nav class="hdr-docs" aria-label="Tài liệu tham chiếu">
+            <span class="micro"></span>
+            <a class="hdr-doc"
+              href="https://docs.google.com/document/d/1ofXIWycwCQJgNIuVJVMJDCzTEZMXXyVKg26XRYlaKb4/edit?usp=sharing"
+              target="_blank" rel="noopener noreferrer" title="Tài liệu thiết kế game">GDD</a>
+            <a class="hdr-doc" href="https://notebooklm.google.com/notebook/6450e82f-2ec1-44b2-9018-56dc62f8889c"
+              target="_blank" rel="noopener noreferrer" title="Học GDD cùng AI (NotebookLM)">Học cùng AI</a>
+            <a class="hdr-doc"
+              href="https://docs.google.com/document/d/1-QD6D42e7srq_uamFrRCWfMdZnF5ERiyx9gQIMtzdkU/edit?usp=sharing"
+              target="_blank" rel="noopener noreferrer" title="Gợi ý test case">Gợi ý test case</a>
+            <a class="hdr-doc"
+              href="https://docs.google.com/document/d/1r0n3cVEqudxyT10zrmOXGgm8z8N4lUtRTOMLagMolW4/edit?usp=sharing"
+              target="_blank" rel="noopener noreferrer" title="Tài liệu dành cho FE developer">Dành cho FE dev</a>
+          </nav>
         </div>
         <!-- Mọi lỗi của tool đổ về đây: mở socket, AUTH, JOIN, rớt giữa chừng, đăng nhập
              staging, và từng lệnh cmd 1900. Xem showWsError() bên dưới. -->
@@ -1837,25 +1839,6 @@
         <div id="ws-note">
           <span>Bấm <b>Kết nối</b> là chiếm phiên debug của tài khoản này — tool đang mở ở tab hoặc máy khác sẽ
             ngừng tác dụng cho tới khi bấm <b>Kết nối</b> lại ở đó.</span>
-        </div>
-        <div id="hdr-status">
-          <span class="sbadge sbadge-mute" id="st-session">Chưa chọn người chơi</span>
-          <span id="poll-paused" class="sbadge sbadge-paused" style="display:none"
-            title="Auto-refresh đang tạm dừng — di chuột vào trang để tiếp tục">Tạm dừng tải lại</span>
-          <nav class="hdr-docs" aria-label="Tài liệu tham chiếu">
-            <span class="micro">Tài liệu</span>
-            <a class="hdr-doc"
-              href="https://docs.google.com/document/d/1ofXIWycwCQJgNIuVJVMJDCzTEZMXXyVKg26XRYlaKb4/edit?usp=sharing"
-              target="_blank" rel="noopener noreferrer" title="Tài liệu thiết kế game">GDD</a>
-            <a class="hdr-doc" href="https://notebooklm.google.com/notebook/6450e82f-2ec1-44b2-9018-56dc62f8889c"
-              target="_blank" rel="noopener noreferrer" title="Học GDD cùng AI (NotebookLM)">Học cùng AI</a>
-            <a class="hdr-doc"
-              href="https://docs.google.com/document/d/1-QD6D42e7srq_uamFrRCWfMdZnF5ERiyx9gQIMtzdkU/edit?usp=sharing"
-              target="_blank" rel="noopener noreferrer" title="Gợi ý test case">Gợi ý test case</a>
-            <a class="hdr-doc"
-              href="https://docs.google.com/document/d/1r0n3cVEqudxyT10zrmOXGgm8z8N4lUtRTOMLagMolW4/edit?usp=sharing"
-              target="_blank" rel="noopener noreferrer" title="Tài liệu dành cho FE developer">Dành cho FE dev</a>
-          </nav>
         </div>
       </header>
 
@@ -2236,12 +2219,16 @@
     // Giữ nguyên văn lỗi gần nhất để nút Copy gửi được cho dev.
     let lastWsError = '';
 
-    function showWsError({ title, message, detail }) {
+    // `message`/`detail` hiện trên dải; `hidden` CHỈ đi vào nút Copy — dành cho lỗi mà QC
+    // không cần đọc phần kỹ thuật, chỉ cần biết bấm gì, nhưng dev vẫn cần đủ để dò.
+    function showWsError({ title, message, detail, hidden }) {
       const stamp = new Date().toLocaleTimeString('vi-VN', { hour12: false });
-      const body = [message, detail].filter(Boolean).join('\n') + '\n' + stamp;
-      lastWsError = title + '\n' + body;
+      const shown = [message, detail].filter(Boolean).join('\n');
+      lastWsError = [title, shown, hidden, stamp].filter(Boolean).join('\n');
       document.getElementById('ws-error-title').textContent = title;
-      document.getElementById('ws-error-detail').textContent = body;
+      const pre = document.getElementById('ws-error-detail');
+      pre.textContent = shown ? shown + '\n' + stamp : '';
+      pre.style.display = shown ? '' : 'none';
       document.getElementById('ws-error').style.display = 'flex';
     }
 
@@ -2285,6 +2272,9 @@
     // ═══════════════════════ NGƯỜI CHƠI ═══════════════════════
     // Nhận diện theo (agency, username) để khi userId/token đổi trên server vẫn biết là cùng người.
     let selectedSession = null;
+    // Nhãn "người chơi @ agency" của phiên đang chọn. Không hiện ở đâu cả — cột trái đã tô
+    // sáng đúng người rồi — nhưng dải "đã cài" phải chép lại nó tại thời điểm cài cheat.
+    let sessionLabel = '';
     // Thẻ đang xổ chi tiết — giữ qua mỗi lần vẽ lại (poll 5 giây).
     const expandedUsers = new Set();
 
@@ -2426,7 +2416,7 @@
         if (el) el.value = '';
         localStorage.setItem('naga_qc_' + k, '');
       });
-      updateStatus('session', 'mute', 'Chưa chọn người chơi');
+      sessionLabel = '';
       applyGating();
       paintSelectedCard();
       clearArmed();
@@ -2442,18 +2432,11 @@
       document.getElementById('i-tok').value = tok;
       saveConfig();
       applyGating();
-      updateStatus('session', 'ok', (uname || uid || '—') + '@' + (ag || '—'));
+      sessionLabel = (uname || uid || '—') + '@' + (ag || '—');
       showMsg('✅ Đã chọn người chơi: ' + (uname || uid || '—'));
       // Khu Pool jackpot vừa dùng được (WS đã nối, tới đây thì luôn vậy — xem useSession() được
       // gọi từ đâu): tự tải một lần, khỏi bắt QC bấm ↻ mới thấy số.
       loadPools();
-    }
-
-    function updateStatus(key, type, text) {
-      const el = document.getElementById('st-' + key);
-      if (!el) return;
-      el.textContent = text;
-      el.className = 'sbadge sbadge-' + (type === 'ok' ? 'ok' : type === 'warn' ? 'warn' : 'mute');
     }
 
     // ═══════════════════════ Ô CỬA CUỘN ═══════════════════════
@@ -2666,8 +2649,7 @@
     function markArmed(code) {
       // Ghi lại luôn người chơi tại thời điểm cài: dải trên phải nói rõ cheat này nhắm vào AI,
       // chứ không phải ai đang được chọn lúc anh nhìn vào nó.
-      const badge = document.getElementById('st-session');
-      armedSlots[slotFor(code)] = { code, at: Date.now(), who: badge ? badge.textContent : '' };
+      armedSlots[slotFor(code)] = { code, at: Date.now(), who: sessionLabel };
       paintArmed();
       if (!_ttlTimer) _ttlTimer = setInterval(tickTtl, 1000);
     }

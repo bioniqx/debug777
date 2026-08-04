@@ -332,9 +332,12 @@ function resetToolWs() {
 function onToolWsDropped(closeInfo) {
   setWsState('error');
   stopPoll();
-  reportWsError('Mất kết nối WebSocket', describeClose(closeInfo),
-    'Lệnh đang chạy (nếu có) chưa chắc đã tới server — kiểm tra kết quả trước khi bấm lại.'
-    + '\nBấm "Kết nối" để dựng phiên mới.');
+  // Rớt mạng thì việc cần làm luôn giống hệt nhau, nên chỉ nói đúng việc đó. Mã đóng và
+  // WS URL vẫn nằm nguyên trong nút Copy để gửi dev khi cần dò.
+  showWsError({
+    title: 'Mất kết nối, vui lòng bấm Kết nối lại lần nữa',
+    hidden: describeClose(closeInfo) + '\nWS URL: ' + wsCfgUrl(),
+  });
 }
 
 /** Dựng phiên WS mới: mở socket → AUTH → JOIN. CHỈ nút "Kết nối" được gọi hàm này. */

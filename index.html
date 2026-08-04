@@ -770,7 +770,12 @@
     }
 
     /* ═══ VÙNG LÀM VIỆC ════════════════════════════════════════════ */
+    /* Cột nội dung có trần rồi canh giữa: lưới cheat rộng nhất là 1360px, màn
+       rộng hơn thì thừa ra hai bên đều nhau thay vì dồn hết sang phải. Trần đặt
+       ở #main để dải "đã cài" và tiêu đề trạm thẳng lề với lưới, không lệch. */
     #main {
+      max-width: 1408px;
+      margin: 0 auto;
       padding: 20px 24px 48px;
     }
 
@@ -910,20 +915,52 @@
       }
     }
 
-    /* ═══ LƯỚI CHEAT ═══════════════════════════════════════════════ */
-    /* Grid theo hàng (đọc trái→phải như bình thường); `dense` để thẻ hẹp lấp
-       nốt chỗ trống mà thẻ rộng bỏ lại, khỏi hụt cuối hàng. */
-    /* 340px là bề rộng tối thiểu để ô cuộn 3×3 giữ được ô gần vuông (~54px) thay vì dẹt
-       thành một cái bảng. Mọi thẻ chiếm đúng một cột nên mọi ô cuộn bằng nhau.
+    /* ═══ LƯỚI CHEAT ═══════════════════════════════════════════════
+       Sáu thẻ cao rất lệch nhau (đo thật ở cột 404px): GRID 432, JACKPOT 445,
+       VAULT 269, RUSH 248 — nhưng hai thẻ _SEQUENCE tới 847 và 916 vì mỗi thẻ
+       chứa 2–N ô cuộn xếp chồng. Thả tự do thì thẻ 432 phải đứng cạnh thẻ 916
+       và bỏ lại gần 500px lỗ hổng.
+
+       Cách xếp: hai thẻ _SEQUENCE chiếm 2 dòng, vừa đúng bằng GRID + JACKPOT
+       xếp chồng ở cột bên (432+445 = 877 ≈ 880). Dòng cuối còn đúng 2 thẻ cho
+       3 chỗ, nên nền lưới đếm bằng 6 cột nhỏ: thẻ thường chiếm 2, hai thẻ dòng
+       cuối chiếm 3 — chia đôi đều thay vì một thẻ rộng gấp đôi thẻ kia. Kết quả
+       là một khối chữ nhật kín, không còn khoảng trống nào.
+
+       280px là bề rộng tối thiểu để ô cuộn 3×3 giữ được ô gần vuông thay vì dẹt
+       thành một cái bảng; trần 1360px của #main chặn chiều ngược lại — màn 4K mà
+       chia 3 cột thì ô cuộn bè ra thành hình chữ nhật nằm.
 
        Cố ý dùng grid chứ KHÔNG dùng `columns`: bố cục dồn cột tính lại vị trí toàn bộ
        thẻ mỗi khi một thẻ đổi chiều cao, nên bấm "Thêm vòng" là cả lưới nhảy sang cột
        khác. Grid giữ nguyên cột của từng thẻ, thẻ nào cao lên thì chỉ hàng của nó dài ra. */
     .cheat-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 14px;
       align-items: start;
+    }
+
+    /* Chỉ xếp khối khi chắc chắn đủ chỗ. Hẹp hơn thì bỏ hết span, để lưới tự
+       rớt về 2 rồi 1 cột theo thứ tự đọc — thẻ nào cũng còn nguyên vẹn. */
+    @media (min-width: 1240px) {
+      .cheat-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+
+      .cheat-c {
+        grid-column: span 2;
+      }
+
+      .cheat-c[data-cheat="FORCE_FREESPIN_SEQUENCE"],
+      .cheat-c[data-cheat="FORCE_WIN_STREAK_SEQUENCE"] {
+        grid-row: span 2;
+      }
+
+      .cheat-c[data-cheat="FORCE_VAULT_DOUBLE_UP"],
+      .cheat-c[data-cheat="FORCE_RUSH_MODE_FILL"] {
+        grid-column: span 3;
+      }
     }
 
     .cheat-c {
@@ -1861,30 +1898,6 @@
             </div>
           </div>
 
-          <!-- ── FORCE_WIN_STREAK_SEQUENCE ──────────────────────────── -->
-          <div class="cheat-c" data-cheat="FORCE_WIN_STREAK_SEQUENCE">
-            <div class="cheat-head">
-              <span class="cheat-name">FORCE_WIN_STREAK_SEQUENCE</span>
-              <span class="armed-tag"></span>
-            </div>
-            <div class="cheat-hint">Cheat ghi thẳng thanh win-streak, không theo luật thắng/thua thường: ván
-              <b>k &lt; N</b> reels RNG nhưng thanh vẫn leo lên k dù thắng hay thua; ván <b>k = N</b> tô theo lưới
-              kích hoạt bên dưới, thanh đạt N và mở Special Free Spin ngay dù ván đó không thắng; ván Special Free
-              Spin kế tiếp tô theo lưới Special Free Spin rồi cheat tự xóa. Nếu lưới kích hoạt có scatter, Free Spin
-              thường sẽ mở trước và Special Free Spin dồn lại chạy sau.</div>
-            <div class="fg" style="max-width:180px;margin-bottom:12px">
-              <label for="wss-count">Ngưỡng win-streak (1–3)</label>
-              <input id="wss-count" type="number" value="2" min="1" max="3">
-            </div>
-            <div class="sub-h">Lưới ván kích hoạt</div>
-            <div id="wss-trigger-wrap"></div>
-            <div class="sub-h">Lưới Special Free Spin</div>
-            <div id="wss-grid-wrap"></div>
-            <div class="cheat-foot">
-              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armWinStreakSeq()">Cài cheat</button>
-            </div>
-          </div>
-
           <!-- ── FORCE_FREESPIN_SEQUENCE ────────────────────────────── -->
           <div class="cheat-c" data-cheat="FORCE_FREESPIN_SEQUENCE">
             <div class="cheat-head">
@@ -1927,6 +1940,71 @@
               <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armFsSeq()">Cài cheat</button>
               <button class="btn btn-ghost btn-sm" onclick="resetFsSeq()">Đặt lại về random</button>
               <button class="btn btn-ghost btn-sm" onclick="fillFsMaxWin()">Toàn Wild + 10×</button>
+            </div>
+          </div>
+
+          <!-- ── FORCE_WIN_STREAK_SEQUENCE ──────────────────────────── -->
+          <div class="cheat-c" data-cheat="FORCE_WIN_STREAK_SEQUENCE">
+            <div class="cheat-head">
+              <span class="cheat-name">FORCE_WIN_STREAK_SEQUENCE</span>
+              <span class="armed-tag"></span>
+            </div>
+            <div class="cheat-hint">Cheat ghi thẳng thanh win-streak, không theo luật thắng/thua thường: ván
+              <b>k &lt; N</b> reels RNG nhưng thanh vẫn leo lên k dù thắng hay thua; ván <b>k = N</b> tô theo lưới
+              kích hoạt bên dưới, thanh đạt N và mở Special Free Spin ngay dù ván đó không thắng; ván Special Free
+              Spin kế tiếp tô theo lưới Special Free Spin rồi cheat tự xóa. Nếu lưới kích hoạt có scatter, Free Spin
+              thường sẽ mở trước và Special Free Spin dồn lại chạy sau.</div>
+            <div class="fg" style="max-width:180px;margin-bottom:12px">
+              <label for="wss-count">Ngưỡng win-streak (1–3)</label>
+              <input id="wss-count" type="number" value="2" min="1" max="3">
+            </div>
+            <div class="sub-h">Lưới ván kích hoạt</div>
+            <div id="wss-trigger-wrap"></div>
+            <div class="sub-h">Lưới Special Free Spin</div>
+            <div id="wss-grid-wrap"></div>
+            <div class="cheat-foot">
+              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armWinStreakSeq()">Cài cheat</button>
+            </div>
+          </div>
+
+          <!-- ── FORCE_JACKPOT_TIER + Pool jackpot ───────────────────── -->
+          <div class="cheat-c" data-cheat="FORCE_JACKPOT_TIER">
+            <div class="cheat-head">
+              <span class="cheat-name">FORCE_JACKPOT_TIER</span>
+              <span class="armed-tag"></span>
+            </div>
+            <div class="cheat-hint"><b>MINOR</b> luôn trả cố định <b>50×</b> tiền cược,
+              không phụ thuộc pool. Tắt checkbox dưới đây thì tự lo phần làm Naga Eye nổ (lưới phải có payline
+              thắng ở cuộn 4).</div>
+            <label class="chk" for="fjt-auto-eye">
+              <input id="fjt-auto-eye" type="checkbox" checked>
+              Tự ép Naga Eye nổ (lưới toàn Wild)
+            </label>
+
+            <div class="jp-pool">
+              <div class="sub-h">
+                <span>Pool jackpot</span>
+                <button class="btn btn-ghost btn-sm" data-needs-ws onclick="reloadPools()"
+                  title="Tải lại pool jackpot từ server" aria-label="Tải lại pool jackpot">↻</button>
+              </div>
+              <div class="frow tight pool-row">
+                <span class="pool-tier">GRAND</span>
+                <span class="pool-val" id="pool-val-GRAND">—</span>
+              </div>
+              <div class="frow tight pool-row">
+                <span class="pool-tier">MAJOR</span>
+                <span class="pool-val" id="pool-val-MAJOR">—</span>
+              </div>
+              <div class="frow tight pool-row">
+                <span class="pool-tier">MINOR</span>
+                <span class="pool-val" id="pool-val-MINOR">—</span>
+              </div>
+            </div>
+
+            <div class="cheat-foot">
+              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armJackpotTier('GRAND')">GRAND</button>
+              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armJackpotTier('MAJOR')">MAJOR</button>
+              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armJackpotTier('MINOR')">MINOR</button>
             </div>
           </div>
 
@@ -1991,62 +2069,6 @@
             <div class="cheat-foot">
               <button class="btn btn-arm btn-block" data-needs-ws data-needs-user
                 onclick="armCheat('FORCE_RUSH_MODE_FILL',{energy:+idv('rm-energy')})">Cài cheat</button>
-            </div>
-          </div>
-
-          <!-- ── FORCE_FREE_SPIN ────────────────────────────────────── -->
-          <div class="cheat-c" data-cheat="FORCE_FREE_SPIN">
-            <div class="cheat-head">
-              <span class="cheat-name">FORCE_FREE_SPIN</span>
-              <span class="armed-tag"></span>
-            </div>
-            <div class="cheat-hint">Đẩy thẳng người chơi vào vòng FREE_SPIN.</div>
-            <div class="fg"><label for="fs-spins">Số vòng</label><input id="fs-spins" type="number" value="10" min="1">
-            </div>
-            <div class="cheat-foot">
-              <button class="btn btn-arm btn-block" data-needs-ws data-needs-user onclick="armCheat('FORCE_FREE_SPIN',{spins:+idv('fs-spins')})">Cài
-                cheat</button>
-            </div>
-          </div>
-
-          <!-- ── FORCE_JACKPOT_TIER + Pool jackpot ───────────────────── -->
-          <div class="cheat-c" data-cheat="FORCE_JACKPOT_TIER">
-            <div class="cheat-head">
-              <span class="cheat-name">FORCE_JACKPOT_TIER</span>
-              <span class="armed-tag"></span>
-            </div>
-            <div class="cheat-hint"><b>MINOR</b> luôn trả cố định <b>50×</b> tiền cược,
-              không phụ thuộc pool. Tắt checkbox dưới đây thì tự lo phần làm Naga Eye nổ (lưới phải có payline
-              thắng ở cuộn 4).</div>
-            <label class="chk" for="fjt-auto-eye">
-              <input id="fjt-auto-eye" type="checkbox" checked>
-              Tự ép Naga Eye nổ (lưới toàn Wild)
-            </label>
-
-            <div class="jp-pool">
-              <div class="sub-h">
-                <span>Pool jackpot</span>
-                <button class="btn btn-ghost btn-sm" data-needs-ws onclick="reloadPools()"
-                  title="Tải lại pool jackpot từ server" aria-label="Tải lại pool jackpot">↻</button>
-              </div>
-              <div class="frow tight pool-row">
-                <span class="pool-tier">GRAND</span>
-                <span class="pool-val" id="pool-val-GRAND">—</span>
-              </div>
-              <div class="frow tight pool-row">
-                <span class="pool-tier">MAJOR</span>
-                <span class="pool-val" id="pool-val-MAJOR">—</span>
-              </div>
-              <div class="frow tight pool-row">
-                <span class="pool-tier">MINOR</span>
-                <span class="pool-val" id="pool-val-MINOR">—</span>
-              </div>
-            </div>
-
-            <div class="cheat-foot">
-              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armJackpotTier('GRAND')">GRAND</button>
-              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armJackpotTier('MAJOR')">MAJOR</button>
-              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armJackpotTier('MINOR')">MINOR</button>
             </div>
           </div>
 

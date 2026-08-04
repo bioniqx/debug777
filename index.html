@@ -775,22 +775,35 @@
     }
 
     /* ── Dải "đã cài" ─────────────────────────────────────────────
-       Bản chất của tool: mỗi người chơi giữ đúng MỘT cheat, sống đúng
-       MỘT lượt spin, TTL 5 phút. Dải này là chỗ duy nhất trả lời câu
-       "ngay lúc này đang có cheat nào chờ nổ không". Tắt thì trơ, bật
-       thì là thứ duy nhất phát sáng trên màn hình. */
+       Bản chất của tool: server giữ NHIỀU slot cheat độc lập cho mỗi người chơi —
+       FORCE_JACKPOT_TIER và FORCE_VAULT_DOUBLE_UP có slot riêng, mọi cheat khác dùng chung một
+       slot. Mỗi cheat sống đúng MỘT lượt spin, TTL 5 phút. Dải này là chỗ duy nhất trả lời câu
+       "ngay lúc này đang có (những) cheat nào chờ nổ không" — một .chamber-row cho mỗi slot đang
+       armed. Tắt thì trơ, bật thì là thứ duy nhất phát sáng trên màn hình. */
     .chamber {
-      position: relative;
       display: flex;
-      align-items: center;
-      gap: 16px;
+      flex-direction: column;
       padding: 14px 18px;
       margin-bottom: 24px;
       border: 1px solid var(--rule);
       border-radius: var(--r-lg);
       background: var(--shell);
-      overflow: hidden;
       transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+    }
+
+    /* Một dải cho mỗi slot đang armed. Từ dải thứ hai trở đi có viền trên để tách khỏi dải trước. */
+    .chamber-row {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      overflow: hidden;
+    }
+
+    .chamber-row + .chamber-row {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--rule);
     }
 
     .chamber-dot {
@@ -1002,6 +1015,40 @@
       display: flex;
       gap: 7px;
       flex-wrap: wrap;
+    }
+
+    /* ═══ POOL JACKPOT ═════════════════════════════════════════════ */
+    .pool-panel {
+      padding: 16px;
+      border: 1px solid var(--rule);
+      border-radius: var(--r-lg);
+      background: var(--shell);
+      box-shadow: var(--shadow);
+    }
+
+    .pool-row {
+      padding: 9px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .pool-row:last-child {
+      border-bottom: none;
+    }
+
+    .pool-tier {
+      flex: none;
+      width: 60px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 600;
+      color: var(--bone);
+    }
+
+    .pool-val {
+      flex: none;
+      width: 110px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-variant-numeric: tabular-nums;
+      color: var(--bone-2);
     }
 
     /* ═══ Ô CỬA CUỘN ═══════════════════════════════════════════════
@@ -1272,6 +1319,29 @@
       background: var(--gold);
       box-shadow: 0 0 10px var(--gold-glow);
       cursor: grab;
+    }
+
+    input[type="checkbox"] {
+      width: auto;
+      padding: 0;
+      background: none;
+      border: none;
+      accent-color: var(--gold);
+      cursor: pointer;
+    }
+
+    /* Dòng "Tự ép Naga Eye nổ" — đọc như văn xuôi, không phải caption viết hoa như label thường. */
+    .chk {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-size: var(--t-body);
+      font-weight: 400;
+      letter-spacing: normal;
+      text-transform: none;
+      color: var(--bone-2);
+      cursor: pointer;
     }
 
     .frow {
@@ -1662,8 +1732,10 @@
           <div class="tip">Mọi lỗi đều hiện ở <b>dải đỏ</b> đầu trang và nằm đó tới khi nối lại được — bấm
             <b>Copy</b> để gửi nguyên văn cho dev.</div>
           <div class="tip">Token staging hết hạn sau <b>~1 giờ</b> — gặp lỗi AUTH thì bấm <b>Kết nối</b> lại.</div>
-          <div class="tip">Chưa chọn người chơi thì 6 nút <b>Cài cheat</b> cũng xám — chọn xong là sáng lên.</div>
-          <div class="tip">Mỗi người chơi chỉ giữ được <b>một</b> cheat. Cài cái mới là đè lên cái cũ.</div>
+          <div class="tip">Chưa chọn người chơi thì các nút <b>Cài cheat</b> cũng xám — chọn xong là sáng lên.</div>
+          <div class="tip">Slot chung chỉ giữ <b>một</b> cheat — cài cái mới là đè lên cái cũ. Riêng
+            <b>FORCE_JACKPOT_TIER</b> và <b>FORCE_VAULT_DOUBLE_UP</b> có slot riêng nên tồn tại song song với cheat ở
+            slot chung.</div>
         </div>
       </details>
     </aside>
@@ -1746,16 +1818,13 @@
 
         <!-- Dải "đã cài" — chỗ duy nhất trả lời "đang có cheat nào chờ nổ không". -->
         <div class="chamber" id="chamber">
-          <span class="chamber-dot"></span>
-          <div class="chamber-body">
-            <div class="chamber-code" id="chamber-code">Chưa cài cheat</div>
-            <div class="chamber-sub" id="chamber-sub">Chọn người chơi ở cột trái, rồi cài một cheat bên dưới.</div>
+          <div class="chamber-row">
+            <span class="chamber-dot"></span>
+            <div class="chamber-body">
+              <div class="chamber-code">Chưa cài cheat</div>
+              <div class="chamber-sub">Chọn người chơi ở cột trái, rồi cài một cheat bên dưới.</div>
+            </div>
           </div>
-          <div class="chamber-ttl">
-            <div class="chamber-ttl-n" id="chamber-ttl">5:00</div>
-            <div class="chamber-ttl-l">còn lại</div>
-          </div>
-          <div class="chamber-bar" id="chamber-bar"></div>
         </div>
 
         <div class="stn-h">
@@ -1929,6 +1998,73 @@
             </div>
           </div>
 
+          <!-- ── FORCE_JACKPOT_TIER ─────────────────────────────────── -->
+          <div class="cheat-c" data-cheat="FORCE_JACKPOT_TIER">
+            <div class="cheat-head">
+              <span class="cheat-name">FORCE_JACKPOT_TIER</span>
+              <span class="armed-tag"></span>
+            </div>
+            <div class="cheat-hint">Ép sẵn tier cho lần Naga Eye nổ kế tiếp — cheat này <b>chỉ chọn tier</b>, không
+              tự làm Naga Eye nổ; tier đã quyết trước khi popup mở nên bấm rương nào cũng ra đúng tier đó.
+              <b>MAJOR/GRAND</b> hút sạch pool tương ứng — pool đang rỗng thì trúng vẫn nhận <b>0đ</b> (đúng luật,
+              không phải lỗi, xem mục Pool jackpot bên dưới). <b>MINOR</b> luôn trả cố định <b>50×</b> tiền cược,
+              không phụ thuộc pool. Tắt checkbox dưới đây thì tự lo phần làm Naga Eye nổ (lưới phải có payline
+              thắng ở cuộn 4).</div>
+            <label class="chk" for="fjt-auto-eye">
+              <input id="fjt-auto-eye" type="checkbox" checked>
+              Tự ép Naga Eye nổ (lưới toàn Wild)
+            </label>
+            <div class="cheat-foot">
+              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armJackpotTier('GRAND')">GRAND</button>
+              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armJackpotTier('MAJOR')">MAJOR</button>
+              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armJackpotTier('MINOR')">MINOR</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="stn-h">
+          <span class="stn">03</span>
+          <span class="stn-t">Pool jackpot</span>
+          <button class="btn btn-arm btn-icon" data-needs-ws onclick="reloadPools()"
+            title="Tải lại pool jackpot từ server" aria-label="Tải lại pool jackpot">↻</button>
+        </div>
+
+        <div class="pool-panel">
+          <div class="cheat-note" style="margin-top:0">Giá trị hiện tại và ô nạp đều tính theo <b>đơn vị hiển thị
+              trên game</b> (xu ÷ 100), không phải xu BE lưu — gõ đúng con số QC nhìn thấy trên game. <b>MINOR</b>
+            luôn trả cố định 50× tiền cược nên nạp pool MINOR <b>không</b> đổi tiền thưởng.</div>
+
+          <div class="frow tight pool-row">
+            <span class="pool-tier">GRAND</span>
+            <span class="pool-val" id="pool-val-GRAND">—</span>
+            <div class="fg"><input id="pool-in-GRAND" type="number" min="0" step="any" placeholder="Số hiển thị mới">
+            </div>
+            <button class="btn btn-arm btn-sm" data-needs-ws data-needs-user
+              onclick="setPool('GRAND',idv('pool-in-GRAND'))">Nạp</button>
+            <button class="btn btn-ghost btn-sm" data-needs-ws data-needs-user
+              onclick="setPool('GRAND','0')">Reset về 0</button>
+          </div>
+          <div class="frow tight pool-row">
+            <span class="pool-tier">MAJOR</span>
+            <span class="pool-val" id="pool-val-MAJOR">—</span>
+            <div class="fg"><input id="pool-in-MAJOR" type="number" min="0" step="any" placeholder="Số hiển thị mới">
+            </div>
+            <button class="btn btn-arm btn-sm" data-needs-ws data-needs-user
+              onclick="setPool('MAJOR',idv('pool-in-MAJOR'))">Nạp</button>
+            <button class="btn btn-ghost btn-sm" data-needs-ws data-needs-user
+              onclick="setPool('MAJOR','0')">Reset về 0</button>
+          </div>
+          <div class="frow tight pool-row">
+            <span class="pool-tier">MINOR</span>
+            <span class="pool-val" id="pool-val-MINOR">—</span>
+            <div class="fg"><input id="pool-in-MINOR" type="number" min="0" step="any" placeholder="Số hiển thị mới">
+            </div>
+            <button class="btn btn-arm btn-sm" data-needs-ws data-needs-user
+              onclick="setPool('MINOR',idv('pool-in-MINOR'))">Nạp</button>
+            <button class="btn btn-ghost btn-sm" data-needs-ws data-needs-user
+              onclick="setPool('MINOR','0')">Reset về 0</button>
+          </div>
         </div>
       </main>
 
@@ -2052,8 +2188,10 @@
     }
 
     function debugCall(method, path, body) {
-      // Mọi thao tác debug đều gắn với một người chơi cụ thể. Ngoại lệ: lấy danh sách ws-list.
-      if (!hasSelectedUser() && !path.includes('/session/ws-list')) {
+      // Mọi thao tác debug đều gắn với một người chơi cụ thể. Ngoại lệ: lấy danh sách ws-list, và
+      // các op pool jackpot — WS_ROUTES (js/ws-debug.js) chỉ build agency+gameId cho chúng, không
+      // cần userId.
+      if (!hasSelectedUser() && !path.includes('/session/ws-list') && !path.includes('/jackpot/')) {
         toast('Vui lòng chọn user', 'warn');
         return Promise.resolve({ ok: false, status: 0, data: {}, noUser: true });
       }
@@ -2299,6 +2437,9 @@
       applyGating();
       updateStatus('session', 'ok', (uname || uid || '—') + '@' + (ag || '—'));
       showMsg('✅ Đã chọn người chơi: ' + (uname || uid || '—'));
+      // Khu Pool jackpot vừa dùng được (WS đã nối, tới đây thì luôn vậy — xem useSession() được
+      // gọi từ đâu): tự tải một lần, khỏi bắt QC bấm ↻ mới thấy số.
+      loadPools();
     }
 
     function updateStatus(key, type, text) {
@@ -2502,69 +2643,108 @@
     }
 
     // ═══════════════════════ ĐÃ CÀI ═══════════════════════
-    // Server giữ đúng một cheat cho mỗi người chơi, sống một lượt spin, TTL 5 phút. Đây là trạng
-    // thái phía tool ("vừa cài gì, lúc nào, cho ai") — KHÔNG đọc lại từ server, nên không bao giờ
-    // khẳng định cheat còn sống sau khi người chơi đã quay. Hết 5 phút thì chắc chắn đã mất.
-    let armedCheat = null;
+    // Server giữ NHIỀU slot cheat độc lập cho mỗi người chơi: FORCE_JACKPOT_TIER và
+    // FORCE_VAULT_DOUBLE_UP có slot riêng, mọi cheat khác dùng chung một slot ("shared") và cài
+    // cái mới thì đè cái cũ trong đúng slot đó. Mỗi cheat sống một lượt spin, TTL 5 phút.
+    // armedSlots là trạng thái phía tool ("vừa cài gì, lúc nào, cho ai", theo từng slot) — KHÔNG
+    // đọc lại từ server, nên không bao giờ khẳng định cheat còn sống sau khi người chơi đã quay.
+    // Hết 5 phút thì chắc chắn đã mất.
+    let armedSlots = {};   // slot -> { code, at, who }
     let _ttlTimer = null;
+
+    function slotFor(code) {
+      return (code === 'FORCE_JACKPOT_TIER' || code === 'FORCE_VAULT_DOUBLE_UP') ? code : 'shared';
+    }
 
     function markArmed(code) {
       // Ghi lại luôn người chơi tại thời điểm cài: dải trên phải nói rõ cheat này nhắm vào AI,
       // chứ không phải ai đang được chọn lúc anh nhìn vào nó.
       const badge = document.getElementById('st-session');
-      armedCheat = { code, at: Date.now(), who: badge ? badge.textContent : '' };
+      armedSlots[slotFor(code)] = { code, at: Date.now(), who: badge ? badge.textContent : '' };
       paintArmed();
-      if (_ttlTimer) clearInterval(_ttlTimer);
-      _ttlTimer = setInterval(tickTtl, 1000);
+      if (!_ttlTimer) _ttlTimer = setInterval(tickTtl, 1000);
     }
 
-    function clearArmed() {
-      armedCheat = null;
-      if (_ttlTimer) { clearInterval(_ttlTimer); _ttlTimer = null; }
+    // Không truyền slot → xoá hết (đổi người chơi thì mọi dấu "đã cài" cũ đều hết đúng cùng lúc).
+    function clearArmed(slot) {
+      if (slot) delete armedSlots[slot]; else armedSlots = {};
+      if (Object.keys(armedSlots).length === 0 && _ttlTimer) { clearInterval(_ttlTimer); _ttlTimer = null; }
       paintArmed();
     }
 
     function tickTtl() {
-      if (!armedCheat) return;
-      if (Date.now() - armedCheat.at >= CHEAT_TTL_MS) { clearArmed(); return; }
-      paintTtl();
+      const before = Object.keys(armedSlots).length;
+      Object.keys(armedSlots).forEach(slot => {
+        if (Date.now() - armedSlots[slot].at >= CHEAT_TTL_MS) delete armedSlots[slot];
+      });
+      // Có slot vừa hết hạn → vẽ lại toàn bộ (bớt một dải); không thì chỉ cập nhật số đếm ngược.
+      if (Object.keys(armedSlots).length !== before) paintArmed();
+      else paintTtl();
+      if (Object.keys(armedSlots).length === 0 && _ttlTimer) { clearInterval(_ttlTimer); _ttlTimer = null; }
     }
 
     function paintTtl() {
-      const left = Math.max(0, CHEAT_TTL_MS - (Date.now() - armedCheat.at));
-      const s = Math.ceil(left / 1000);
-      document.getElementById('chamber-ttl').textContent =
-        Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
-      document.getElementById('chamber-bar').style.width = (left / CHEAT_TTL_MS * 100) + '%';
+      Object.keys(armedSlots).forEach(slot => {
+        const left = Math.max(0, CHEAT_TTL_MS - (Date.now() - armedSlots[slot].at));
+        const s = Math.ceil(left / 1000);
+        const ttlEl = document.getElementById('chamber-ttl-' + slot);
+        const barEl = document.getElementById('chamber-bar-' + slot);
+        if (ttlEl) ttlEl.textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+        if (barEl) barEl.style.width = (left / CHEAT_TTL_MS * 100) + '%';
+      });
     }
 
     function paintArmed() {
       document.querySelectorAll('.cheat-c.is-armed').forEach(c => c.classList.remove('is-armed'));
       const chamber = document.getElementById('chamber');
-      const code = document.getElementById('chamber-code');
-      const sub = document.getElementById('chamber-sub');
+      const slots = Object.keys(armedSlots);
 
-      if (!armedCheat) {
+      if (slots.length === 0) {
         chamber.classList.remove('armed');
-        code.textContent = 'Chưa cài cheat';
-        sub.textContent = hasSelectedUser()
-          ? 'Chọn một thẻ cheat bên dưới, chỉnh tham số rồi bấm Cài cheat.'
-          : 'Chọn người chơi ở cột trái, rồi cài một cheat bên dưới.';
-        document.getElementById('chamber-bar').style.width = '0';
+        chamber.innerHTML = `
+          <div class="chamber-row">
+            <span class="chamber-dot"></span>
+            <div class="chamber-body">
+              <div class="chamber-code">Chưa cài cheat</div>
+              <div class="chamber-sub">${hasSelectedUser()
+            ? 'Chọn một thẻ cheat bên dưới, chỉnh tham số rồi bấm Cài cheat.'
+            : 'Chọn người chơi ở cột trái, rồi cài một cheat bên dưới.'}</div>
+            </div>
+          </div>`;
         return;
       }
 
-      const stamp = new Date(armedCheat.at).toLocaleTimeString('vi-VN', { hour12: false });
       chamber.classList.add('armed');
-      code.textContent = armedCheat.code;
-      sub.innerHTML = `<b>${escHtml(armedCheat.who || '—')}</b> · cài lúc ${stamp} · áp cho đúng lượt spin kế tiếp`;
-      paintTtl();
+      chamber.innerHTML = slots.map(slot => {
+        const a = armedSlots[slot];
+        const stamp = new Date(a.at).toLocaleTimeString('vi-VN', { hour12: false });
+        return `
+          <div class="chamber-row">
+            <span class="chamber-dot"></span>
+            <div class="chamber-body">
+              <div class="chamber-code">${escHtml(a.code)}</div>
+              <div class="chamber-sub"><b>${escHtml(a.who || '—')}</b> · cài lúc ${stamp} · áp cho đúng lượt spin kế
+                tiếp</div>
+            </div>
+            <div class="chamber-ttl">
+              <div class="chamber-ttl-n" id="chamber-ttl-${slot}">5:00</div>
+              <div class="chamber-ttl-l">còn lại</div>
+            </div>
+            <div class="chamber-bar" id="chamber-bar-${slot}"></div>
+          </div>`;
+      }).join('');
 
-      const card = document.querySelector(`.cheat-c[data-cheat="${armedCheat.code}"]`);
-      if (card) {
-        card.classList.add('is-armed');
-        card.querySelector('.armed-tag').textContent = 'đã cài ' + stamp;
-      }
+      slots.forEach(slot => {
+        const a = armedSlots[slot];
+        const card = document.querySelector(`.cheat-c[data-cheat="${a.code}"]`);
+        if (card) {
+          card.classList.add('is-armed');
+          card.querySelector('.armed-tag').textContent =
+            'đã cài ' + new Date(a.at).toLocaleTimeString('vi-VN', { hour12: false });
+        }
+      });
+
+      paintTtl();
     }
 
     // ═══════════════════════ CÀI CHEAT ═══════════════════════
@@ -2577,10 +2757,29 @@
         // debugCall() đã tự báo khi chưa chọn user; mọi lỗi còn lại phải hiện ra, không được nuốt.
         showMsg('❌ Cài cheat thất bại: ' + ((r.data && r.data.error) || ('HTTP ' + r.status)));
       }
+      return r;   // để chỗ gọi tuần tự (armJackpotTier) biết lệnh đầu có thành công không.
     }
 
     async function armGridCheat() {
       await armCheat('FORCE_GRID', readReel(document.querySelector('#grid-ui .reel')));
+    }
+
+    // FORCE_JACKPOT_TIER chỉ chọn tier, không tự làm Naga Eye nổ — mặc định kèm FORCE_GRID toàn
+    // Wild để chắc chắn có payline thắng ở cuộn 4. Hai lệnh gửi tuần tự: lệnh đầu lỗi thì dừng,
+    // không gửi lệnh sau (armCheat đã tự báo lỗi, không nuốt).
+    async function armJackpotTier(tier) {
+      if (document.getElementById('fjt-auto-eye').checked) {
+        // Khuôn {screen, mults, nagaEye} y hệt readReel() — nagaEye:true luôn đi kèm mults[1]=1 (Naga
+        // Eye chỉ tồn tại ở hàng giữa cuộn 4), không tách rời được.
+        const wildRow = [10, 10, 10];
+        const r = await armCheat('FORCE_GRID', {
+          screen: [wildRow, wildRow, wildRow],
+          mults: [null, 1, null],
+          nagaEye: true,
+        });
+        if (!r.ok) return;
+      }
+      await armCheat('FORCE_JACKPOT_TIER', { tier });
     }
 
     async function armVaultDoubleUp() {
@@ -2609,6 +2808,59 @@
         trigger: readReel(document.querySelector('#wss-trigger-wrap .reel')),
         special: readReel(document.querySelector('#wss-grid-wrap .reel')),
       });
+    }
+
+    // ═══════════════════════ POOL JACKPOT ═══════════════════════
+    // Không tự tải khi vào trang — chỉ tự tải một lần khi khu Pool bắt đầu dùng được (xem
+    // useSession()); ngoài ra QC vẫn bấm ↻ khi cần xem số mới nhất. Giá trị BE lưu là XU, game
+    // hiển thị = xu / 100; mọi ô nhập và số hiện trên bảng đều theo đơn vị hiển thị đó.
+    async function loadPools() {
+      const r = await debugCall('GET', `/api/v1/debug/jackpot/${agency()}/${gameId()}/pools`);
+      if (!r.ok) {
+        if (!r.noUser) showMsg('❌ Tải pool jackpot thất bại: ' + ((r.data && r.data.error) || ('HTTP ' + r.status)));
+        return false;
+      }
+      const pools = (r.data && r.data.pools) || {};
+      ['GRAND', 'MAJOR', 'MINOR'].forEach(tier => {
+        const raw = pools[tier];
+        const el = document.getElementById('pool-val-' + tier);
+        // toFixed(2) khớp cách game hiển thị (MoneyScale.toDisplay = chia 100, làm tròn 2 chữ số);
+        // pool thực có thể lẻ hơn vì contribute() cộng góp ở scale 4 chữ số.
+        if (el) el.textContent = (raw === null || raw === undefined) ? '—' : (Number(raw) / 100).toFixed(2);
+      });
+      return true;
+    }
+
+    // Đường bấm tay của nút ↻ — báo thành công để QC biết lệnh đã chạy, kể cả khi số trông y hệt
+    // lần trước. setPool() gọi thẳng loadPools() sau khi nạp nên không đi qua đây, tránh đè mất
+    // toast "Đã nạp pool ..." bằng toast tải lại chung chung.
+    async function reloadPools() {
+      if (await loadPools()) showMsg('✅ Đã tải lại pool jackpot');
+    }
+
+    // amountDisplay là chuỗi từ ô nhập, đơn vị hiển thị (không phải xu) — quy đổi đúng một chỗ này.
+    async function setPool(tier, amountDisplay) {
+      const n = Number(amountDisplay);
+      if (String(amountDisplay).trim() === '' || isNaN(n) || n < 0) {
+        showMsg('⚠ Số nạp không hợp lệ — nhập số ≥ 0');
+        return;
+      }
+      // BE cố ý từ chối khi pool tier này chưa tồn tại (chưa ai quay ván nào) — chặn ở đây TRƯỚC
+      // khi gửi. wsDebugExec (js/ws-debug.js) coi MỌI ok:false là rớt kết nối và xám hết nút, nên
+      // để BE trả lỗi rồi mới xử lý là làm cả tool trông như mất kết nối.
+      const valEl = document.getElementById('pool-val-' + tier);
+      if (valEl && valEl.textContent === '—') {
+        showMsg('⚠ Pool ' + tier + ' chưa khởi tạo — cho người chơi quay 1 lượt trước rồi mới nạp được');
+        return;
+      }
+      const r = await debugCall('POST', `/api/v1/debug/jackpot/${agency()}/${gameId()}/pools`,
+        { tier, amount: String(Math.round(n * 100)) });
+      if (r.ok) {
+        showMsg('✅ Đã nạp pool ' + tier);
+        loadPools();
+      } else if (!r.noUser) {
+        showMsg('❌ Nạp pool thất bại: ' + ((r.data && r.data.error) || ('HTTP ' + r.status)));
+      }
     }
 
     // ═══════════════════════ CHUỖI FREESPIN ═══════════════════════

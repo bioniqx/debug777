@@ -720,11 +720,6 @@
       flex-wrap: wrap;
     }
 
-    .hdr-docs>.micro {
-      margin-right: 6px;
-      color: var(--bone-3);
-    }
-
     .hdr-doc {
       padding: 4px 9px;
       border-radius: var(--r);
@@ -1809,7 +1804,6 @@
           <!-- Đứng chung hàng kết nối, dồn về mép phải bằng margin-left:auto — nửa phải hàng này
                vốn bỏ trống, tách riêng một dòng chỉ để bốn đường dẫn là phí một dòng thanh trên. -->
           <nav class="hdr-docs" aria-label="Tài liệu tham chiếu">
-            <span class="micro"></span>
             <a class="hdr-doc"
               href="https://docs.google.com/document/d/1ofXIWycwCQJgNIuVJVMJDCzTEZMXXyVKg26XRYlaKb4/edit?usp=sharing"
               target="_blank" rel="noopener noreferrer" title="Tài liệu thiết kế game">GDD</a>
@@ -1871,13 +1865,16 @@
               <span class="cheat-name">FORCE_GRID</span>
               <span class="armed-tag"></span>
             </div>
-            <div class="cheat-hint">Vẽ sẵn lưới 3×3 cho lượt spin kế tiếp. Bấm vào ô để đổi ký hiệu.</div>
+            <div class="cheat-hint">Vẽ sẵn lưới 3×3 cho lượt spin kế tiếp. Bấm vào ô để đổi ký hiệu — mở ra
+              lưới <b>toàn Random</b>, chỉ ô nào đổi mới bị ép, ô để Random thì server tự quay.</div>
             <div id="grid-ui"></div>
             <div class="cheat-foot">
               <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armGridCheat()">Cài cheat</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillGrid(10)">Toàn Wild</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillGrid(2)">Toàn B · 50×</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillGrid(5)">Toàn E · 10×</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,10)">Toàn Wild</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,2)">Toàn B · 50×</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,5)">Toàn E · 10×</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,0)">Toàn Q · trống</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,'')">Toàn Random</button>
             </div>
           </div>
 
@@ -1921,8 +1918,12 @@
             </div>
             <div class="cheat-foot">
               <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armFsSeq()">Cài cheat</button>
-              <button class="btn btn-ghost btn-sm" onclick="resetFsSeq()">Đặt lại về random</button>
               <button class="btn btn-ghost btn-sm" onclick="fillFsMaxWin()">Toàn Wild + 10×</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,10)">Toàn Wild</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,2)">Toàn B · 50×</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,5)">Toàn E · 10×</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,0)">Toàn Q · trống</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,'')">Toàn Random</button>
             </div>
           </div>
 
@@ -1947,6 +1948,11 @@
             <div id="wss-grid-wrap"></div>
             <div class="cheat-foot">
               <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armWinStreakSeq()">Cài cheat</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,10)">Toàn Wild</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,2)">Toàn B · 50×</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,5)">Toàn E · 10×</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,0)">Toàn Q · trống</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,'')">Toàn Random</button>
             </div>
           </div>
 
@@ -2130,7 +2136,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       restoreConfigOnLoad();
-      document.getElementById('grid-ui').appendChild(buildReel({ allowRandom: false, defaultSymbol: 5 }));
+      document.getElementById('grid-ui').appendChild(buildReel({ allowRandom: true }));
       document.getElementById('wss-trigger-wrap').appendChild(buildReel({ allowRandom: true }));
       document.getElementById('wss-grid-wrap').appendChild(buildReel({ allowRandom: true }));
       initFsSeq();
@@ -2442,8 +2448,9 @@
     // ═══════════════════════ Ô CỬA CUỘN ═══════════════════════
     // Một hàm dựng dùng chung cho FORCE_GRID, WIN_STREAK và mọi vòng của FREESPIN_SEQUENCE.
     // Giá trị nằm ở dataset.v của từng ô; readReel() đọc ra đúng khuôn payload cũ.
-    //   allowRandom  — cho phép ô để trống (null = server tự random). FORCE_GRID thì không.
-    //   defaultSymbol— id ký hiệu ban đầu khi không cho random.
+    //   allowRandom — cho phép ô để trống. Ô null KHÔNG phải "không ép" cả lưới: BE phủ đè từng ô
+    //   một (SpinUseCaseImpl.applyCheat: `if (v != null) screen[c][r] = v`), nên ô null giữ nguyên
+    //   kết quả RNG còn ô có giá trị thì bị ép. Nhờ vậy ép được một phần lưới.
     const ROWS = [['TOP', 'r0'], ['MID', 'r1'], ['BOT', 'r2']];
 
     function symbolsFor(allowRandom) {
@@ -2474,7 +2481,7 @@
     function buildReel(opts) {
       const allowRandom = !!opts.allowRandom;
       const symList = symbolsFor(allowRandom);
-      const startSym = allowRandom ? SYM_RANDOM : findSym(symList, opts.defaultSymbol);
+      const startSym = allowRandom ? SYM_RANDOM : symList[0];
 
       const reel = document.createElement('div');
       reel.className = 'reel';
@@ -2616,10 +2623,17 @@
     }, { passive: true });
 
     // ── Nút điền nhanh ────────────────────────────────────────────
-    function fillGrid(symbolId) {
-      const reel = document.querySelector('#grid-ui .reel');
-      const sym = findSym(SYMBOLS, symbolId);
-      reel.querySelectorAll('[data-kind="sym"]').forEach(c => paintCell(c, sym));
+    // Điền một ký hiệu vào MỌI ô cuộn của thẻ chứa nút vừa bấm — thẻ chuỗi có nhiều lưới (kích
+    // hoạt + từng vòng) và số lưới còn đổi theo nút "Thêm vòng", nên phải dò lại lúc bấm chứ
+    // không giữ sẵn danh sách. Bám theo thẻ thay vì id cố định để thêm thẻ mới khỏi sửa hàm này.
+    //
+    // symbolId '' là Random — phải tra trong danh sách CÓ Random, tra trong SYMBOLS thì không
+    // khớp gì và findSym rơi về phần tử đầu (Wild), tức bấm "Toàn Random" lại ra toàn Wild.
+    function fillAll(btn, symbolId) {
+      btn.closest('.cheat-c').querySelectorAll('.reel').forEach(reel => {
+        const sym = findSym(symbolsFor(!!reel.dataset.allowRandom), symbolId);
+        reel.querySelectorAll('[data-kind="sym"]').forEach(c => paintCell(c, sym));
+      });
     }
 
     // Toàn Wild + hệ số 10× cho mọi lưới của FORCE_FREESPIN_SEQUENCE.
@@ -2859,12 +2873,6 @@
     function updateFsRoundCount() {
       const n = document.getElementById('fss-rounds-wrap').children.length;
       document.getElementById('fss-round-count').textContent = '(' + n + ')';
-    }
-
-    function resetFsSeq() {
-      document.getElementById('fss-trigger-wrap').innerHTML = '';
-      initFsSeq();
-      document.getElementById('fss-overflow').value = 'RNG';
     }
 
     async function armFsSeq() {

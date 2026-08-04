@@ -227,7 +227,7 @@
       color: var(--bone-4);
     }
 
-    /* ── Tiêu đề trạm: số thứ tự là thật, quy trình đúng 3 bước ──── */
+    /* ── Tiêu đề trạm: số thứ tự là thật, quy trình đúng 2 bước ──── */
     .stn-h {
       display: flex;
       align-items: center;
@@ -1017,13 +1017,22 @@
       flex-wrap: wrap;
     }
 
-    /* ═══ POOL JACKPOT ═════════════════════════════════════════════ */
-    .pool-panel {
-      padding: 16px;
+    /* ═══ POOL JACKPOT ═════════════════════════════════════════════
+       Nằm ngay trong thẻ FORCE_JACKPOT_TIER: pool quyết tiền thưởng của
+       MAJOR/GRAND, tách ra khu riêng thì QC phải cuộn qua lại mới đối
+       chiếu được. Nền lõm để đọc ra ngay đây là số máy chủ báo về, không
+       phải thứ bấm được như phần cheat phía trên. */
+    .jp-pool {
+      margin-bottom: 14px;
+      padding: 12px 14px;
       border: 1px solid var(--rule);
       border-radius: var(--r-lg);
-      background: var(--shell);
-      box-shadow: var(--shadow);
+      background: var(--inlay);
+    }
+
+    /* Nút ↻ ra sau vạch kẻ của .sub-h, không chen giữa chữ và vạch. */
+    .jp-pool .sub-h .btn {
+      order: 1;
     }
 
     .pool-row {
@@ -1043,9 +1052,11 @@
       color: var(--bone);
     }
 
+    /* Số dồn về mép phải để ba tier so hàng đơn vị với nhau như bảng sổ. */
     .pool-val {
-      flex: none;
-      width: 110px;
+      flex: 1;
+      min-width: 0;
+      text-align: right;
       font-family: 'IBM Plex Mono', monospace;
       font-variant-numeric: tabular-nums;
       color: var(--bone-2);
@@ -1998,22 +2009,40 @@
             </div>
           </div>
 
-          <!-- ── FORCE_JACKPOT_TIER ─────────────────────────────────── -->
+          <!-- ── FORCE_JACKPOT_TIER + Pool jackpot ───────────────────── -->
           <div class="cheat-c" data-cheat="FORCE_JACKPOT_TIER">
             <div class="cheat-head">
               <span class="cheat-name">FORCE_JACKPOT_TIER</span>
               <span class="armed-tag"></span>
             </div>
-            <div class="cheat-hint">Ép sẵn tier cho lần Naga Eye nổ kế tiếp — cheat này <b>chỉ chọn tier</b>, không
-              tự làm Naga Eye nổ; tier đã quyết trước khi popup mở nên bấm rương nào cũng ra đúng tier đó.
-              <b>MAJOR/GRAND</b> hút sạch pool tương ứng — pool đang rỗng thì trúng vẫn nhận <b>0đ</b> (đúng luật,
-              không phải lỗi, xem mục Pool jackpot bên dưới). <b>MINOR</b> luôn trả cố định <b>50×</b> tiền cược,
+            <div class="cheat-hint"><b>MINOR</b> luôn trả cố định <b>50×</b> tiền cược,
               không phụ thuộc pool. Tắt checkbox dưới đây thì tự lo phần làm Naga Eye nổ (lưới phải có payline
               thắng ở cuộn 4).</div>
             <label class="chk" for="fjt-auto-eye">
               <input id="fjt-auto-eye" type="checkbox" checked>
               Tự ép Naga Eye nổ (lưới toàn Wild)
             </label>
+
+            <div class="jp-pool">
+              <div class="sub-h">
+                <span>Pool jackpot</span>
+                <button class="btn btn-ghost btn-sm" data-needs-ws onclick="reloadPools()"
+                  title="Tải lại pool jackpot từ server" aria-label="Tải lại pool jackpot">↻</button>
+              </div>
+              <div class="frow tight pool-row">
+                <span class="pool-tier">GRAND</span>
+                <span class="pool-val" id="pool-val-GRAND">—</span>
+              </div>
+              <div class="frow tight pool-row">
+                <span class="pool-tier">MAJOR</span>
+                <span class="pool-val" id="pool-val-MAJOR">—</span>
+              </div>
+              <div class="frow tight pool-row">
+                <span class="pool-tier">MINOR</span>
+                <span class="pool-val" id="pool-val-MINOR">—</span>
+              </div>
+            </div>
+
             <div class="cheat-foot">
               <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armJackpotTier('GRAND')">GRAND</button>
               <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armJackpotTier('MAJOR')">MAJOR</button>
@@ -2021,50 +2050,6 @@
             </div>
           </div>
 
-        </div>
-
-        <div class="stn-h">
-          <span class="stn">03</span>
-          <span class="stn-t">Pool jackpot</span>
-          <button class="btn btn-arm btn-icon" data-needs-ws onclick="reloadPools()"
-            title="Tải lại pool jackpot từ server" aria-label="Tải lại pool jackpot">↻</button>
-        </div>
-
-        <div class="pool-panel">
-          <div class="cheat-note" style="margin-top:0">Giá trị hiện tại và ô nạp đều tính theo <b>đơn vị hiển thị
-              trên game</b> (xu ÷ 100), không phải xu BE lưu — gõ đúng con số QC nhìn thấy trên game. <b>MINOR</b>
-            luôn trả cố định 50× tiền cược nên nạp pool MINOR <b>không</b> đổi tiền thưởng.</div>
-
-          <div class="frow tight pool-row">
-            <span class="pool-tier">GRAND</span>
-            <span class="pool-val" id="pool-val-GRAND">—</span>
-            <div class="fg"><input id="pool-in-GRAND" type="number" min="0" step="any" placeholder="Số hiển thị mới">
-            </div>
-            <button class="btn btn-arm btn-sm" data-needs-ws data-needs-user
-              onclick="setPool('GRAND',idv('pool-in-GRAND'))">Nạp</button>
-            <button class="btn btn-ghost btn-sm" data-needs-ws data-needs-user
-              onclick="setPool('GRAND','0')">Reset về 0</button>
-          </div>
-          <div class="frow tight pool-row">
-            <span class="pool-tier">MAJOR</span>
-            <span class="pool-val" id="pool-val-MAJOR">—</span>
-            <div class="fg"><input id="pool-in-MAJOR" type="number" min="0" step="any" placeholder="Số hiển thị mới">
-            </div>
-            <button class="btn btn-arm btn-sm" data-needs-ws data-needs-user
-              onclick="setPool('MAJOR',idv('pool-in-MAJOR'))">Nạp</button>
-            <button class="btn btn-ghost btn-sm" data-needs-ws data-needs-user
-              onclick="setPool('MAJOR','0')">Reset về 0</button>
-          </div>
-          <div class="frow tight pool-row">
-            <span class="pool-tier">MINOR</span>
-            <span class="pool-val" id="pool-val-MINOR">—</span>
-            <div class="fg"><input id="pool-in-MINOR" type="number" min="0" step="any" placeholder="Số hiển thị mới">
-            </div>
-            <button class="btn btn-arm btn-sm" data-needs-ws data-needs-user
-              onclick="setPool('MINOR',idv('pool-in-MINOR'))">Nạp</button>
-            <button class="btn btn-ghost btn-sm" data-needs-ws data-needs-user
-              onclick="setPool('MINOR','0')">Reset về 0</button>
-          </div>
         </div>
       </main>
 
@@ -2832,35 +2817,9 @@
     }
 
     // Đường bấm tay của nút ↻ — báo thành công để QC biết lệnh đã chạy, kể cả khi số trông y hệt
-    // lần trước. setPool() gọi thẳng loadPools() sau khi nạp nên không đi qua đây, tránh đè mất
-    // toast "Đã nạp pool ..." bằng toast tải lại chung chung.
+    // lần trước.
     async function reloadPools() {
       if (await loadPools()) showMsg('✅ Đã tải lại pool jackpot');
-    }
-
-    // amountDisplay là chuỗi từ ô nhập, đơn vị hiển thị (không phải xu) — quy đổi đúng một chỗ này.
-    async function setPool(tier, amountDisplay) {
-      const n = Number(amountDisplay);
-      if (String(amountDisplay).trim() === '' || isNaN(n) || n < 0) {
-        showMsg('⚠ Số nạp không hợp lệ — nhập số ≥ 0');
-        return;
-      }
-      // BE cố ý từ chối khi pool tier này chưa tồn tại (chưa ai quay ván nào) — chặn ở đây TRƯỚC
-      // khi gửi. wsDebugExec (js/ws-debug.js) coi MỌI ok:false là rớt kết nối và xám hết nút, nên
-      // để BE trả lỗi rồi mới xử lý là làm cả tool trông như mất kết nối.
-      const valEl = document.getElementById('pool-val-' + tier);
-      if (valEl && valEl.textContent === '—') {
-        showMsg('⚠ Pool ' + tier + ' chưa khởi tạo — cho người chơi quay 1 lượt trước rồi mới nạp được');
-        return;
-      }
-      const r = await debugCall('POST', `/api/v1/debug/jackpot/${agency()}/${gameId()}/pools`,
-        { tier, amount: String(Math.round(n * 100)) });
-      if (r.ok) {
-        showMsg('✅ Đã nạp pool ' + tier);
-        loadPools();
-      } else if (!r.noUser) {
-        showMsg('❌ Nạp pool thất bại: ' + ((r.data && r.data.error) || ('HTTP ' + r.status)));
-      }
     }
 
     // ═══════════════════════ CHUỖI FREESPIN ═══════════════════════

@@ -11,19 +11,20 @@
    ════════════════════════════════════════════════════════════════ */
 
 /* Trình duyệt không cho JS đọc lý do thật của onerror (chặn vì lý do bảo mật), nên close code
-   là manh mối DUY NHẤT để biết vì sao rớt — phải giữ lại và dịch ra tiếng người. */
-const WS_CLOSE_TEXT = {
-  1000: 'đóng bình thường',
-  1001: 'phía kia rời đi',
-  1005: 'không có mã đóng',
-  1006: 'đóng bất thường — mất mạng hoặc server chết',
-  1011: 'server gặp lỗi',
-  1015: 'bắt tay TLS thất bại',
+   là manh mối DUY NHẤT để biết vì sao rớt — phải giữ lại và dịch ra tiếng người. t() là global
+   do index.html định nghĩa (script inline nạp trước file này). */
+const WS_CLOSE_TEXT_KEYS = {
+  1000: 'wsClose1000',
+  1001: 'wsClose1001',
+  1005: 'wsClose1005',
+  1006: 'wsClose1006',
+  1011: 'wsClose1011',
+  1015: 'wsClose1015',
 };
 
 function describeClose(c) {
   if (!c) return '';
-  return 'close ' + c.code + ' (' + (WS_CLOSE_TEXT[c.code] || 'không rõ') + ')'
+  return 'close ' + c.code + ' (' + t(WS_CLOSE_TEXT_KEYS[c.code] || 'wsCloseUnknown') + ')'
     + (c.reason ? ' · ' + c.reason : '');
 }
 
@@ -50,12 +51,12 @@ class NagaWsClient {
     return new Promise((resolve, reject) => {
       let settled = false;
       const fail = (msg) => { if (!settled) { settled = true; reject(new Error(msg)); } };
-      const timer = setTimeout(() => fail('Timeout mở WebSocket ' + this.url), timeoutMs);
+      const timer = setTimeout(() => fail(t('connectTimeout', { url: this.url })), timeoutMs);
       try {
         this.ws = new WebSocket(this.url);
       } catch (e) {
         clearTimeout(timer);
-        return fail('Không mở được WebSocket: ' + e.message);
+        return fail(t('connectExceptionFail', { err: e.message }));
       }
       this.ws.onopen = () => {
         clearTimeout(timer);
@@ -72,8 +73,8 @@ class NagaWsClient {
         clearTimeout(timer);
         this.lastClose = { code: ev.code, reason: ev.reason, wasClean: ev.wasClean };
         const why = describeClose(this.lastClose);
-        fail((sawError ? 'Không mở được WebSocket ' + this.url : 'WebSocket đóng trước khi mở xong') + ' · ' + why);
-        this._flushWaiters('WebSocket đã đóng · ' + why);
+        fail((sawError ? t('openFailWithUrl', { url: this.url }) : t('closedBeforeOpen')) + ' · ' + why);
+        this._flushWaiters(t('wsClosedWhy', { why }));
         // Rớt SAU khi đã mở xong thì không còn ai đang await connect() để nhận lỗi — im lặng ở
         // đây là lý do tool cứ tưởng mình vẫn nối cho tới lệnh debug kế tiếp.
         if (this.opened && !this.intendedClose && this.onDisconnect) this.onDisconnect(this.lastClose);
@@ -84,7 +85,7 @@ class NagaWsClient {
   close() {
     this.intendedClose = true;
     try { if (this.ws) this.ws.close(); } catch (e) { /* bỏ qua */ }
-    this._flushWaiters('Client đã đóng kết nối');
+    this._flushWaiters(t('clientClosed'));
   }
 
   /* ── Gửi ──────────────────────────────────────────────────── */
@@ -107,7 +108,7 @@ class NagaWsClient {
   async auth(accessToken, agentId, timeoutMs = 6000) {
     this.sendRaw([1, this.zone, '', '', { accessToken, agentId, reconnect: false }]);
     const msg = await this.waitFor((m) => m.kind === 'auth', timeoutMs, 'AUTH reply');
-    if (!msg.ok) throw new Error('AUTH bị từ chối: ' + JSON.stringify(msg.raw));
+    if (!msg.ok) throw new Error(t('authRejected', { raw: JSON.stringify(msg.raw) }));
     this.sessionId = msg.sessionId;
     return msg;
   }
@@ -131,7 +132,7 @@ class NagaWsClient {
     const msg = await this.waitFor(
       (m) => m.cmd === 1900 && m.payload && m.payload.reqId === reqId,
       timeoutMs, 'DEBUG_OP ' + op);
-    if (msg.payload.ok === false) throw new Error(msg.payload.error || ('DEBUG_OP ' + op + ' thất bại'));
+    if (msg.payload.ok === false) throw new Error(msg.payload.error || t('debugOpFail', { op }));
     return msg.payload.data;
   }
 
@@ -156,7 +157,7 @@ class NagaWsClient {
       const waiter = { fn, resolve, reject, label };
       waiter.timer = setTimeout(() => {
         this.waiters = this.waiters.filter((w) => w !== waiter);
-        reject(new Error('Timeout ' + (timeoutMs / 1000) + 's chờ ' + (label || 'message')));
+        reject(new Error(t('waitTimeout', { s: timeoutMs / 1000, label: label || 'message' })));
       }, timeoutMs);
       this.waiters.push(waiter);
     });
@@ -225,7 +226,7 @@ class NagaWsClient {
     pending.forEach((w) => {
       clearTimeout(w.timer);
       if (!this.intendedClose) w.reject(new Error(reason));
-      else w.reject(new Error('Kết nối đã được đóng chủ động'));
+      else w.reject(new Error(t('intentionalClose')));
     });
   }
 }

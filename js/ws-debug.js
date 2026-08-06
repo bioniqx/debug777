@@ -73,6 +73,29 @@ let stagToken = null;
 // bấm chip là mở lại.
 let wsCfgCollapsed = false;
 
+// Dữ liệu chip "● WS local/staging · ai" lần vẽ gần nhất — giữ lại để vẽ lại đúng ngôn ngữ
+// khi đổi VI/EN mà không phải nối lại WS. null nghĩa là chưa từng nối được lần nào.
+let lastWsSummaryInfo = null;
+
+function renderWsSummaryChip() {
+  if (!lastWsSummaryInfo) return;
+  const sum = document.getElementById('ws-summary');
+  if (!sum) return;
+  sum.innerHTML = '';
+  sum.append('● ' + t(lastWsSummaryInfo.isLocal ? 'wsSummaryLocal' : 'wsSummaryStaging') + ' · ' + lastWsSummaryInfo.who);
+  const edit = document.createElement('span');
+  edit.className = 'ws-sum-edit';
+  edit.textContent = t('wsSumEditText');
+  sum.append(edit);
+}
+
+// Gọi từ refreshDynamicI18n() (index.html) khi đổi ngôn ngữ — vẽ lại mọi mảnh chữ mà file này
+// đã tự dựng ra ngoài data-i18n: nhãn nút Kết nối, tooltip xám của applyGating(), chip WS.
+function refreshWsUiLang() {
+  setWsState(wsState);
+  renderWsSummaryChip();
+}
+
 /* ── Trạng thái kết nối — nguồn sự thật cho nút cheat và dải lỗi ──────── */
 
 // 'idle' chưa nối lần nào · 'connecting' đang nối · 'connected' đã AUTH+JOIN · 'error' hỏng/rớt
@@ -85,7 +108,7 @@ function setWsState(state) {
   applyGating();  // index.html: xám/sáng mọi nút [data-needs-ws] / [data-needs-user]
   const btn = document.getElementById('btn-ws-connect');
   if (btn) {
-    btn.textContent = state === 'connecting' ? 'Đang nối…' : (state === 'connected' ? 'Đã nối ✓' : 'Kết nối');
+    btn.textContent = state === 'connecting' ? t('connectBtnConnecting') : (state === 'connected' ? t('connectBtnConnected') : t('btnConnectText'));
     btn.disabled = state === 'connecting';
   }
   // Nối xong thì hàng cấu hình tự thu lại, tức nút "Kết nối" bị ẩn. Mất kết nối mà cứ để thu
@@ -97,7 +120,7 @@ function setWsState(state) {
 function reportWsError(title, message, extra) {
   const lines = [];
   if (extra) lines.push(extra);
-  lines.push('WS URL: ' + wsCfgUrl());
+  lines.push(t('wsUrlLabel') + wsCfgUrl());
   showWsError({ title, message: String(message), detail: lines.join('\n') });
 }
 
@@ -192,7 +215,7 @@ async function postJson(url, headers, body) {
       body: JSON.stringify(body),
     });
   } catch (e) {
-    throw new Error('Không gọi được ' + url + ' — ' + e.message + ' (mạng, CORS hoặc host sai)');
+    throw new Error(t('fetchFail', { url, err: e.message }));
   }
   const text = await res.text();
   let data;
@@ -211,16 +234,14 @@ async function stagLogin() {
   const login = await postJson(loginUrl, {}, { username: wsCfgUser(), password: wsCfgPass() });
   const loginToken = login.data && (login.data.token || (login.data.data && login.data.data.token));
   if (!login.res.ok || !loginToken) {
-    throw new Error('Đăng nhập thất bại · HTTP ' + login.res.status + ' POST ' + loginUrl
-      + ' · ' + JSON.stringify(login.data));
+    throw new Error(t('loginFail', { status: login.res.status, url: loginUrl, data: JSON.stringify(login.data) }));
   }
 
   const playUrl = host + '/api/v1/play-game';
   const play = await postJson(playUrl, { Authorization: 'Bearer ' + loginToken }, { gameId: gameId() });
   const gameToken = play.data && (play.data.token || (play.data.data && play.data.data.token));
   if (!play.res.ok || !gameToken) {
-    throw new Error('play-game thất bại · HTTP ' + play.res.status + ' POST ' + playUrl
-      + ' · ' + JSON.stringify(play.data));
+    throw new Error(t('playGameFail', { status: play.res.status, url: playUrl, data: JSON.stringify(play.data) }));
   }
   return gameToken;
 }
@@ -251,7 +272,7 @@ async function wsConnect() {
     // đăng nhập. Lẫn hai cái này là mất thời gian ngồi dò vì sao cheat không ăn.
     const who = j.userId
       ? (j.agency || '?') + '/' + j.userId + (j.stableId ? ' · stableId=' + j.stableId : '')
-      : 'không rõ danh tính';
+      : t('unknownIdentity');
     // Bước cuối: lấy danh sách user đang kết nối qua cmd 1900 (op SESSION_WS_LIST). Dùng lại
     // listSessions() của index.html — ở mode WS nó đã tự đi đường cmd 1900 — nên panel bên trái
     // được vẽ lại luôn, không phải gọi thêm lần nữa chỉ để đếm.
@@ -272,25 +293,18 @@ async function wsConnect() {
 
     startPoll(false);  // listSessions() vừa chạy ngay trên, chỉ cần bật nhịp 5 giây
     // Nối được rồi thì hàng cấu hình hết việc — thu lại, nhường chỗ cho vùng làm việc.
-    const sum = document.getElementById('ws-summary');
-    if (sum) {
-      sum.innerHTML = '';
-      sum.append('● ' + (wsIsLocal() ? 'WS local' : 'WS staging') + ' · ' + (j.userId || wsCfgAgent()));
-      const edit = document.createElement('span');
-      edit.className = 'ws-sum-edit';
-      edit.textContent = 'sửa';
-      sum.append(edit);
-    }
+    lastWsSummaryInfo = { isLocal: wsIsLocal(), who: (j.userId || wsCfgAgent()) };
+    renderWsSummaryChip();
     wsCfgCollapsed = true;
     applyWsRowVisibility();
 
-    const msg = 'Đã kết nối WS · sessionId=' + client.sessionId + ' · ' + who
-      + (found === null ? ' · không lấy được danh sách user' : ' · ' + found + ' user đang kết nối');
+    const foundPart = found === null ? t('foundNone') : t('foundCount', { n: found });
+    const msg = t('connectedMsg', { sid: client.sessionId, who, foundPart });
     if (typeof toast === 'function') toast(msg, 'success'); else console.log(msg);
   } catch (e) {
     setWsState('error');
-    reportWsError('Kết nối WS thất bại', e.message);
-    if (typeof toast === 'function') toast('Kết nối WS thất bại — chi tiết ở dải đỏ đầu trang', 'error');
+    reportWsError(t('connectFailTitle'), e.message);
+    if (typeof toast === 'function') toast(t('connectFailToast'), 'error');
   }
 }
 
@@ -335,8 +349,8 @@ function onToolWsDropped(closeInfo) {
   // Rớt mạng thì việc cần làm luôn giống hệt nhau, nên chỉ nói đúng việc đó. Mã đóng và
   // WS URL vẫn nằm nguyên trong nút Copy để gửi dev khi cần dò.
   showWsError({
-    title: 'Mất kết nối, vui lòng bấm Kết nối lại lần nữa',
-    hidden: describeClose(closeInfo) + '\nWS URL: ' + wsCfgUrl(),
+    title: t('disconnectedTitle'),
+    hidden: describeClose(closeInfo) + '\n' + t('wsUrlLabel') + wsCfgUrl(),
   });
 }
 
@@ -364,7 +378,7 @@ async function openToolWs() {
 function ensureToolWs() {
   // Xét cả wsState: một lệnh lỗi là hạ trạng thái xuống 'error' dù socket còn mở, và khi đó
   // tool phải im cho tới khi nối lại — nếu không, nút thì xám mà lệnh vẫn lọt qua được.
-  if (!wsConnected() || !wsIsOpen(toolWs)) throw new Error('Chưa kết nối WS — bấm "Kết nối" ở thanh trên');
+  if (!wsConnected() || !wsIsOpen(toolWs)) throw new Error(t('needWsTip'));
   return toolWs;
 }
 
@@ -383,9 +397,8 @@ async function wsDebugExec(op, params) {
     // xong. Với HISTORY_BULK_GENERATE, BULK_BUY_DEBUG… bấm lại là sinh thêm một lô dữ liệu và
     // trừ tiền thật lần nữa, nên phải cảnh báo trước khi QC bấm lại.
     const mayHaveRun = msg.startsWith('Timeout');
-    reportWsError('Lệnh ' + op + ' thất bại', msg,
-      (mayHaveRun ? 'Không nhận được trả lời, nhưng lệnh có thể ĐÃ chạy ở server — kiểm tra kết quả trước khi bấm lại.\n' : '')
-      + 'Tool đã ngắt kết nối — bấm "Kết nối" để dựng phiên mới.');
+    reportWsError(t('cmdFailTitle', { op }), msg,
+      (mayHaveRun ? t('mayHaveRunHint') : '') + t('disconnectedHint'));
     return { ok: false, status: 0, data: { error: msg } };
   }
 }

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="dark">
-  <title>Naga Fortune 777 · Bảng điều khiển cheat</title>
+  <title data-i18n="pageTitle">Naga Fortune 777 · Bảng điều khiển cheat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -744,6 +744,44 @@
     }
 
     .hdr-doc:focus-visible {
+      outline: 2px solid var(--jade);
+      outline-offset: 1px;
+    }
+
+    /* ── Nút chuyển ngôn ngữ ─────────────────────────────────────── */
+    .lang-toggle {
+      flex: none;
+      display: flex;
+      padding: 2px;
+      border: 1px solid var(--rule);
+      border-radius: 100px;
+      background: var(--void);
+    }
+
+    .lang-btn {
+      padding: 3px 10px;
+      border: none;
+      border-radius: 100px;
+      background: transparent;
+      color: var(--bone-4);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--t-meta);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .lang-btn:hover {
+      color: var(--bone-2);
+    }
+
+    .lang-btn.active {
+      background: var(--gold-dim);
+      color: var(--gold-hi);
+    }
+
+    .lang-btn:focus-visible {
       outline: 2px solid var(--jade);
       outline-offset: 1px;
     }
@@ -1714,53 +1752,54 @@
         <img src="assets/img5.png" alt="">
         <div>
           <div class="brand-name">Naga Fortune 777</div>
-          <div class="brand-sub">Bảng điều khiển cheat</div>
+          <div class="brand-sub" data-i18n="brandSub">Bảng điều khiển cheat</div>
         </div>
       </div>
 
       <section class="rail-block">
         <div class="stn-h">
           <span class="stn">01</span>
-          <span class="stn-t">Chọn người chơi</span>
+          <span class="stn-t" data-i18n="stepSelectPlayer">Chọn người chơi</span>
           <button class="btn btn-arm btn-icon" data-needs-ws onclick="reloadSessions()"
+            data-i18n-title="reloadPlayersTitle" data-i18n-aria="reloadPlayersAria"
             title="Tải lại danh sách người chơi" aria-label="Tải lại danh sách">↻</button>
         </div>
         <div id="session-list-body" class="user-list">
-          <div class="empty">Chưa kết nối WS — bấm <b>Kết nối</b> ở thanh trên, danh sách sẽ tự hiện.</div>
+          <div class="empty" data-i18n-html="sessionsNoWs">Chưa kết nối WS — bấm <b>Kết nối</b> ở thanh trên, danh sách sẽ tự hiện.</div>
         </div>
       </section>
 
       <details class="rail-block guide" open>
         <summary>
-          <span class="stn-t">Hướng dẫn nhanh</span>
+          <span class="stn-t" data-i18n="guideTitle">Hướng dẫn nhanh</span>
           <span class="guide-caret">▾</span>
         </summary>
         <ol class="steps">
-          <li><b>Chọn môi trường:</b> bấm <b>LOCAL</b> hoặc <b>STAG</b> trên hàng WS — WS URL và agentId tự điền. Trỏ
+          <li data-i18n-html="step1"><b>Chọn môi trường:</b> bấm <b>LOCAL</b> hoặc <b>STAG</b> trên hàng WS — WS URL và agentId tự điền. Trỏ
             staging thì hiện thêm username/password (mặc định <code>Admin101</code>); local dùng seed token nên hai ô đó
             tự ẩn.</li>
-          <li>Bấm <b>Kết nối</b> — mở WebSocket, đăng nhập, JOIN rồi tải luôn danh sách người chơi.</li>
-          <li><b>Mở game</b> trên thiết bị test và đăng nhập tài khoản thật.</li>
-          <li>Bấm <b>↻</b> để tải lại danh sách. Còn đúng <b>1 người chơi</b> → tool tự chọn; nhiều người → bấm
+          <li data-i18n-html="step2">Bấm <b>Kết nối</b> — mở WebSocket, đăng nhập, JOIN rồi tải luôn danh sách người chơi.</li>
+          <li data-i18n-html="step3"><b>Mở game</b> trên thiết bị test và đăng nhập tài khoản thật.</li>
+          <li data-i18n-html="step4">Bấm <b>↻</b> để tải lại danh sách. Còn đúng <b>1 người chơi</b> → tool tự chọn; nhiều người → bấm
             <b>Dùng</b> ở đúng người.</li>
-          <li>Kiểm tra huy hiệu <code>username@agency</code> trên thanh trên — đó là người đang bị nhắm.</li>
-          <li>Chọn một thẻ cheat, chỉnh tham số rồi bấm <b>Cài cheat</b>. Dải trên cùng sẽ sáng lên.</li>
-          <li>Quay lại game bấm <b>SPIN</b>. Cheat áp đúng <b>1 lượt</b> rồi tự xoá.</li>
+          <li data-i18n-html="step5">Kiểm tra huy hiệu <code>username@agency</code> trên thanh trên — đó là người đang bị nhắm.</li>
+          <li data-i18n-html="step6">Chọn một thẻ cheat, chỉnh tham số rồi bấm <b>Cài cheat</b>. Dải trên cùng sẽ sáng lên.</li>
+          <li data-i18n-html="step7">Quay lại game bấm <b>SPIN</b>. Cheat áp đúng <b>1 lượt</b> rồi tự xoá.</li>
         </ol>
         <div class="tips">
-          <div class="tip">Tool chạy cố định qua <b>WebSocket</b> (cmd 1900). Huy hiệu <b>WS</b> trên thanh trên là
+          <div class="tip" data-i18n-html="tip1">Tool chạy cố định qua <b>WebSocket</b> (cmd 1900). Huy hiệu <b>WS</b> trên thanh trên là
             xác nhận đường đang dùng.</div>
-          <div class="tip">Dòng <b>mờ, viền đứt, có nhãn TOOL</b> là phiên WebSocket của chính tool, không phải người
+          <div class="tip" data-i18n-html="tip2">Dòng <b>mờ, viền đứt, có nhãn TOOL</b> là phiên WebSocket của chính tool, không phải người
             chơi — tool không bao giờ tự chọn dòng đó.</div>
-          <div class="tip">Danh sách tự tải lại mỗi <b>5 giây</b> — đây cũng là cách tool phát hiện mất kết nối;
+          <div class="tip" data-i18n-html="tip3">Danh sách tự tải lại mỗi <b>5 giây</b> — đây cũng là cách tool phát hiện mất kết nối;
             chuột rời khỏi trang thì tạm dừng.</div>
-          <div class="tip">Chưa nối, vừa rớt, hoặc <b>bất kỳ lệnh nào lỗi</b> thì mọi nút gọi server bị xám — bấm
+          <div class="tip" data-i18n-html="tip4">Chưa nối, vừa rớt, hoặc <b>bất kỳ lệnh nào lỗi</b> thì mọi nút gọi server bị xám — bấm
             <b>Kết nối</b> là sáng lại. Tool không bao giờ tự nối ngầm.</div>
-          <div class="tip">Mọi lỗi đều hiện ở <b>dải đỏ</b> đầu trang và nằm đó tới khi nối lại được — bấm
+          <div class="tip" data-i18n-html="tip5">Mọi lỗi đều hiện ở <b>dải đỏ</b> đầu trang và nằm đó tới khi nối lại được — bấm
             <b>Copy</b> để gửi nguyên văn cho dev.</div>
-          <div class="tip">Token staging hết hạn sau <b>~1 giờ</b> — gặp lỗi AUTH thì bấm <b>Kết nối</b> lại.</div>
-          <div class="tip">Chưa chọn người chơi thì các nút <b>Cài cheat</b> cũng xám — chọn xong là sáng lên.</div>
-          <div class="tip">Slot chung chỉ giữ <b>một</b> cheat — cài cái mới là đè lên cái cũ. Riêng
+          <div class="tip" data-i18n-html="tip6">Token staging hết hạn sau <b>~1 giờ</b> — gặp lỗi AUTH thì bấm <b>Kết nối</b> lại.</div>
+          <div class="tip" data-i18n-html="tip7">Chưa chọn người chơi thì các nút <b>Cài cheat</b> cũng xám — chọn xong là sáng lên.</div>
+          <div class="tip" data-i18n-html="tip8">Slot chung chỉ giữ <b>một</b> cheat — cài cái mới là đè lên cái cũ. Riêng
             <b>FORCE_JACKPOT_TIER</b> và <b>FORCE_VAULT_DOUBLE_UP</b> có slot riêng nên tồn tại song song với cheat ở
             slot chung.</div>
         </div>
@@ -1787,7 +1826,7 @@
               title="ws://localhost:9099/websocket · agentId=1">LOCAL</button>
             <button class="btn btn-ghost btn-sm" type="button" onclick="setWsPreset('stag')"
               title="wss://gob02-ws.relaxwmestu.xyz/websocket · agentId=AGENCY_001">STAG</button>
-            <input id="i-ws-url" placeholder="WS URL (phiên debug riêng của tool)" onchange="saveWsConfig()">
+            <input id="i-ws-url" data-i18n-placeholder="wsUrlPlaceholder" placeholder="WS URL (phiên debug riêng của tool)" onchange="saveWsConfig()">
             <input id="i-ws-agent" placeholder="agentId" onchange="saveWsConfig()">
             <!-- Không có ô accessToken: local dùng thẳng seed token, staging tự đăng nhập lấy token
                  theo luồng 2 bước của agency-platform. Hai ô dưới chỉ hiện khi trỏ staging. -->
@@ -1795,26 +1834,36 @@
             <!-- Để chữ thường, không che: tài khoản test dùng chung, che chỉ gây vướng. -->
             <input id="i-ws-pass" placeholder="password" onchange="saveWsConfig()">
             <button id="btn-ws-connect" class="btn btn-arm btn-sm" type="button" onclick="wsConnect()"
-              title="Mở WebSocket, AUTH rồi JOIN cmd 1005 — biết ngay cấu hình đúng hay sai">Kết nối</button>
+              data-i18n-title="btnConnectTitle"
+              title="Mở WebSocket, AUTH rồi JOIN cmd 1005 — biết ngay cấu hình đúng hay sai" data-i18n="btnConnectText">Kết nối</button>
           </div>
           <div id="ws-summary" role="button" tabindex="0" onclick="expandWsConfig()" onkeydown="wsSummaryKey(event)"
-            title="Bấm để mở lại cấu hình WebSocket"></div>
+            data-i18n-title="wsSummaryTitle" title="Bấm để mở lại cấu hình WebSocket"></div>
           <span id="poll-paused" class="sbadge sbadge-paused" style="display:none"
-            title="Auto-refresh đang tạm dừng — di chuột vào trang để tiếp tục">Tạm dừng tải lại</span>
+            data-i18n-title="pollPausedTitle" title="Auto-refresh đang tạm dừng — di chuột vào trang để tiếp tục"
+            data-i18n="pollPausedText">Tạm dừng tải lại</span>
+          <!-- Nút chuyển ngôn ngữ — đứng cạnh nhóm link tài liệu, luôn thấy vì #hdr sticky. -->
+          <div id="lang-toggle" class="lang-toggle" role="group" aria-label="Language">
+            <button type="button" class="lang-btn" data-lang="vi" onclick="setLang('vi')">VI</button>
+            <button type="button" class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+          </div>
           <!-- Đứng chung hàng kết nối, dồn về mép phải bằng margin-left:auto — nửa phải hàng này
                vốn bỏ trống, tách riêng một dòng chỉ để bốn đường dẫn là phí một dòng thanh trên. -->
-          <nav class="hdr-docs" aria-label="Tài liệu tham chiếu">
+          <nav class="hdr-docs" data-i18n-aria="docsNavAria" aria-label="Tài liệu tham chiếu">
             <a class="hdr-doc"
               href="https://docs.google.com/document/d/1ofXIWycwCQJgNIuVJVMJDCzTEZMXXyVKg26XRYlaKb4/edit?usp=sharing"
-              target="_blank" rel="noopener noreferrer" title="Tài liệu thiết kế game">GDD</a>
+              target="_blank" rel="noopener noreferrer" data-i18n-title="docGddTitle" title="Tài liệu thiết kế game">GDD</a>
             <a class="hdr-doc" href="https://notebooklm.google.com/notebook/6450e82f-2ec1-44b2-9018-56dc62f8889c"
-              target="_blank" rel="noopener noreferrer" title="Học GDD cùng AI (NotebookLM)">Học cùng AI</a>
+              target="_blank" rel="noopener noreferrer" data-i18n-title="docLearnTitle" title="Học GDD cùng AI (NotebookLM)"
+              data-i18n="docLearnText">Học cùng AI</a>
             <a class="hdr-doc"
               href="https://docs.google.com/document/d/1-QD6D42e7srq_uamFrRCWfMdZnF5ERiyx9gQIMtzdkU/edit?usp=sharing"
-              target="_blank" rel="noopener noreferrer" title="Gợi ý test case">Gợi ý test case</a>
+              target="_blank" rel="noopener noreferrer" data-i18n-title="docTestcaseTitle" title="Gợi ý test case"
+              data-i18n="docTestcaseText">Gợi ý test case</a>
             <a class="hdr-doc"
               href="https://docs.google.com/document/d/1r0n3cVEqudxyT10zrmOXGgm8z8N4lUtRTOMLagMolW4/edit?usp=sharing"
-              target="_blank" rel="noopener noreferrer" title="Tài liệu dành cho FE developer">Dành cho FE dev</a>
+              target="_blank" rel="noopener noreferrer" data-i18n-title="docFeDevTitle" title="Tài liệu dành cho FE developer"
+              data-i18n="docFeDevText">Dành cho FE dev</a>
           </nav>
         </div>
         <!-- Mọi lỗi của tool đổ về đây: mở socket, AUTH, JOIN, rớt giữa chừng, đăng nhập
@@ -1826,12 +1875,12 @@
             <pre id="ws-error-detail"></pre>
           </div>
           <button class="btn btn-ghost btn-sm" type="button" onclick="copyWsError()"
-            title="Chép toàn bộ nội dung lỗi để gửi dev">Copy</button>
+            data-i18n-title="copyErrTitle" title="Chép toàn bộ nội dung lỗi để gửi dev">Copy</button>
           <button class="btn btn-ghost btn-sm" type="button" onclick="clearWsError()"
-            aria-label="Đóng dải lỗi">×</button>
+            data-i18n-aria="closeErrAria" aria-label="Đóng dải lỗi">×</button>
         </div>
         <div id="ws-note">
-          <span>Bấm <b>Kết nối</b> là chiếm phiên debug của tài khoản này — tool đang mở ở tab hoặc máy khác sẽ
+          <span data-i18n-html="wsNoteHtml">Bấm <b>Kết nối</b> là chiếm phiên debug của tài khoản này — tool đang mở ở tab hoặc máy khác sẽ
             ngừng tác dụng cho tới khi bấm <b>Kết nối</b> lại ở đó.</span>
         </div>
       </header>
@@ -1846,15 +1895,15 @@
           <div class="chamber-row">
             <span class="chamber-dot"></span>
             <div class="chamber-body">
-              <div class="chamber-code">Chưa cài cheat</div>
-              <div class="chamber-sub">Chọn người chơi ở cột trái, rồi cài một cheat bên dưới.</div>
+              <div class="chamber-code" data-i18n="chamberEmptyCode">Chưa cài cheat</div>
+              <div class="chamber-sub" data-i18n="chamberEmptySubNoUser">Chọn người chơi ở cột trái, rồi cài một cheat bên dưới.</div>
             </div>
           </div>
         </div>
 
         <div class="stn-h">
           <span class="stn">02</span>
-          <span class="stn-t">Cài cheat</span>
+          <span class="stn-t" data-i18n="stepArmCheat">Cài cheat</span>
         </div>
 
         <div class="cheat-grid">
@@ -1865,16 +1914,16 @@
               <span class="cheat-name">FORCE_GRID</span>
               <span class="armed-tag"></span>
             </div>
-            <div class="cheat-hint">Vẽ sẵn lưới 3×3 cho lượt spin kế tiếp. Bấm vào ô để đổi ký hiệu — mở ra
+            <div class="cheat-hint" data-i18n-html="gridHint">Vẽ sẵn lưới 3×3 cho lượt spin kế tiếp. Bấm vào ô để đổi ký hiệu — mở ra
               lưới <b>toàn Random</b>, chỉ ô nào đổi mới bị ép, ô để Random thì server tự quay.</div>
             <div id="grid-ui"></div>
             <div class="cheat-foot">
-              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armGridCheat()">Cài cheat</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,10)">Toàn Wild</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,2)">Toàn B · 50×</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,5)">Toàn E · 10×</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,0)">Toàn Q · trống</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,'')">Toàn Random</button>
+              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armGridCheat()" data-i18n="btnArmCheat">Cài cheat</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,10)" data-i18n="btnFillWild">Toàn Wild</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,2)" data-i18n="btnFillB50">Toàn B · 50×</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,5)" data-i18n="btnFillE10">Toàn E · 10×</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,0)" data-i18n="btnFillQBlank">Toàn Q · trống</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,'')" data-i18n="btnFillRandom">Toàn Random</button>
             </div>
           </div>
 
@@ -1884,46 +1933,46 @@
               <span class="cheat-name">FORCE_FREESPIN_SEQUENCE</span>
               <span class="armed-tag"></span>
             </div>
-            <div class="cheat-hint">Dựng chuỗi lưới cho 1 lượt kích hoạt (base) + N vòng freespin. Cài một lần, dùng một
+            <div class="cheat-hint" data-i18n="fssHint">Dựng chuỗi lưới cho 1 lượt kích hoạt (base) + N vòng freespin. Cài một lần, dùng một
               lần.</div>
 
             <div class="stack">
               <div>
-                <div class="sub-h">Lượt kích hoạt</div>
+                <div class="sub-h" data-i18n="triggerRoundLabel">Lượt kích hoạt</div>
                 <div id="fss-trigger-wrap"></div>
               </div>
 
               <div>
                 <div class="sub-h">
-                  Vòng freespin <span id="fss-round-count" class="mono"
+                  <span data-i18n="freespinRoundsLabel">Vòng freespin</span> <span id="fss-round-count" class="mono"
                     style="text-transform:none;letter-spacing:0"></span>
-                  <button class="btn btn-ghost btn-sm" onclick="addFsRound()">Thêm vòng</button>
-                  <button class="btn btn-ghost btn-sm" onclick="removeFsRound()">Bớt vòng</button>
+                  <button class="btn btn-ghost btn-sm" onclick="addFsRound()" data-i18n="btnAddRound">Thêm vòng</button>
+                  <button class="btn btn-ghost btn-sm" onclick="removeFsRound()" data-i18n="btnRemoveRound">Bớt vòng</button>
                 </div>
                 <div id="fss-rounds-wrap" class="stack"></div>
               </div>
             </div>
 
             <div class="frow tight" style="margin-top:14px">
-              <label for="fss-overflow">Vòng dư</label>
+              <label for="fss-overflow" data-i18n="overflowRoundLabel">Vòng dư</label>
               <select id="fss-overflow">
                 <option value="RNG" selected>RNG</option>
                 <option value="REPEAT_LAST">REPEAT_LAST</option>
                 <option value="LOOP">LOOP</option>
               </select>
             </div>
-            <div class="cheat-note">
+            <div class="cheat-note" data-i18n-html="fssNote">
               Hiện logic ép cứng đúng N vòng và chặn retrigger, nên <b>vòng dư không bao giờ xảy ra</b> — ba lựa chọn
               trên chưa tạo khác biệt quan sát được trong game. Đây là lưới an toàn cho hành vi luôn xác định.
             </div>
             <div class="cheat-foot">
-              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armFsSeq()">Cài cheat</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillFsMaxWin()">Toàn Wild + 10×</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,10)">Toàn Wild</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,2)">Toàn B · 50×</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,5)">Toàn E · 10×</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,0)">Toàn Q · trống</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,'')">Toàn Random</button>
+              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armFsSeq()" data-i18n="btnArmCheat">Cài cheat</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillFsMaxWin()" data-i18n="btnFillFsMaxWin">Toàn Wild + 10×</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,10)" data-i18n="btnFillWild">Toàn Wild</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,2)" data-i18n="btnFillB50">Toàn B · 50×</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,5)" data-i18n="btnFillE10">Toàn E · 10×</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,0)" data-i18n="btnFillQBlank">Toàn Q · trống</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,'')" data-i18n="btnFillRandom">Toàn Random</button>
             </div>
           </div>
 
@@ -1933,26 +1982,26 @@
               <span class="cheat-name">FORCE_WIN_STREAK_SEQUENCE</span>
               <span class="armed-tag"></span>
             </div>
-            <div class="cheat-hint">Cheat ghi thẳng thanh win-streak, không theo luật thắng/thua thường: ván
+            <div class="cheat-hint" data-i18n-html="wssHint">Cheat ghi thẳng thanh win-streak, không theo luật thắng/thua thường: ván
               <b>k &lt; N</b> reels RNG nhưng thanh vẫn leo lên k dù thắng hay thua; ván <b>k = N</b> tô theo lưới
               kích hoạt bên dưới, thanh đạt N và mở Special Free Spin ngay dù ván đó không thắng; ván Special Free
               Spin kế tiếp tô theo lưới Special Free Spin rồi cheat tự xóa. Nếu lưới kích hoạt có scatter, Free Spin
               thường sẽ mở trước và Special Free Spin dồn lại chạy sau.</div>
             <div class="fg" style="max-width:180px;margin-bottom:12px">
-              <label for="wss-count">Ngưỡng win-streak (1–3)</label>
+              <label for="wss-count" data-i18n="winStreakThresholdLabel">Ngưỡng win-streak (1–3)</label>
               <input id="wss-count" type="number" value="2" min="1" max="3">
             </div>
-            <div class="sub-h">Lưới ván kích hoạt</div>
+            <div class="sub-h" data-i18n="triggerGridLabel">Lưới ván kích hoạt</div>
             <div id="wss-trigger-wrap"></div>
-            <div class="sub-h">Lưới Special Free Spin</div>
+            <div class="sub-h" data-i18n="specialFsGridLabel">Lưới Special Free Spin</div>
             <div id="wss-grid-wrap"></div>
             <div class="cheat-foot">
-              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armWinStreakSeq()">Cài cheat</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,10)">Toàn Wild</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,2)">Toàn B · 50×</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,5)">Toàn E · 10×</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,0)">Toàn Q · trống</button>
-              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,'')">Toàn Random</button>
+              <button class="btn btn-arm" data-needs-ws data-needs-user onclick="armWinStreakSeq()" data-i18n="btnArmCheat">Cài cheat</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,10)" data-i18n="btnFillWild">Toàn Wild</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,2)" data-i18n="btnFillB50">Toàn B · 50×</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,5)" data-i18n="btnFillE10">Toàn E · 10×</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,0)" data-i18n="btnFillQBlank">Toàn Q · trống</button>
+              <button class="btn btn-ghost btn-sm" onclick="fillAll(this,'')" data-i18n="btnFillRandom">Toàn Random</button>
             </div>
           </div>
 
@@ -1962,19 +2011,20 @@
               <span class="cheat-name">FORCE_JACKPOT_TIER</span>
               <span class="armed-tag"></span>
             </div>
-            <div class="cheat-hint"><b>MINOR</b> luôn trả cố định <b>50×</b> tiền cược,
+            <div class="cheat-hint" data-i18n-html="jackpotHint"><b>MINOR</b> luôn trả cố định <b>50×</b> tiền cược,
               không phụ thuộc pool. Tắt checkbox dưới đây thì tự lo phần làm Naga Eye nổ (lưới phải có payline
               thắng ở cuộn 4).</div>
             <label class="chk" for="fjt-auto-eye">
               <input id="fjt-auto-eye" type="checkbox" checked>
-              Tự ép Naga Eye nổ (lưới toàn Wild)
+              <span data-i18n="autoEyeLabel">Tự ép Naga Eye nổ (lưới toàn Wild)</span>
             </label>
 
             <div class="jp-pool">
               <div class="sub-h">
-                <span>Pool jackpot</span>
+                <span data-i18n="poolJackpotLabel">Pool jackpot</span>
                 <button class="btn btn-ghost btn-sm" data-needs-ws onclick="reloadPools()"
-                  title="Tải lại pool jackpot từ server" aria-label="Tải lại pool jackpot">↻</button>
+                  data-i18n-title="reloadPoolTitle" title="Tải lại pool jackpot từ server"
+                  data-i18n-aria="reloadPoolAria" aria-label="Tải lại pool jackpot">↻</button>
               </div>
               <div class="frow tight pool-row">
                 <span class="pool-tier">GRAND</span>
@@ -2003,24 +2053,24 @@
               <span class="cheat-name">FORCE_VAULT_DOUBLE_UP</span>
               <span class="armed-tag"></span>
             </div>
-            <div class="cheat-hint">Ép kết quả từng ván x2. Điền liên tiếp từ Ván 1; ô đầu tiên để <b>—</b> là dừng.
+            <div class="cheat-hint" data-i18n-html="vaultHint">Ép kết quả từng ván x2. Điền liên tiếp từ Ván 1; ô đầu tiên để <b>—</b> là dừng.
             </div>
             <div class="frow">
-              <div class="fg"><label>Ván 1</label>
+              <div class="fg"><label data-i18n="roundLabel1">Ván 1</label>
                 <select id="vdu-r1">
                   <option value="WIN" selected>WIN</option>
                   <option value="LOSS">LOSS</option>
                   <option value="">—</option>
                 </select>
               </div>
-              <div class="fg"><label>Ván 2</label>
+              <div class="fg"><label data-i18n="roundLabel2">Ván 2</label>
                 <select id="vdu-r2">
                   <option value="">—</option>
                   <option value="WIN">WIN</option>
                   <option value="LOSS">LOSS</option>
                 </select>
               </div>
-              <div class="fg"><label>Ván 3</label>
+              <div class="fg"><label data-i18n="roundLabel3">Ván 3</label>
                 <select id="vdu-r3">
                   <option value="">—</option>
                   <option value="WIN">WIN</option>
@@ -2029,7 +2079,7 @@
               </div>
             </div>
             <div class="frow tight" style="margin-top:12px">
-              <label for="vdu-overflow">Ván dư</label>
+              <label for="vdu-overflow" data-i18n="overflowRoundVduLabel">Ván dư</label>
               <select id="vdu-overflow">
                 <option value="RNG" selected>RNG</option>
                 <option value="REPEAT_LAST">REPEAT_LAST</option>
@@ -2037,7 +2087,7 @@
               </select>
             </div>
             <div class="cheat-foot">
-              <button class="btn btn-arm btn-block" data-needs-ws data-needs-user onclick="armVaultDoubleUp()">Cài cheat</button>
+              <button class="btn btn-arm btn-block" data-needs-ws data-needs-user onclick="armVaultDoubleUp()" data-i18n="btnArmCheat">Cài cheat</button>
             </div>
           </div>
 
@@ -2047,17 +2097,17 @@
               <span class="cheat-name">FORCE_RUSH_MODE_FILL</span>
               <span class="armed-tag"></span>
             </div>
-            <div class="cheat-hint">Nạp thanh năng lượng Rush Mode. Đủ <b>30</b> là kích hoạt free spin.</div>
-            <label for="rm-energy">Năng lượng</label>
+            <div class="cheat-hint" data-i18n-html="rushHint">Nạp thanh năng lượng Rush Mode. Đủ <b>30</b> là kích hoạt free spin.</div>
+            <label for="rm-energy" data-i18n="energyLabel">Năng lượng</label>
             <input id="rm-energy" type="range" min="0" max="30" value="30"
               oninput="document.getElementById('rm-val').textContent=this.value">
             <div class="readout">
               <span class="readout-n" id="rm-val">30</span>
-              <span class="readout-l">/ 30 điểm</span>
+              <span class="readout-l" data-i18n="energyUnit">/ 30 điểm</span>
             </div>
             <div class="cheat-foot">
               <button class="btn btn-arm btn-block" data-needs-ws data-needs-user
-                onclick="armCheat('FORCE_RUSH_MODE_FILL',{energy:+idv('rm-energy')})">Cài cheat</button>
+                onclick="armCheat('FORCE_RUSH_MODE_FILL',{energy:+idv('rm-energy')})" data-i18n="btnArmCheat">Cài cheat</button>
             </div>
           </div>
 
@@ -2070,38 +2120,416 @@
   <div id="toast-container"></div>
 
   <!-- Một bảng chọn dùng chung cho mọi ô cuộn — tránh nhân bản popover theo số ô. -->
-  <div id="sym-pop" role="dialog" aria-label="Chọn ký hiệu"></div>
+  <div id="sym-pop" role="dialog" data-i18n-aria="symPopAria" aria-label="Chọn ký hiệu"></div>
 
   <script>
     'use strict';
 
+    // ═══════════════════════ NGÔN NGỮ (i18n) ═══════════════════════
+    // Mọi chữ hiển thị nằm trong I18N; t(key, vars) tra theo currentLang rồi thế các {var}.
+    // Text tĩnh trong HTML gắn qua data-i18n / data-i18n-html / data-i18n-title / data-i18n-aria /
+    // data-i18n-placeholder — applyI18n() quét lại toàn trang mỗi khi đổi ngôn ngữ. Text sinh động
+    // (toast, dải lỗi, danh sách người chơi, ô cuộn…) gọi thẳng t() lúc dựng nên tự đúng ngôn ngữ；
+    // phần đã dựng sẵn trước đó được refreshDynamicI18n() vẽ lại.
+    const I18N_LS_KEY = 'naga_qc_lang';
+    const I18N = {
+      vi: {
+        pageTitle: 'Naga Fortune 777 · Bảng điều khiển cheat',
+        brandSub: 'Bảng điều khiển cheat',
+        stepSelectPlayer: 'Chọn người chơi',
+        reloadPlayersTitle: 'Tải lại danh sách người chơi',
+        reloadPlayersAria: 'Tải lại danh sách',
+        sessionsNoWs: 'Chưa kết nối WS — bấm <b>Kết nối</b> ở thanh trên, danh sách sẽ tự hiện.',
+        guideTitle: 'Hướng dẫn nhanh',
+        step1: '<b>Chọn môi trường:</b> bấm <b>LOCAL</b> hoặc <b>STAG</b> trên hàng WS — WS URL và agentId tự điền. Trỏ staging thì hiện thêm username/password (mặc định <code>Admin101</code>); local dùng seed token nên hai ô đó tự ẩn.',
+        step2: 'Bấm <b>Kết nối</b> — mở WebSocket, đăng nhập, JOIN rồi tải luôn danh sách người chơi.',
+        step3: '<b>Mở game</b> trên thiết bị test và đăng nhập tài khoản thật.',
+        step4: 'Bấm <b>↻</b> để tải lại danh sách. Còn đúng <b>1 người chơi</b> → tool tự chọn; nhiều người → bấm <b>Dùng</b> ở đúng người.',
+        step5: 'Kiểm tra huy hiệu <code>username@agency</code> trên thanh trên — đó là người đang bị nhắm.',
+        step6: 'Chọn một thẻ cheat, chỉnh tham số rồi bấm <b>Cài cheat</b>. Dải trên cùng sẽ sáng lên.',
+        step7: 'Quay lại game bấm <b>SPIN</b>. Cheat áp đúng <b>1 lượt</b> rồi tự xoá.',
+        tip1: 'Tool chạy cố định qua <b>WebSocket</b> (cmd 1900). Huy hiệu <b>WS</b> trên thanh trên là xác nhận đường đang dùng.',
+        tip2: 'Dòng <b>mờ, viền đứt, có nhãn TOOL</b> là phiên WebSocket của chính tool, không phải người chơi — tool không bao giờ tự chọn dòng đó.',
+        tip3: 'Danh sách tự tải lại mỗi <b>5 giây</b> — đây cũng là cách tool phát hiện mất kết nối; chuột rời khỏi trang thì tạm dừng.',
+        tip4: 'Chưa nối, vừa rớt, hoặc <b>bất kỳ lệnh nào lỗi</b> thì mọi nút gọi server bị xám — bấm <b>Kết nối</b> là sáng lại. Tool không bao giờ tự nối ngầm.',
+        tip5: 'Mọi lỗi đều hiện ở <b>dải đỏ</b> đầu trang và nằm đó tới khi nối lại được — bấm <b>Copy</b> để gửi nguyên văn cho dev.',
+        tip6: 'Token staging hết hạn sau <b>~1 giờ</b> — gặp lỗi AUTH thì bấm <b>Kết nối</b> lại.',
+        tip7: 'Chưa chọn người chơi thì các nút <b>Cài cheat</b> cũng xám — chọn xong là sáng lên.',
+        tip8: 'Slot chung chỉ giữ <b>một</b> cheat — cài cái mới là đè lên cái cũ. Riêng <b>FORCE_JACKPOT_TIER</b> và <b>FORCE_VAULT_DOUBLE_UP</b> có slot riêng nên tồn tại song song với cheat ở slot chung.',
+        wsUrlPlaceholder: 'WS URL (phiên debug riêng của tool)',
+        btnConnectTitle: 'Mở WebSocket, AUTH rồi JOIN cmd 1005 — biết ngay cấu hình đúng hay sai',
+        btnConnectText: 'Kết nối',
+        wsSummaryTitle: 'Bấm để mở lại cấu hình WebSocket',
+        pollPausedTitle: 'Auto-refresh đang tạm dừng — di chuột vào trang để tiếp tục',
+        pollPausedText: 'Tạm dừng tải lại',
+        docsNavAria: 'Tài liệu tham chiếu',
+        docGddTitle: 'Tài liệu thiết kế game',
+        docLearnTitle: 'Học GDD cùng AI (NotebookLM)',
+        docLearnText: 'Học cùng AI',
+        docTestcaseTitle: 'Gợi ý test case',
+        docTestcaseText: 'Gợi ý test case',
+        docFeDevTitle: 'Tài liệu dành cho FE developer',
+        docFeDevText: 'Dành cho FE dev',
+        copyErrTitle: 'Chép toàn bộ nội dung lỗi để gửi dev',
+        closeErrAria: 'Đóng dải lỗi',
+        wsNoteHtml: 'Bấm <b>Kết nối</b> là chiếm phiên debug của tài khoản này — tool đang mở ở tab hoặc máy khác sẽ ngừng tác dụng cho tới khi bấm <b>Kết nối</b> lại ở đó.',
+        chamberEmptyCode: 'Chưa cài cheat',
+        chamberEmptySubNoUser: 'Chọn người chơi ở cột trái, rồi cài một cheat bên dưới.',
+        chamberEmptySubHasUser: 'Chọn một thẻ cheat bên dưới, chỉnh tham số rồi bấm Cài cheat.',
+        stepArmCheat: 'Cài cheat',
+        btnArmCheat: 'Cài cheat',
+        btnFillWild: 'Toàn Wild',
+        btnFillB50: 'Toàn B · 50×',
+        btnFillE10: 'Toàn E · 10×',
+        btnFillQBlank: 'Toàn Q · trống',
+        btnFillRandom: 'Toàn Random',
+        gridHint: 'Vẽ sẵn lưới 3×3 cho lượt spin kế tiếp. Bấm vào ô để đổi ký hiệu — mở ra lưới <b>toàn Random</b>, chỉ ô nào đổi mới bị ép, ô để Random thì server tự quay.',
+        fssHint: 'Dựng chuỗi lưới cho 1 lượt kích hoạt (base) + N vòng freespin. Cài một lần, dùng một lần.',
+        triggerRoundLabel: 'Lượt kích hoạt',
+        freespinRoundsLabel: 'Vòng freespin',
+        btnAddRound: 'Thêm vòng',
+        btnRemoveRound: 'Bớt vòng',
+        overflowRoundLabel: 'Vòng dư',
+        fssNote: 'Hiện logic ép cứng đúng N vòng và chặn retrigger, nên <b>vòng dư không bao giờ xảy ra</b> — ba lựa chọn trên chưa tạo khác biệt quan sát được trong game. Đây là lưới an toàn cho hành vi luôn xác định.',
+        btnFillFsMaxWin: 'Toàn Wild + 10×',
+        wssHint: 'Cheat ghi thẳng thanh win-streak, không theo luật thắng/thua thường: ván <b>k &lt; N</b> reels RNG nhưng thanh vẫn leo lên k dù thắng hay thua; ván <b>k = N</b> tô theo lưới kích hoạt bên dưới, thanh đạt N và mở Special Free Spin ngay dù ván đó không thắng; ván Special Free Spin kế tiếp tô theo lưới Special Free Spin rồi cheat tự xóa. Nếu lưới kích hoạt có scatter, Free Spin thường sẽ mở trước và Special Free Spin dồn lại chạy sau.',
+        winStreakThresholdLabel: 'Ngưỡng win-streak (1–3)',
+        triggerGridLabel: 'Lưới ván kích hoạt',
+        specialFsGridLabel: 'Lưới Special Free Spin',
+        jackpotHint: '<b>MINOR</b> luôn trả cố định <b>50×</b> tiền cược, không phụ thuộc pool. Tắt checkbox dưới đây thì tự lo phần làm Naga Eye nổ (lưới phải có payline thắng ở cuộn 4).',
+        autoEyeLabel: 'Tự ép Naga Eye nổ (lưới toàn Wild)',
+        poolJackpotLabel: 'Pool jackpot',
+        reloadPoolTitle: 'Tải lại pool jackpot từ server',
+        reloadPoolAria: 'Tải lại pool jackpot',
+        vaultHint: 'Ép kết quả từng ván x2. Điền liên tiếp từ Ván 1; ô đầu tiên để <b>—</b> là dừng.',
+        roundLabel1: 'Ván 1',
+        roundLabel2: 'Ván 2',
+        roundLabel3: 'Ván 3',
+        overflowRoundVduLabel: 'Ván dư',
+        rushHint: 'Nạp thanh năng lượng Rush Mode. Đủ <b>30</b> là kích hoạt free spin.',
+        energyLabel: 'Năng lượng',
+        energyUnit: '/ 30 điểm',
+        symPopAria: 'Chọn ký hiệu',
+
+        emptyListHtml: 'Chưa có ai đang mở game. Mở game ở thiết bị test rồi bấm ↻.',
+        sessionListError: 'Lỗi không xác định',
+        agencyNotLookedUp: 'chưa lookup',
+        agencyLookupFailTitle: 'Không tìm thấy urn:is-service:s:{token}',
+        cardExpandTip: 'Bấm để xổ/thu thông tin',
+        toolSessionTip: 'User này đang trong debug tool',
+        btnUse: 'Dùng',
+        ucAgency: 'Agency',
+        ucUserId: 'User ID',
+        ucStableId: 'Stable ID',
+        ucGame: 'Game',
+        ucIp: 'IP',
+        ucSession: 'Session',
+        ucConnected: 'Kết nối',
+        noStableIdTitle: 'stableId thiếu — cheat bind theo userId, có thể sai khoá trên staging',
+        playerLeftWarn: '⚠ Người chơi {name} đã thoát game',
+        playerSelectedMsg: '✅ Đã chọn người chơi: {name}',
+        reloadedSessionsMsg: 'Đã tải lại · {n} người chơi đang kết nối',
+        needWsTip: 'Chưa kết nối WS — bấm "Kết nối" ở thanh trên',
+        needUserTip: 'Chưa chọn người chơi — bấm "Dùng" ở cột trái',
+        copyErrSuccess: 'Đã chép nội dung lỗi',
+        copyErrFail: 'Trình duyệt chặn chép tự động — bôi đen dải lỗi rồi Ctrl+C',
+        noRouteErr: 'Không có route WS cho {method} {path}',
+        progErrTitle: 'Lỗi lập trình của tool',
+        progErrDetail: 'Thiếu route trong WS_ROUTES (js/ws-debug.js).',
+        selectUserFirst: 'Vui lòng chọn user',
+
+        symWild: 'Wild · Đầu Rắn',
+        symDiamond: 'Kim Cương',
+        symBar3: '3 Thỏi Vàng',
+        symBar2: '2 Thỏi Vàng',
+        symBar1: '1 Thỏi Vàng',
+        symBell: 'Chuông Naga',
+        symBlank: 'Ô trống',
+        symRandom: 'Ngẫu nhiên',
+        symNagaEye: 'Naga Eye',
+        mult1: 'Hệ số 1',
+        mult2: 'Hệ số 2',
+        mult5: 'Hệ số 5',
+        mult10: 'Hệ số 10',
+        reelMultTitle: 'Cuộn 4 — hệ số nhân của hàng',
+        popNameMult: 'Hệ số cuộn 4',
+        popNameSym: 'Ký hiệu',
+
+        armedSubText: '<b>{who}</b> · cài lúc {stamp} · áp cho đúng lượt spin kế tiếp',
+        ttlLeftLabel: 'còn lại',
+        armedTagText: 'đã cài {stamp}',
+        armSuccess: '✅ Đã cài — áp cho lượt quay kế tiếp, hết hạn sau 5 phút',
+        armFail: '❌ Cài cheat thất bại: {err}',
+        vaultNoOutcome: '⚠ Chưa chọn kết quả Ván 1 — chưa cài được',
+        winStreakInvalid: '⚠ Ngưỡng win-streak phải là số nguyên từ 1 đến 3 — chưa cài được',
+        poolLoadFail: '❌ Tải pool jackpot thất bại: {err}',
+        poolReloadSuccess: '✅ Đã tải lại pool jackpot',
+        fsRoundLabel: 'Vòng {n}',
+
+        connectBtnConnecting: 'Đang nối…',
+        connectBtnConnected: 'Đã nối ✓',
+        wsUrlLabel: 'WS URL: ',
+        disconnectedTitle: 'Mất kết nối, vui lòng bấm Kết nối lại lần nữa',
+        unknownIdentity: 'không rõ danh tính',
+        wsSummaryLocal: 'WS local',
+        wsSummaryStaging: 'WS staging',
+        wsSumEditText: 'sửa',
+        connectedMsg: 'Đã kết nối WS · sessionId={sid} · {who}{foundPart}',
+        foundNone: ' · không lấy được danh sách user',
+        foundCount: ' · {n} user đang kết nối',
+        connectFailTitle: 'Kết nối WS thất bại',
+        connectFailToast: 'Kết nối WS thất bại — chi tiết ở dải đỏ đầu trang',
+        cmdFailTitle: 'Lệnh {op} thất bại',
+        mayHaveRunHint: 'Không nhận được trả lời, nhưng lệnh có thể ĐÃ chạy ở server — kiểm tra kết quả trước khi bấm lại.\n',
+        disconnectedHint: 'Tool đã ngắt kết nối — bấm "Kết nối" để dựng phiên mới.',
+        fetchFail: 'Không gọi được {url} — {err} (mạng, CORS hoặc host sai)',
+        loginFail: 'Đăng nhập thất bại · HTTP {status} POST {url} · {data}',
+        playGameFail: 'play-game thất bại · HTTP {status} POST {url} · {data}',
+
+        wsClose1000: 'đóng bình thường',
+        wsClose1001: 'phía kia rời đi',
+        wsClose1005: 'không có mã đóng',
+        wsClose1006: 'đóng bất thường — mất mạng hoặc server chết',
+        wsClose1011: 'server gặp lỗi',
+        wsClose1015: 'bắt tay TLS thất bại',
+        wsCloseUnknown: 'không rõ',
+        connectTimeout: 'Timeout mở WebSocket {url}',
+        connectExceptionFail: 'Không mở được WebSocket: {err}',
+        openFailWithUrl: 'Không mở được WebSocket {url}',
+        closedBeforeOpen: 'WebSocket đóng trước khi mở xong',
+        wsClosedWhy: 'WebSocket đã đóng · {why}',
+        clientClosed: 'Client đã đóng kết nối',
+        authRejected: 'AUTH bị từ chối: {raw}',
+        debugOpFail: 'DEBUG_OP {op} thất bại',
+        waitTimeout: 'Timeout {s}s chờ {label}',
+        intentionalClose: 'Kết nối đã được đóng chủ động',
+      },
+      en: {
+        pageTitle: 'Naga Fortune 777 · Cheat Control Panel',
+        brandSub: 'Cheat control panel',
+        stepSelectPlayer: 'Select player',
+        reloadPlayersTitle: 'Reload player list',
+        reloadPlayersAria: 'Reload list',
+        sessionsNoWs: 'Not connected to WS yet — click <b>Connect</b> in the top bar and the list will appear automatically.',
+        guideTitle: 'Quick guide',
+        step1: '<b>Pick an environment:</b> click <b>LOCAL</b> or <b>STAG</b> on the WS row — WS URL and agentId fill in automatically. Pointing to staging reveals username/password (default <code>Admin101</code>); local uses a seed token so those two fields stay hidden.',
+        step2: 'Click <b>Connect</b> — opens the WebSocket, logs in, JOINs, and loads the player list.',
+        step3: '<b>Open the game</b> on the test device and log in with a real account.',
+        step4: 'Click <b>↻</b> to reload the list. Exactly <b>1 player</b> → the tool auto-selects them; more than one → click <b>Use</b> on the right one.',
+        step5: 'Check the <code>username@agency</code> badge in the top bar — that\'s who is currently targeted.',
+        step6: 'Pick a cheat card, adjust the parameters, then click <b>Arm cheat</b>. The top strip lights up.',
+        step7: 'Go back to the game and press <b>SPIN</b>. The cheat applies to exactly <b>1 spin</b> then clears itself.',
+        tip1: 'The tool always runs over <b>WebSocket</b> (cmd 1900). The <b>WS</b> badge in the top bar confirms which path is active.',
+        tip2: 'A row that\'s <b>dimmed, dashed-border, labeled TOOL</b> is the tool\'s own WebSocket session, not a player — the tool never auto-selects that row.',
+        tip3: 'The list auto-refreshes every <b>5 seconds</b> — this is also how the tool detects a dropped connection; it pauses once your mouse leaves the page.',
+        tip4: 'Not connected, just dropped, or <b>any failed command</b> grays out every server-calling button — click <b>Connect</b> to light them up again. The tool never silently reconnects.',
+        tip5: 'Every error shows in the <b>red banner</b> at the top and stays there until reconnected — click <b>Copy</b> to send the exact text to a dev.',
+        tip6: 'The staging token expires after <b>~1 hour</b> — hit an AUTH error and just click <b>Connect</b> again.',
+        tip7: 'The <b>Arm cheat</b> buttons stay gray until a player is selected — pick one and they light up.',
+        tip8: 'The shared slot holds only <b>one</b> cheat — arming a new one overwrites the old one. <b>FORCE_JACKPOT_TIER</b> and <b>FORCE_VAULT_DOUBLE_UP</b> each get their own slot, so they can coexist with the shared-slot cheat.',
+        wsUrlPlaceholder: 'WS URL (tool\'s own debug session)',
+        btnConnectTitle: 'Opens the WebSocket, AUTH then JOIN cmd 1005 — tells you right away whether the config is right or wrong',
+        btnConnectText: 'Connect',
+        wsSummaryTitle: 'Click to reopen the WebSocket config',
+        pollPausedTitle: 'Auto-refresh is paused — move your mouse over the page to resume',
+        pollPausedText: 'Auto-refresh paused',
+        docsNavAria: 'Reference docs',
+        docGddTitle: 'Game design document',
+        docLearnTitle: 'Learn the GDD with AI (NotebookLM)',
+        docLearnText: 'Learn with AI',
+        docTestcaseTitle: 'Test case suggestions',
+        docTestcaseText: 'Test case ideas',
+        docFeDevTitle: 'Docs for FE developers',
+        docFeDevText: 'For FE devs',
+        copyErrTitle: 'Copy the full error text to send to a dev',
+        closeErrAria: 'Close error banner',
+        wsNoteHtml: 'Clicking <b>Connect</b> claims this account\'s debug session — a tool open in another tab or machine stops working until it clicks <b>Connect</b> again there.',
+        chamberEmptyCode: 'No cheat armed',
+        chamberEmptySubNoUser: 'Select a player in the left column, then arm a cheat below.',
+        chamberEmptySubHasUser: 'Pick a cheat card below, adjust the parameters, then click Arm cheat.',
+        stepArmCheat: 'Arm cheat',
+        btnArmCheat: 'Arm cheat',
+        btnFillWild: 'All Wild',
+        btnFillB50: 'All B · 50×',
+        btnFillE10: 'All E · 10×',
+        btnFillQBlank: 'All Q · blank',
+        btnFillRandom: 'All Random',
+        gridHint: 'Pre-draws the 3×3 grid for the next spin. Click a cell to change its symbol — it opens <b>all-Random</b> by default; only cells you change get forced, cells left on Random still roll on the server.',
+        fssHint: 'Builds a grid sequence for 1 trigger spin (base) + N free-spin rounds. Arm once, use once.',
+        triggerRoundLabel: 'Trigger spin',
+        freespinRoundsLabel: 'Free-spin rounds',
+        btnAddRound: 'Add round',
+        btnRemoveRound: 'Remove round',
+        overflowRoundLabel: 'Overflow round',
+        fssNote: 'The current logic hard-forces exactly N rounds and blocks retrigger, so <b>an overflow round never actually happens</b> — the three options above don\'t yet create an observable difference in game. This is a safe default for always-deterministic behavior.',
+        btnFillFsMaxWin: 'All Wild + 10×',
+        wssHint: 'This cheat writes straight to the win-streak bar, bypassing normal win/loss rules: for round <b>k &lt; N</b> the reels stay RNG but the bar still climbs to k regardless of win or loss; round <b>k = N</b> uses the trigger grid below, the bar hits N and opens Special Free Spin immediately even if that round didn\'t win; the following Special Free Spin round uses the Special Free Spin grid, then the cheat clears itself. If the trigger grid has a scatter, the regular Free Spin opens first and Special Free Spin queues to run after it.',
+        winStreakThresholdLabel: 'Win-streak threshold (1–3)',
+        triggerGridLabel: 'Trigger round grid',
+        specialFsGridLabel: 'Special Free Spin grid',
+        jackpotHint: '<b>MINOR</b> always pays a fixed <b>50×</b> bet, independent of the pool. Turn off the checkbox below and you\'re on your own for making Naga Eye trigger (the grid needs a winning payline on reel 4).',
+        autoEyeLabel: 'Auto-force Naga Eye to trigger (all-Wild grid)',
+        poolJackpotLabel: 'Jackpot pool',
+        reloadPoolTitle: 'Reload jackpot pool from server',
+        reloadPoolAria: 'Reload jackpot pool',
+        vaultHint: 'Forces the outcome of each round x2. Fill in sequentially starting from Round 1; the first field left at <b>—</b> stops the sequence.',
+        roundLabel1: 'Round 1',
+        roundLabel2: 'Round 2',
+        roundLabel3: 'Round 3',
+        overflowRoundVduLabel: 'Overflow round',
+        rushHint: 'Fills the Rush Mode energy bar. Reaching <b>30</b> triggers free spin.',
+        energyLabel: 'Energy',
+        energyUnit: '/ 30 points',
+        symPopAria: 'Choose symbol',
+
+        emptyListHtml: 'Nobody has the game open yet. Open the game on the test device, then click ↻.',
+        sessionListError: 'Unknown error',
+        agencyNotLookedUp: 'not looked up',
+        agencyLookupFailTitle: 'Couldn\'t find urn:is-service:s:{token}',
+        cardExpandTip: 'Click to expand/collapse info',
+        toolSessionTip: 'This user is the debug tool itself',
+        btnUse: 'Use',
+        ucAgency: 'Agency',
+        ucUserId: 'User ID',
+        ucStableId: 'Stable ID',
+        ucGame: 'Game',
+        ucIp: 'IP',
+        ucSession: 'Session',
+        ucConnected: 'Connected',
+        noStableIdTitle: 'stableId missing — cheat binds by userId, may be the wrong key on staging',
+        playerLeftWarn: '⚠ Player {name} left the game',
+        playerSelectedMsg: '✅ Selected player: {name}',
+        reloadedSessionsMsg: 'Reloaded · {n} player(s) connected',
+        needWsTip: 'Not connected to WS — click "Connect" in the top bar',
+        needUserTip: 'No player selected — click "Use" in the left column',
+        copyErrSuccess: 'Error text copied',
+        copyErrFail: 'Browser blocked auto-copy — select the error banner text and press Ctrl+C',
+        noRouteErr: 'No WS route for {method} {path}',
+        progErrTitle: 'Tool programming error',
+        progErrDetail: 'Missing route in WS_ROUTES (js/ws-debug.js).',
+        selectUserFirst: 'Please select a user',
+
+        symWild: 'Wild · Snake Head',
+        symDiamond: 'Diamond',
+        symBar3: '3 Gold Bars',
+        symBar2: '2 Gold Bars',
+        symBar1: '1 Gold Bar',
+        symBell: 'Naga Bell',
+        symBlank: 'Blank',
+        symRandom: 'Random',
+        symNagaEye: 'Naga Eye',
+        mult1: 'Multiplier 1',
+        mult2: 'Multiplier 2',
+        mult5: 'Multiplier 5',
+        mult10: 'Multiplier 10',
+        reelMultTitle: 'Reel 4 — row multiplier',
+        popNameMult: 'Reel 4 multiplier',
+        popNameSym: 'Symbol',
+
+        armedSubText: '<b>{who}</b> · armed at {stamp} · applies to the next spin',
+        ttlLeftLabel: 'left',
+        armedTagText: 'armed {stamp}',
+        armSuccess: '✅ Armed — applies to the next spin, expires in 5 minutes',
+        armFail: '❌ Arm cheat failed: {err}',
+        vaultNoOutcome: '⚠ Round 1 outcome not set — can\'t arm yet',
+        winStreakInvalid: '⚠ Win-streak threshold must be a whole number from 1 to 3 — can\'t arm yet',
+        poolLoadFail: '❌ Failed to load jackpot pool: {err}',
+        poolReloadSuccess: '✅ Jackpot pool reloaded',
+        fsRoundLabel: 'Round {n}',
+
+        connectBtnConnecting: 'Connecting…',
+        connectBtnConnected: 'Connected ✓',
+        wsUrlLabel: 'WS URL: ',
+        disconnectedTitle: 'Connection lost — please click Connect again',
+        unknownIdentity: 'unknown identity',
+        wsSummaryLocal: 'WS local',
+        wsSummaryStaging: 'WS staging',
+        wsSumEditText: 'edit',
+        connectedMsg: 'Connected to WS · sessionId={sid} · {who}{foundPart}',
+        foundNone: ' · couldn\'t fetch the user list',
+        foundCount: ' · {n} user(s) connected',
+        connectFailTitle: 'WS connection failed',
+        connectFailToast: 'WS connection failed — see the red banner at the top for details',
+        cmdFailTitle: 'Command {op} failed',
+        mayHaveRunHint: 'No reply received, but the command may have ALREADY run on the server — check the result before retrying.\n',
+        disconnectedHint: 'The tool has disconnected — click "Connect" to start a new session.',
+        fetchFail: 'Couldn\'t call {url} — {err} (network, CORS, or wrong host)',
+        loginFail: 'Login failed · HTTP {status} POST {url} · {data}',
+        playGameFail: 'play-game failed · HTTP {status} POST {url} · {data}',
+
+        wsClose1000: 'normal close',
+        wsClose1001: 'the other side left',
+        wsClose1005: 'no close code',
+        wsClose1006: 'abnormal close — network lost or server died',
+        wsClose1011: 'server error',
+        wsClose1015: 'TLS handshake failed',
+        wsCloseUnknown: 'unknown',
+        connectTimeout: 'Timeout opening WebSocket {url}',
+        connectExceptionFail: 'Couldn\'t open WebSocket: {err}',
+        openFailWithUrl: 'Couldn\'t open WebSocket {url}',
+        closedBeforeOpen: 'WebSocket closed before it finished opening',
+        wsClosedWhy: 'WebSocket closed · {why}',
+        clientClosed: 'Client closed the connection',
+        authRejected: 'AUTH rejected: {raw}',
+        debugOpFail: 'DEBUG_OP {op} failed',
+        waitTimeout: 'Timeout after {s}s waiting for {label}',
+        intentionalClose: 'Connection was closed intentionally',
+      },
+    };
+    let currentLang = localStorage.getItem(I18N_LS_KEY) === 'en' ? 'en' : 'vi';
+
+    function t(key, vars) {
+      let s = (I18N[currentLang] && I18N[currentLang][key]) || I18N.vi[key] || key;
+      if (vars) for (const k in vars) s = s.split('{' + k + '}').join(vars[k]);
+      return s;
+    }
+
+    function setLang(lang) {
+      if (lang !== 'vi' && lang !== 'en') return;
+      currentLang = lang;
+      localStorage.setItem(I18N_LS_KEY, lang);
+      applyI18n();
+    }
+
+    function applyI18n() {
+      document.documentElement.lang = currentLang;
+      document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+      document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = t(el.dataset.i18nTitle); });
+      document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+      document.querySelectorAll('#lang-toggle .lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === currentLang));
+      refreshDynamicI18n();
+    }
+
+    document.addEventListener('DOMContentLoaded', applyI18n);
+
     // ═══════════════════════ KÝ HIỆU ═══════════════════════
     // Xếp từ cao xuống thấp giá trị: đó là thứ tự QC nghĩ khi chọn, không phải thứ tự id.
     const SYMBOLS = [
-      { id: 10, ch: 'W', pay: 'wild', name: 'Wild · Đầu Rắn', kind: 'wild' },
-      { id: 1, ch: 'A', pay: '200×', name: 'Kim Cương' },
-      { id: 2, ch: 'B', pay: '50×', name: '3 Thỏi Vàng' },
-      { id: 3, ch: 'C', pay: '25×', name: '2 Thỏi Vàng' },
-      { id: 4, ch: 'D', pay: '15×', name: '1 Thỏi Vàng' },
-      { id: 5, ch: 'E', pay: '10×', name: 'Chuông Naga' },
-      { id: 0, ch: 'Q', pay: 'blank', name: 'Ô trống', kind: 'blank' },
+      { id: 10, ch: 'W', pay: 'wild', nameKey: 'symWild', kind: 'wild' },
+      { id: 1, ch: 'A', pay: '200×', nameKey: 'symDiamond' },
+      { id: 2, ch: 'B', pay: '50×', nameKey: 'symBar3' },
+      { id: 3, ch: 'C', pay: '25×', nameKey: 'symBar2' },
+      { id: 4, ch: 'D', pay: '15×', nameKey: 'symBar1' },
+      { id: 5, ch: 'E', pay: '10×', nameKey: 'symBell' },
+      { id: 0, ch: 'Q', pay: 'blank', nameKey: 'symBlank', kind: 'blank' },
     ];
-    const SYM_RANDOM = { id: '', ch: '?', pay: 'random', name: 'Ngẫu nhiên', kind: 'rand' };
+    const SYM_RANDOM = { id: '', ch: '?', pay: 'random', nameKey: 'symRandom', kind: 'rand' };
 
     // Cuộn 4 là cuộn HỆ SỐ, không phải cuộn ký hiệu — bảng chọn riêng.
     const R4 = [
-      { id: '', ch: '—', pay: 'random', name: 'Ngẫu nhiên', kind: 'rand' },
-      { id: 1, ch: '1×', pay: '', name: 'Hệ số 1' },
-      { id: 2, ch: '2×', pay: '', name: 'Hệ số 2' },
-      { id: 5, ch: '5×', pay: '', name: 'Hệ số 5' },
-      { id: 10, ch: '10×', pay: '', name: 'Hệ số 10' },
+      { id: '', ch: '—', pay: 'random', nameKey: 'symRandom', kind: 'rand' },
+      { id: 1, ch: '1×', pay: '', nameKey: 'mult1' },
+      { id: 2, ch: '2×', pay: '', nameKey: 'mult2' },
+      { id: 5, ch: '5×', pay: '', nameKey: 'mult5' },
+      { id: 10, ch: '10×', pay: '', nameKey: 'mult10' },
     ];
     // Naga Eye chỉ tồn tại ở hàng giữa — nó là ô mở màn chọn rương, không phải hệ số.
-    const R4_EYE = { id: 'eye', ch: 'EYE', pay: 'naga', name: 'Naga Eye', kind: 'eye' };
+    const R4_EYE = { id: 'eye', ch: 'EYE', pay: 'naga', nameKey: 'symNagaEye', kind: 'eye' };
 
     const DBG_TOKEN = 'slot-engine-debug';
     const CHEAT_TTL_MS = 5 * 60 * 1000;
-    const EMPTY_LIST_HTML = '<div class="empty">Chưa có ai đang mở game. Mở game ở thiết bị test rồi bấm ↻.</div>';
 
     function cfg(key, fallback = '') {
       return (document.getElementById('i-' + key) || { value: '' }).value.trim() || fallback;
@@ -2171,8 +2599,8 @@
       // wsDebugCall trả null khi path không map được op nào. Báo thẳng thay vì im lặng:
       // đây là lỗi lập trình (thiếu route trong WS_ROUTES), không phải lỗi vận hành.
       if (!wsResult) {
-        const err = 'Không có route WS cho ' + method + ' ' + path;
-        showWsError({ title: 'Lỗi lập trình của tool', message: err, detail: 'Thiếu route trong WS_ROUTES (js/ws-debug.js).' });
+        const err = t('noRouteErr', { method, path });
+        showWsError({ title: t('progErrTitle'), message: err, detail: t('progErrDetail') });
         return { ok: false, status: 0, data: { error: err } };
       }
       return wsResult;
@@ -2188,7 +2616,7 @@
       // các op pool jackpot — WS_ROUTES (js/ws-debug.js) chỉ build agency+gameId cho chúng, không
       // cần userId.
       if (!hasSelectedUser() && !path.includes('/session/ws-list') && !path.includes('/jackpot/')) {
-        toast('Vui lòng chọn user', 'warn');
+        toast(t('selectUserFirst'), 'warn');
         return Promise.resolve({ ok: false, status: 0, data: {}, noUser: true });
       }
       // Token debug do ws-debug.js tự gắn vào từng op (cmd 1900), không đi qua header nữa.
@@ -2246,10 +2674,10 @@
     async function copyWsError() {
       try {
         await navigator.clipboard.writeText(lastWsError);
-        toast('Đã chép nội dung lỗi', 'success');
+        toast(t('copyErrSuccess'), 'success');
       } catch (e) {
         // clipboard API chỉ chạy trên HTTPS hoặc localhost — mở tool qua http thuần là hỏng.
-        toast('Trình duyệt chặn chép tự động — bôi đen dải lỗi rồi Ctrl+C', 'warn');
+        toast(t('copyErrFail'), 'warn');
       }
     }
 
@@ -2258,20 +2686,20 @@
     // js/ws-debug.js), data-needs-user cần một người chơi đang được chọn. Nút "Cài cheat" mang
     // cả hai. Nút ↻ và "Dùng" cố ý CHỈ cần WS — bắt chúng đợi người chơi thì không bao giờ
     // chọn được ai.
-    const NEED_WS_TIP = 'Chưa kết nối WS — bấm "Kết nối" ở thanh trên';
-    const NEED_USER_TIP = 'Chưa chọn người chơi — bấm "Dùng" ở cột trái';
-
     function applyGating() {
       const noWs = !wsConnected();
       const noUser = !hasSelectedUser();
       document.querySelectorAll('[data-needs-ws], [data-needs-user]').forEach(el => {
         // Nhớ title gốc ngay lần đầu gặp, nếu không lần bật lại sẽ xoá mất chú thích của nút.
         if (el.dataset.titleOn === undefined) el.dataset.titleOn = el.title;
+        // Nút có data-i18n-title thì "tiêu đề đang bật" phải lấy bản dịch mới nhất, không thì
+        // cache ban đầu sẽ đứng yên ở ngôn ngữ lúc trang vừa tải.
+        const onTitle = el.dataset.i18nTitle ? t(el.dataset.i18nTitle) : el.dataset.titleOn;
         // Thiếu kết nối nói trước: chưa nối thì cũng chưa thể chọn được người chơi nào.
-        const why = (noWs && el.hasAttribute('data-needs-ws')) ? NEED_WS_TIP
-          : (noUser && el.hasAttribute('data-needs-user')) ? NEED_USER_TIP : '';
+        const why = (noWs && el.hasAttribute('data-needs-ws')) ? t('needWsTip')
+          : (noUser && el.hasAttribute('data-needs-user')) ? t('needUserTip') : '';
         el.disabled = !!why;
-        el.title = why || el.dataset.titleOn;
+        el.title = why || onTitle;
       });
     }
 
@@ -2305,8 +2733,11 @@
       const n = await listSessions();
       // Chỉ có số khi thật sự thành công. undefined nghĩa là hoặc lỗi (dải đỏ đã báo rồi), hoặc
       // nhịp poll chen ngang làm kết quả này bị bỏ — báo "thành công" lúc đó là nói dối.
-      if (typeof n === 'number') toast('Đã tải lại · ' + n + ' người chơi đang kết nối', 'success');
+      if (typeof n === 'number') toast(t('reloadedSessionsMsg', { n }), 'success');
     }
+
+    // Cache dữ liệu lần vẽ gần nhất — đổi ngôn ngữ chỉ cần vẽ lại từ đây, khỏi gọi lại WS.
+    let lastSessionUsers = null;
 
     let _listSeq = 0;
     async function listSessions() {
@@ -2317,12 +2748,14 @@
       const r = await debugCall('GET', '/api/v1/debug/session/ws-list');
       if (seq !== _listSeq) return;
       if (!r.ok) {
-        box.innerHTML = `<div class="empty bad">${escHtml(r.data?.error || 'Lỗi không xác định')}</div>`;
+        lastSessionUsers = null;
+        box.innerHTML = `<div class="empty bad">${escHtml(r.data?.error || t('sessionListError'))}</div>`;
         return;
       }
       const users = r.data.users || [];
+      lastSessionUsers = users;
       if (users.length === 0) {
-        box.innerHTML = EMPTY_LIST_HTML;
+        renderSessionList(users);
         syncSelectedSession([]);
         return 0;
       }
@@ -2340,12 +2773,25 @@
           useSession(only.agency, only.userId, only.gameId, only.sessionToken, only.username, only.stableId);
         }
       }
+      renderSessionList(users);
+      return users.length; // nút "Kết nối" báo lại số user tìm thấy
+    }
+
+    // Vẽ danh sách người chơi từ dữ liệu đã có (lastSessionUsers) — tách riêng khỏi listSessions()
+    // để đổi ngôn ngữ vẽ lại được ngay, không phải gọi WS thêm lần nữa.
+    function renderSessionList(users) {
+      const box = document.getElementById('session-list-body');
+      if (!box) return;
+      if (users.length === 0) {
+        box.innerHTML = `<div class="empty">${t('emptyListHtml')}</div>`;
+        return;
+      }
       box.innerHTML = users.map(u => {
         const shortSid = (u.sessionId && u.sessionId.length > 22) ? u.sessionId.slice(0, 22) + '…' : (u.sessionId || '—');
         const agencyVal = u.agency
           ? escHtml(u.agency)
-          : '<span style="color:var(--gold)" title="Không tìm thấy urn:is-service:s:{token}">chưa lookup</span>';
-        const connected = u.connectedAt ? new Date(u.connectedAt).toLocaleString('vi-VN', { hour12: false }) : '—';
+          : `<span style="color:var(--gold)" title="${escAttr(t('agencyLookupFailTitle'))}">${escHtml(t('agencyNotLookedUp'))}</span>`;
+        const connected = u.connectedAt ? new Date(u.connectedAt).toLocaleString(currentLang === 'en' ? 'en-US' : 'vi-VN', { hour12: false }) : '—';
         const isSel = selectedSession
           && (u.agency || '') === selectedSession.agency
           && (u.username || '') === selectedSession.username;
@@ -2355,26 +2801,25 @@
         const isTool = isOwnToolSession(u);
         // Thẻ của tool dùng tooltip tự vẽ (data-tip) cho hiện tức thì; bỏ hẳn `title` gốc trong
         // thẻ vì để lại thì trình duyệt bồi thêm một tooltip nữa sau một giây.
-        const nameTip = isTool ? '' : 'Bấm để xổ/thu thông tin';
-        return `<div class="user-card${isSel ? ' on' : ''}${expandedUsers.has(ukey) ? ' open' : ''}${isTool ? ' is-tool' : ''}"${isTool ? ' data-tip="User này đang trong debug tool"' : ''} data-key="${escAttr(ukey)}">
+        const nameTip = isTool ? '' : t('cardExpandTip');
+        return `<div class="user-card${isSel ? ' on' : ''}${expandedUsers.has(ukey) ? ' open' : ''}${isTool ? ' is-tool' : ''}"${isTool ? ` data-tip="${escAttr(t('toolSessionTip'))}"` : ''} data-key="${escAttr(ukey)}">
       <div class="uc-top">
-        <div class="uc-name"${nameTip ? ` title="${nameTip}"` : ''} onclick="toggleUserCard(this)">${escHtml(u.username || '—')}</div>
+        <div class="uc-name"${nameTip ? ` title="${escAttr(nameTip)}"` : ''} onclick="toggleUserCard(this)">${escHtml(u.username || '—')}</div>
         ${isTool ? '<span class="uc-tool">TOOL</span>' : ''}
-        <button class="btn btn-ghost btn-sm" data-needs-ws ${noStableId ? 'title="stableId thiếu — cheat bind theo userId, có thể sai khoá trên staging"' : ''} data-ag="${escAttr(u.agency)}" data-uid="${escAttr(u.userId)}" data-sid="${escAttr(sid)}" data-gid="${escAttr(u.gameId)}" data-tok="${escAttr(u.sessionToken)}" data-uname="${escAttr(u.username)}" onclick="useSessionFromBtn(this)">Dùng</button>
+        <button class="btn btn-ghost btn-sm" data-needs-ws ${noStableId ? `title="${escAttr(t('noStableIdTitle'))}"` : ''} data-ag="${escAttr(u.agency)}" data-uid="${escAttr(u.userId)}" data-sid="${escAttr(sid)}" data-gid="${escAttr(u.gameId)}" data-tok="${escAttr(u.sessionToken)}" data-uname="${escAttr(u.username)}" onclick="useSessionFromBtn(this)">${t('btnUse')}</button>
       </div>
       <div class="uc-meta">
-        <div class="uc-row"><span class="uc-k">Agency</span><span class="uc-v">${agencyVal}</span></div>
-        <div class="uc-row"><span class="uc-k">User ID</span><span class="uc-v strong">${escHtml(u.userId || '—')}</span></div>
-        <div class="uc-row"><span class="uc-k">Stable ID</span><span class="uc-v mono">${escHtml(u.stableId || '—')}</span></div>
-        <div class="uc-row"><span class="uc-k">Game</span><span class="uc-v">${escHtml(u.gameId || '—')}</span></div>
-        <div class="uc-row"><span class="uc-k">IP</span><span class="uc-v mono">${escHtml(u.ip || '—')}</span></div>
-        <div class="uc-row"><span class="uc-k">Session</span><span class="uc-v mono" title="${escAttr(u.sessionId || '')}">${escHtml(shortSid)}</span></div>
-        <div class="uc-row"><span class="uc-k">Kết nối</span><span class="uc-v mono">${escHtml(connected)}</span></div>
+        <div class="uc-row"><span class="uc-k">${t('ucAgency')}</span><span class="uc-v">${agencyVal}</span></div>
+        <div class="uc-row"><span class="uc-k">${t('ucUserId')}</span><span class="uc-v strong">${escHtml(u.userId || '—')}</span></div>
+        <div class="uc-row"><span class="uc-k">${t('ucStableId')}</span><span class="uc-v mono">${escHtml(u.stableId || '—')}</span></div>
+        <div class="uc-row"><span class="uc-k">${t('ucGame')}</span><span class="uc-v">${escHtml(u.gameId || '—')}</span></div>
+        <div class="uc-row"><span class="uc-k">${t('ucIp')}</span><span class="uc-v mono">${escHtml(u.ip || '—')}</span></div>
+        <div class="uc-row"><span class="uc-k">${t('ucSession')}</span><span class="uc-v mono" title="${escAttr(u.sessionId || '')}">${escHtml(shortSid)}</span></div>
+        <div class="uc-row"><span class="uc-k">${t('ucConnected')}</span><span class="uc-v mono">${escHtml(connected)}</span></div>
       </div>
     </div>`;
       }).join('');
       applyGating();  // các nút "Dùng" vừa dựng lại phải theo đúng trạng thái hiện tại
-      return users.length; // nút "Kết nối" báo lại số user tìm thấy
     }
 
     // Người đang chọn xuất hiện với userId/token/game khác hiện tại → áp dụng lại như vừa bấm
@@ -2385,7 +2830,7 @@
         (u.agency || '') === selectedSession.agency &&
         (u.username || '') === selectedSession.username);
       if (!match) {
-        showMsg('⚠ Người chơi ' + (selectedSession.username || '—') + ' đã thoát game');
+        showMsg(t('playerLeftWarn', { name: selectedSession.username || '—' }));
         clearSession();
         return;
       }
@@ -2439,7 +2884,7 @@
       saveConfig();
       applyGating();
       sessionLabel = (uname || uid || '—') + '@' + (ag || '—');
-      showMsg('✅ Đã chọn người chơi: ' + (uname || uid || '—'));
+      showMsg(t('playerSelectedMsg', { name: uname || uid || '—' }));
       // Khu Pool jackpot vừa dùng được (WS đã nối, tới đây thì luôn vậy — xem useSession() được
       // gọi từ đâu): tự tải một lần, khỏi bắt QC bấm ↻ mới thấy số.
       loadPools();
@@ -2466,8 +2911,8 @@
       cell.dataset.v = sym.id;
       cell.className = 'cell' + (sym.kind ? ' is-' + sym.kind : '');
       cell.innerHTML = `<span class="cell-ch">${sym.ch}</span>` + (sym.pay ? `<span class="cell-pay">${sym.pay}</span>` : '');
-      cell.setAttribute('aria-label', sym.name);
-      cell.title = sym.name;
+      cell.setAttribute('aria-label', t(sym.nameKey));
+      cell.title = t(sym.nameKey);
     }
 
     function makeCell(sym, kindAttr) {
@@ -2503,7 +2948,7 @@
       const mh = document.createElement('div');
       mh.className = 'reel-col';
       mh.textContent = 'Reel 4';
-      mh.title = 'Cuộn 4 — hệ số nhân của hàng';
+      mh.title = t('reelMultTitle');
       mult.appendChild(mh);
 
       ROWS.forEach(([label, code], r) => {
@@ -2586,7 +3031,7 @@
       pop.appendChild(grid);
       const name = document.createElement('div');
       name.className = 'pop-name';
-      name.textContent = cell.dataset.kind === 'mult' ? 'Hệ số cuộn 4' : 'Ký hiệu';
+      name.textContent = cell.dataset.kind === 'mult' ? t('popNameMult') : t('popNameSym');
       pop.appendChild(name);
 
       // Toạ độ cửa sổ (position: fixed): trang cuộn bên trong #content-area chứ không cuộn
@@ -2708,30 +3153,28 @@
           <div class="chamber-row">
             <span class="chamber-dot"></span>
             <div class="chamber-body">
-              <div class="chamber-code">Chưa cài cheat</div>
-              <div class="chamber-sub">${hasSelectedUser()
-            ? 'Chọn một thẻ cheat bên dưới, chỉnh tham số rồi bấm Cài cheat.'
-            : 'Chọn người chơi ở cột trái, rồi cài một cheat bên dưới.'}</div>
+              <div class="chamber-code">${t('chamberEmptyCode')}</div>
+              <div class="chamber-sub">${hasSelectedUser() ? t('chamberEmptySubHasUser') : t('chamberEmptySubNoUser')}</div>
             </div>
           </div>`;
         return;
       }
 
       chamber.classList.add('armed');
+      const dtLocale = currentLang === 'en' ? 'en-US' : 'vi-VN';
       chamber.innerHTML = slots.map(slot => {
         const a = armedSlots[slot];
-        const stamp = new Date(a.at).toLocaleTimeString('vi-VN', { hour12: false });
+        const stamp = new Date(a.at).toLocaleTimeString(dtLocale, { hour12: false });
         return `
           <div class="chamber-row">
             <span class="chamber-dot"></span>
             <div class="chamber-body">
               <div class="chamber-code">${escHtml(a.code)}</div>
-              <div class="chamber-sub"><b>${escHtml(a.who || '—')}</b> · cài lúc ${stamp} · áp cho đúng lượt spin kế
-                tiếp</div>
+              <div class="chamber-sub">${t('armedSubText', { who: escHtml(a.who || '—'), stamp })}</div>
             </div>
             <div class="chamber-ttl">
               <div class="chamber-ttl-n" id="chamber-ttl-${slot}">5:00</div>
-              <div class="chamber-ttl-l">còn lại</div>
+              <div class="chamber-ttl-l">${t('ttlLeftLabel')}</div>
             </div>
             <div class="chamber-bar" id="chamber-bar-${slot}"></div>
           </div>`;
@@ -2743,7 +3186,7 @@
         if (card) {
           card.classList.add('is-armed');
           card.querySelector('.armed-tag').textContent =
-            'đã cài ' + new Date(a.at).toLocaleTimeString('vi-VN', { hour12: false });
+            t('armedTagText', { stamp: new Date(a.at).toLocaleTimeString(dtLocale, { hour12: false }) });
         }
       });
 
@@ -2755,10 +3198,10 @@
       const r = await debugCall('POST', `/api/v1/debug/cheat/${agency()}/${userId()}`, { cheat: code, value });
       if (r.ok) {
         markArmed(code);
-        showMsg('✅ Đã cài — áp cho lượt quay kế tiếp, hết hạn sau 5 phút');
+        showMsg(t('armSuccess'));
       } else if (!r.noUser) {
         // debugCall() đã tự báo khi chưa chọn user; mọi lỗi còn lại phải hiện ra, không được nuốt.
-        showMsg('❌ Cài cheat thất bại: ' + ((r.data && r.data.error) || ('HTTP ' + r.status)));
+        showMsg(t('armFail', { err: (r.data && r.data.error) || ('HTTP ' + r.status) }));
       }
       return r;   // để chỗ gọi tuần tự (armJackpotTier) biết lệnh đầu có thành công không.
     }
@@ -2794,7 +3237,7 @@
         outcomes.push(v);
       }
       if (outcomes.length === 0) {
-        showMsg('⚠ Chưa chọn kết quả Ván 1 — chưa cài được');
+        showMsg(t('vaultNoOutcome'));
         return;
       }
       await armCheat('FORCE_VAULT_DOUBLE_UP', { outcomes, overflow: idv('vdu-overflow') });
@@ -2803,7 +3246,7 @@
     async function armWinStreakSeq() {
       const count = parseInt(idv('wss-count'), 10);
       if (isNaN(count) || count < 1 || count > 3) {
-        showMsg('⚠ Ngưỡng win-streak phải là số nguyên từ 1 đến 3 — chưa cài được');
+        showMsg(t('winStreakInvalid'));
         return;
       }
       await armCheat('FORCE_WIN_STREAK_SEQUENCE', {
@@ -2820,7 +3263,7 @@
     async function loadPools() {
       const r = await debugCall('GET', `/api/v1/debug/jackpot/${agency()}/${gameId()}/pools`);
       if (!r.ok) {
-        if (!r.noUser) showMsg('❌ Tải pool jackpot thất bại: ' + ((r.data && r.data.error) || ('HTTP ' + r.status)));
+        if (!r.noUser) showMsg(t('poolLoadFail', { err: (r.data && r.data.error) || ('HTTP ' + r.status) }));
         return false;
       }
       const pools = (r.data && r.data.pools) || {};
@@ -2837,7 +3280,7 @@
     // Đường bấm tay của nút ↻ — báo thành công để QC biết lệnh đã chạy, kể cả khi số trông y hệt
     // lần trước.
     async function reloadPools() {
-      if (await loadPools()) showMsg('✅ Đã tải lại pool jackpot');
+      if (await loadPools()) showMsg(t('poolReloadSuccess'));
     }
 
     // ═══════════════════════ CHUỖI FREESPIN ═══════════════════════
@@ -2852,7 +3295,7 @@
       const box = document.createElement('div');
       const lbl = document.createElement('div');
       lbl.className = 'sub-h';
-      lbl.textContent = 'Vòng ' + (wrap.children.length + 1);
+      lbl.textContent = t('fsRoundLabel', { n: wrap.children.length + 1 });
       box.appendChild(lbl);
       box.appendChild(buildReel({ allowRandom: true }));
       wrap.appendChild(box);
@@ -2883,6 +3326,33 @@
         rounds,
         overflow: idv('fss-overflow'),
       });
+    }
+
+    // ═══════════════════ ĐỔI NGÔN NGỮ ═══════════════════
+    // applyI18n() đã quét lại mọi [data-i18n*] tĩnh; hàm này vẽ lại phần JS tự dựng ra NGOÀI đó
+    // (ô cuộn, danh sách người chơi, dải "đã cài", nút/chip WS…). Tất cả đều vẽ lại từ dữ liệu
+    // đang có sẵn trong bộ nhớ — không cái nào cần gọi lại WS chỉ vì đổi chữ.
+    function refreshDynamicI18n() {
+      // Ô cuộn: chỉ title/aria-label đổi theo ngôn ngữ, ch/pay hiển thị vốn đã trung lập.
+      document.querySelectorAll('.reel .cell[data-kind]').forEach(cell => {
+        const reel = cell.closest('.reel');
+        const list = cell.dataset.kind === 'mult'
+          ? (+cell.dataset.r === 1 ? R4.concat(R4_EYE) : R4)
+          : symbolsFor(!!(reel && reel.dataset.allowRandom));
+        paintCell(cell, findSym(list, cell.dataset.v));
+      });
+      // Nhãn "Vòng N" của từng vòng freespin đã dựng — số thứ tự giữ nguyên, chỉ đổi chữ.
+      document.querySelectorAll('#fss-rounds-wrap > div > .sub-h').forEach((lbl, i) => {
+        lbl.textContent = t('fsRoundLabel', { n: i + 1 });
+      });
+      // Bảng chọn ký hiệu lỡ đang mở giữa lúc đổi ngôn ngữ — đóng lại cho chắc, khỏi vẽ dở dang.
+      const pop = document.getElementById('sym-pop');
+      if (pop) pop.classList.remove('open');
+      // Danh sách người chơi: vẽ lại từ cache, không gọi lại WS chỉ vì đổi chữ.
+      if (typeof renderSessionList === 'function' && lastSessionUsers) renderSessionList(lastSessionUsers);
+      // Dải "đã cài" tự dựng từ armedSlots đang có; nhãn nút Kết nối/chip WS sống ở ws-debug.js.
+      if (typeof paintArmed === 'function') paintArmed();
+      if (typeof refreshWsUiLang === 'function') refreshWsUiLang();
     }
   </script>
   <!-- ?v= là cache-busting: đổi URL thì bản cũ trong cache trình duyệt không khớp được nữa.

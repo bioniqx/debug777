@@ -32,7 +32,7 @@ class NagaWsClient {
   constructor(opts = {}) {
     this.url = opts.url;
     this.zone = opts.zone || 'MiniGame';
-    this.plugin = opts.plugin || 'game-mutant-merge';
+    this.plugin = opts.plugin || 'game-naga-fortune-777';
     this.onLog = opts.onLog || null;   // fn(dir, frame) — tùy chọn
     this.ws = null;
     this.sessionId = null;             // lấy từ AUTH reply

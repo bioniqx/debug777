@@ -577,6 +577,14 @@
       width: 132px;
     }
 
+    /* Ô chọn env (APP_ENV của BE): cố định hẹp, phông mono cho đồng bộ với cả hàng cấu hình. */
+    #i-ws-env {
+      flex: none;
+      width: 96px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--t-meta);
+    }
+
     .cfg-inputs input {
       padding: 6px 10px;
       font-family: 'IBM Plex Mono', monospace;
@@ -1775,9 +1783,9 @@
           <span class="guide-caret">▾</span>
         </summary>
         <ol class="steps">
-          <li data-i18n-html="step1"><b>Chọn môi trường:</b> bấm <b>LOCAL</b> hoặc <b>STAG</b> trên hàng WS — WS URL và agentId tự điền. Trỏ
-            staging thì hiện thêm username/password (mặc định <code>Admin101</code>); local dùng seed token nên hai ô đó
-            tự ẩn.</li>
+          <li data-i18n-html="step1"><b>Chọn môi trường:</b> chọn <b>WEB/BUNDLE/TRIAL</b> rồi bấm <b>LOCAL</b> hoặc <b>STAG</b> trên hàng WS —
+            WS URL và agentId tự điền theo env đó. Trỏ staging thì hiện thêm username/password (mặc định <code>Admin101</code>); local dùng
+            seed token nên hai ô đó tự ẩn. Staging bundle/trial chưa có URL mẫu — tự điền tay.</li>
           <li data-i18n-html="step2">Bấm <b>Kết nối</b> — mở WebSocket, đăng nhập, JOIN rồi tải luôn danh sách người chơi.</li>
           <li data-i18n-html="step3"><b>Mở game</b> trên thiết bị test và đăng nhập tài khoản thật.</li>
           <li data-i18n-html="step4">Bấm <b>↻</b> để tải lại danh sách. Còn đúng <b>1 người chơi</b> → tool tự chọn; nhiều người → bấm
@@ -1820,12 +1828,21 @@
           <input id="i-game" type="hidden">
           <input id="i-tok" type="hidden">
           <div id="ws-cfg-row" class="cfg-inputs" style="display:none">
-            <!-- Preset đứng trước ô URL: chọn môi trường là việc làm ĐẦU TIÊN mỗi phiên, và hai
-                 nút này ghi đè luôn nội dung ô URL bên phải — đặt sau ô đó thì đọc ngược chiều thao tác. -->
+            <!-- Env đứng đầu hàng: chọn APP_ENV của BE (web/bundle/trial) là việc làm ĐẦU TIÊN —
+                 nó quyết định gameId + plugin trên khung WS. Hai nút preset sau nó chọn stage
+                 (local/staging) và ghi đè nội dung ô URL bên phải. -->
+            <select id="i-ws-env" onchange="saveWsConfig()" data-i18n-title="wsEnvTitle"
+              title="Môi trường BE (APP_ENV) — quyết định gameId và plugin WS" aria-label="Env">
+              <option value="web">WEB</option>
+              <option value="bundle">BUNDLE</option>
+              <option value="trial">TRIAL</option>
+            </select>
+            <!-- Preset đứng trước ô URL: hai nút này ghi đè luôn nội dung ô URL bên phải — đặt
+                 sau ô đó thì đọc ngược chiều thao tác. -->
             <button class="btn btn-ghost btn-sm" type="button" onclick="setWsPreset('local')"
               title="ws://localhost:9099/websocket · agentId=1">LOCAL</button>
             <button class="btn btn-ghost btn-sm" type="button" onclick="setWsPreset('stag')"
-              title="wss://gob02-ws.relaxwmestu.xyz/websocket · agentId=AGENCY_001">STAG</button>
+              title="Điền preset staging của env đang chọn (web có sẵn URL; bundle/trial tự điền)">STAG</button>
             <input id="i-ws-url" data-i18n-placeholder="wsUrlPlaceholder" placeholder="WS URL (phiên debug riêng của tool)" onchange="saveWsConfig()">
             <input id="i-ws-agent" placeholder="agentId" onchange="saveWsConfig()">
             <!-- Không có ô accessToken: local dùng thẳng seed token, staging tự đăng nhập lấy token
@@ -2141,7 +2158,7 @@
         reloadPlayersAria: 'Tải lại danh sách',
         sessionsNoWs: 'Chưa kết nối WS — bấm <b>Kết nối</b> ở thanh trên, danh sách sẽ tự hiện.',
         guideTitle: 'Hướng dẫn nhanh',
-        step1: '<b>Chọn môi trường:</b> bấm <b>LOCAL</b> hoặc <b>STAG</b> trên hàng WS — WS URL và agentId tự điền. Trỏ staging thì hiện thêm username/password (mặc định <code>Admin101</code>); local dùng seed token nên hai ô đó tự ẩn.',
+        step1: '<b>Chọn môi trường:</b> chọn <b>WEB/BUNDLE/TRIAL</b> rồi bấm <b>LOCAL</b> hoặc <b>STAG</b> trên hàng WS — WS URL và agentId tự điền theo env đó. Trỏ staging thì hiện thêm username/password (mặc định <code>Admin101</code>); local dùng seed token nên hai ô đó tự ẩn. Staging bundle/trial chưa có URL mẫu — tự điền tay.',
         step2: 'Bấm <b>Kết nối</b> — mở WebSocket, đăng nhập, JOIN rồi tải luôn danh sách người chơi.',
         step3: '<b>Mở game</b> trên thiết bị test và đăng nhập tài khoản thật.',
         step4: 'Bấm <b>↻</b> để tải lại danh sách. Còn đúng <b>1 người chơi</b> → tool tự chọn; nhiều người → bấm <b>Dùng</b> ở đúng người.',
@@ -2157,6 +2174,8 @@
         tip7: 'Chưa chọn người chơi thì các nút <b>Cài cheat</b> cũng xám — chọn xong là sáng lên.',
         tip8: 'Slot chung chỉ giữ <b>một</b> cheat — cài cái mới là đè lên cái cũ. Riêng <b>FORCE_JACKPOT_TIER</b> và <b>FORCE_VAULT_DOUBLE_UP</b> có slot riêng nên tồn tại song song với cheat ở slot chung.',
         wsUrlPlaceholder: 'WS URL (phiên debug riêng của tool)',
+        wsEnvTitle: 'Môi trường BE (APP_ENV=web/bundle/trial) — quyết định gameId và plugin WS',
+        stagAuthUnknown: 'Env {env} chưa có authHost staging trong preset — điền URL staging thủ công hoặc bổ sung ENV_DEFS (js/ws-debug.js)',
         btnConnectTitle: 'Mở WebSocket, AUTH rồi JOIN cmd 1005 — biết ngay cấu hình đúng hay sai',
         btnConnectText: 'Kết nối',
         wsSummaryTitle: 'Bấm để mở lại cấu hình WebSocket',
@@ -2312,7 +2331,7 @@
         reloadPlayersAria: 'Reload list',
         sessionsNoWs: 'Not connected to WS yet — click <b>Connect</b> in the top bar and the list will appear automatically.',
         guideTitle: 'Quick guide',
-        step1: '<b>Pick an environment:</b> click <b>LOCAL</b> or <b>STAG</b> on the WS row — WS URL and agentId fill in automatically. Pointing to staging reveals username/password (default <code>Admin101</code>); local uses a seed token so those two fields stay hidden.',
+        step1: '<b>Pick an environment:</b> choose <b>WEB/BUNDLE/TRIAL</b>, then click <b>LOCAL</b> or <b>STAG</b> on the WS row — WS URL and agentId fill in for that env. Pointing to staging reveals username/password (default <code>Admin101</code>); local uses a seed token so those two fields stay hidden. Staging bundle/trial have no preset URL yet — fill it in manually.',
         step2: 'Click <b>Connect</b> — opens the WebSocket, logs in, JOINs, and loads the player list.',
         step3: '<b>Open the game</b> on the test device and log in with a real account.',
         step4: 'Click <b>↻</b> to reload the list. Exactly <b>1 player</b> → the tool auto-selects them; more than one → click <b>Use</b> on the right one.',
@@ -2328,6 +2347,8 @@
         tip7: 'The <b>Arm cheat</b> buttons stay gray until a player is selected — pick one and they light up.',
         tip8: 'The shared slot holds only <b>one</b> cheat — arming a new one overwrites the old one. <b>FORCE_JACKPOT_TIER</b> and <b>FORCE_VAULT_DOUBLE_UP</b> each get their own slot, so they can coexist with the shared-slot cheat.',
         wsUrlPlaceholder: 'WS URL (tool\'s own debug session)',
+        wsEnvTitle: 'Backend environment (APP_ENV=web/bundle/trial) — drives gameId and the WS plugin name',
+        stagAuthUnknown: 'Env {env} has no staging authHost in its preset — fill the staging URL manually or extend ENV_DEFS (js/ws-debug.js)',
         btnConnectTitle: 'Opens the WebSocket, AUTH then JOIN cmd 1005 — tells you right away whether the config is right or wrong',
         btnConnectText: 'Connect',
         wsSummaryTitle: 'Click to reopen the WebSocket config',
@@ -2538,7 +2559,9 @@
 
     function agency() { return cfg('agency', 'demo'); }
     function userId() { return cfg('user', 'player_001'); }
-    function gameId() { return cfg('game', 'game-naga-fortune-777'); }
+    // Fallback theo env (envGameId trong ws-debug.js — bundle là yama_01031); đã chọn người chơi
+    // thì i-game từ session của họ luôn thắng.
+    function gameId() { return cfg('game', typeof envGameId === 'function' ? envGameId() : 'game-naga-fortune-777'); }
 
     // ═══════════════════════ KHỞI ĐỘNG ═══════════════════════
     let _pollTimer = null;
@@ -3358,7 +3381,7 @@
   <!-- ?v= là cache-busting: đổi URL thì bản cũ trong cache trình duyệt không khớp được nữa.
        Sửa hai file này thì tăng số. -->
   <script src="js/ws-client.js?v=10"></script>
-  <script src="js/ws-debug.js?v=11"></script>
+  <script src="js/ws-debug.js?v=12"></script>
 </body>
 
 </html>

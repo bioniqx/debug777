@@ -30,35 +30,90 @@ const DEBUG_TOKEN = DBG_TOKEN;
 
 /* ── Cấu hình phiên WS của tool (WS URL / accessToken / agentId) ──────── */
 
-const WS_CFG_LS = { url: 'naga_qc_ws_url', agent: 'naga_qc_ws_agent', user: 'naga_qc_ws_user', pass: 'naga_qc_ws_pass' };
+const WS_CFG_LS = { env: 'naga_qc_ws_env', url: 'naga_qc_ws_url', agent: 'naga_qc_ws_agent', user: 'naga_qc_ws_user', pass: 'naga_qc_ws_pass' };
 
-// Giá trị lấy từ local_login.md và staging_login.md. Riêng tài khoản staging dùng Admin101 chứ
-// không phải KOL-001 như trong tài liệu: đó là tài khoản riêng của tool, để tool không giành
-// phiên với QC đang test (xem lý do ở comment 'local' ngay dưới — TokenRegistry khoá theo username).
-// Local có seed token cố định nên không phải đăng nhập; staging phải qua luồng 2 bước.
-const WS_PRESETS = {
-  // Token 100 chứ không phải 001: TokenRegistry của BE khoá theo username, nên nếu tool JOIN trùng
-  // danh tính với một người chơi thật thì nó GHI ĐÈ phiên của người đó — người chơi biến mất khỏi
-  // danh sách và cheat nhắm vào họ cũng trượt. Dải 001-046 là của QC khi test tay, nên tool
-  // lấy đuôi 100 cho khỏi đụng.
-  local: { url: 'ws://localhost:9099/websocket', agent: '1', token: '1-valid-token-100' },
-  stag: {
-    url: 'wss://gob02-ws.relaxwmestu.xyz/websocket',
-    agent: 'AGENCY_001',
-    authHost: 'https://agency001.relaxwmestu.xyz',
-    user: 'Admin101',
-    pass: '12345',
+// ── 3 môi trường BE (APP_ENV=web|bundle|trial — xem application.yml của BE) ──────────────
+// Mỗi env quyết định gameId (vào ARM_CHEAT/jackpot/bulk op và body /play-game lúc login
+// staging) và plugin trên khung WS [6, zone, plugin, ...] (khoá grpc client của wsproxy
+// phải trùng đúng tên này). Stage local/stag chỉ quyết định URL + auth.
+// Preset staging của bundle/trial để trống: URL chưa công khai trong repo — QC tự điền.
+const ENV_DEFS = {
+  web: {
+    gameId: 'game-naga-fortune-777',
+    plugin: 'game-naga-fortune-777',
+    presets: {
+      // Token 100 chứ không phải 001: TokenRegistry của BE khoá theo username, nên nếu tool JOIN trùng
+      // danh tính với một người chơi thật thì nó GHI ĐÈ phiên của người đó — người chơi biến mất khỏi
+      // danh sách và cheat nhắm vào họ cũng trượt. Dải 001-046 là của QC khi test tay, nên tool
+      // lấy đuôi 100 cho khỏi đụng. Local có seed token cố định nên không phải đăng nhập.
+      local: { url: 'ws://localhost:9099/websocket', agent: '1', token: '1-valid-token-100' },
+      // Tài khoản staging lấy từ staging_login.md nhưng dùng Admin101 thay vì KOL-001: tài khoản
+      // riêng của tool để không giành phiên với QC đang test (TokenRegistry khoá theo username).
+      stag: {
+        url: 'wss://gob02-ws.relaxwmestu.xyz/websocket',
+        agent: 'AGENCY_001',
+        authHost: 'https://agency001.relaxwmestu.xyz',
+        user: 'Admin101',
+        pass: '12345',
+      },
+    },
+  },
+  bundle: {
+    // env-bundle.yml: GAME_ID mặc định yama_01031; games/yama_01031.yaml khai pluginName yama_01031.
+    gameId: 'yama_01031',
+    plugin: 'yama_01031',
+    presets: {
+      local: { url: 'ws://localhost:9099/websocket', agent: '1', token: '1-valid-token-100' },
+      stag: { url: '', agent: '' },
+    },
+  },
+  trial: {
+    gameId: 'game-naga-fortune-777',
+    plugin: 'game-naga-fortune-777',
+    presets: {
+      // Stack local gốc (docker-compose.yml của workspace) chạy bản trial nên URL trùng web/bundle.
+      local: { url: 'ws://localhost:9099/websocket', agent: '1', token: '1-valid-token-100' },
+      stag: { url: '', agent: '' },
+    },
   },
 };
+
+const ENV_ORDER = ['web', 'bundle', 'trial'];
+
+// Env đang chọn trên UI; thiếu/giá trị hỏng thì về trial — đúng hành vi mặc định cũ
+// (preset LOCAL cũ trỏ vào stack local gốc, mà stack đó chạy bản trial).
+function wsEnv() {
+  const el = document.getElementById('i-ws-env');
+  const v = el ? String(el.value || '').trim().toLowerCase() : '';
+  return ENV_ORDER.indexOf(v) >= 0 ? v : 'trial';
+}
+
+function envDef() { return ENV_DEFS[wsEnv()]; }
+
+// Plugin cho khung WS. Riêng trial-staging: wsproxy trial định tuyến theo <plugin>-trial và
+// GameRegistry của BE tự strip đuôi này khi tra (getGameByPluginName); wsproxy local không
+// thêm đuôi nên trial-local vẫn dùng tên gốc.
+function pluginForEnv(env, isLocal) {
+  const base = ENV_DEFS[env].plugin;
+  return (env === 'trial' && !isLocal) ? base + '-trial' : base;
+}
+
+function wsPluginName() { return pluginForEnv(wsEnv(), wsIsLocal()); }
+
+// gameId mặc định theo env. gameId() (index.html) vẫn ưu tiên gameId của người chơi đang chọn
+// (i-game từ session) — hàm này chỉ là fallback và là nguồn duy nhất lúc login staging.
+function gameIdForEnv(env) { return ENV_DEFS[env].gameId; }
+
+function envGameId() { return gameIdForEnv(wsEnv()); }
 
 function wsCfgRaw(key) {
   const el = document.getElementById('i-ws-' + key);
   return el ? el.value.trim() : '';
 }
-function wsCfgUrl() { return wsCfgRaw('url') || WS_PRESETS.local.url; }
-function wsCfgAgent() { return wsCfgRaw('agent') || WS_PRESETS.local.agent; }
-function wsCfgUser() { return wsCfgRaw('user') || WS_PRESETS.stag.user; }
-function wsCfgPass() { return wsCfgRaw('pass') || WS_PRESETS.stag.pass; }
+function wsCfgUrl() { return wsCfgRaw('url') || envDef().presets.local.url; }
+function wsCfgAgent() { return wsCfgRaw('agent') || envDef().presets.local.agent; }
+function wsCfgUser() { return wsCfgRaw('user') || (envDef().presets.stag.user || ''); }
+function wsCfgPass() { return wsCfgRaw('pass') || (envDef().presets.stag.pass || ''); }
 
 // Local nhận ra qua host, không qua việc bấm preset — QC gõ tay URL localhost vẫn phải đúng.
 function wsIsLocal() {
@@ -82,7 +137,9 @@ function renderWsSummaryChip() {
   const sum = document.getElementById('ws-summary');
   if (!sum) return;
   sum.innerHTML = '';
-  sum.append('● ' + t(lastWsSummaryInfo.isLocal ? 'wsSummaryLocal' : 'wsSummaryStaging') + ' · ' + lastWsSummaryInfo.who);
+  // Chip phải nói rõ cả env: bấm cheat nhầm sang môi trường khác là tốn công cả team đi dò.
+  sum.append('● ' + t(lastWsSummaryInfo.isLocal ? 'wsSummaryLocal' : 'wsSummaryStaging')
+    + ' · ' + String(lastWsSummaryInfo.env || wsEnv()).toUpperCase() + ' · ' + lastWsSummaryInfo.who);
   const edit = document.createElement('span');
   edit.className = 'ws-sum-edit';
   edit.textContent = t('wsSumEditText');
@@ -158,12 +215,14 @@ function saveWsConfig() {
 }
 
 // Mặc định lấy thẳng từ local_login.md / staging_login.md — mở tool lên là chạy được ngay,
-// không phải tra tài liệu rồi gõ lại.
+// không phải tra tài liệu rồi gõ lại. env mặc định trial (xem wsEnv); url/agent là preset
+// local của mọi env (chung một wsproxy local), user/pass là của staging web.
 const WS_CFG_DEFAULTS = {
-  url: WS_PRESETS.local.url,
-  agent: WS_PRESETS.local.agent,
-  user: WS_PRESETS.stag.user,
-  pass: WS_PRESETS.stag.pass,
+  env: 'trial',
+  url: ENV_DEFS.trial.presets.local.url,
+  agent: ENV_DEFS.trial.presets.local.agent,
+  user: ENV_DEFS.web.presets.stag.user,
+  pass: ENV_DEFS.web.presets.stag.pass,
 };
 
 function restoreWsConfig() {
@@ -186,7 +245,7 @@ function updateWsAuthVisibility() {
 }
 
 function setWsPreset(which) {
-  const p = WS_PRESETS[which];
+  const p = envDef().presets[which];
   if (!p) return;
   const urlEl = document.getElementById('i-ws-url');
   const agentEl = document.getElementById('i-ws-agent');
@@ -194,6 +253,7 @@ function setWsPreset(which) {
   if (agentEl) agentEl.value = p.agent;
   // Preset phải trả về trọn bộ của môi trường đó, kể cả tài khoản. Trước đây chỉ đổi url+agent
   // nên bấm STAG xong vẫn còn tài khoản của lần gõ trước nằm lại trong ô (và trong localStorage).
+  // Staging bundle/trial chưa có user/pass mẫu (URL để trống) nên giữ nguyên 2 ô cho QC tự điền.
   const userEl = document.getElementById('i-ws-user');
   const passEl = document.getElementById('i-ws-pass');
   if (p.user && userEl) userEl.value = p.user;
@@ -228,7 +288,12 @@ async function postJson(url, headers, body) {
 // Host này là nền tảng của khách hàng, không phải game backend, nên gọi HTTP ở đây là đúng và
 // không đi ngược mục tiêu bỏ REST vào game BE.
 async function stagLogin() {
-  const host = WS_PRESETS.stag.authHost;
+  const stag = envDef().presets.stag;
+  // shortcut: staging bundle/trial chưa có authHost trong preset (URL chưa công khai trong repo).
+  // Khi nền tảng đó có host/luồng đăng nhập thật thì bổ sung authHost (và token guest cho trial)
+  // vào ENV_DEFS — tới hạn đó QC điền URL staging thủ công và dùng luồng web.
+  if (!stag.authHost) throw new Error(t('stagAuthUnknown', { env: wsEnv() }));
+  const host = stag.authHost;
 
   const loginUrl = host + '/api/v1/user/login';
   const login = await postJson(loginUrl, {}, { username: wsCfgUser(), password: wsCfgPass() });
@@ -237,8 +302,10 @@ async function stagLogin() {
     throw new Error(t('loginFail', { status: login.res.status, url: loginUrl, data: JSON.stringify(login.data) }));
   }
 
+  // gameId phải theo env (bundle = yama_01031): /play-game đổi token sang đúng game được đăng ký
+  // trên nền tảng — truyền sai gameId là lấy nhầm token game khác ngay bước này.
   const playUrl = host + '/api/v1/play-game';
-  const play = await postJson(playUrl, { Authorization: 'Bearer ' + loginToken }, { gameId: gameId() });
+  const play = await postJson(playUrl, { Authorization: 'Bearer ' + loginToken }, { gameId: envGameId() });
   const gameToken = play.data && (play.data.token || (play.data.data && play.data.data.token));
   if (!play.res.ok || !gameToken) {
     throw new Error(t('playGameFail', { status: play.res.status, url: playUrl, data: JSON.stringify(play.data) }));
@@ -246,9 +313,10 @@ async function stagLogin() {
   return gameToken;
 }
 
-/** Token để AUTH: local dùng seed cố định, staging đăng nhập lấy về (có nhớ lại trong phiên). */
+/** Token để AUTH: local dùng seed cố định (mọi env chung một wsproxy local), staging đăng nhập
+ *  lấy về (có nhớ lại trong phiên). */
 async function resolveWsToken(forceRefresh) {
-  if (wsIsLocal()) return WS_PRESETS.local.token;
+  if (wsIsLocal()) return envDef().presets.local.token;
   if (stagToken && !forceRefresh) return stagToken;
   stagToken = await stagLogin();
   return stagToken;
@@ -293,7 +361,7 @@ async function wsConnect() {
 
     startPoll(false);  // listSessions() vừa chạy ngay trên, chỉ cần bật nhịp 5 giây
     // Nối được rồi thì hàng cấu hình hết việc — thu lại, nhường chỗ cho vùng làm việc.
-    lastWsSummaryInfo = { isLocal: wsIsLocal(), who: (j.userId || wsCfgAgent()) };
+    lastWsSummaryInfo = { isLocal: wsIsLocal(), env: wsEnv(), who: (j.userId || wsCfgAgent()) };
     renderWsSummaryChip();
     wsCfgCollapsed = true;
     applyWsRowVisibility();
@@ -357,7 +425,8 @@ function onToolWsDropped(closeInfo) {
 /** Dựng phiên WS mới: mở socket → AUTH → JOIN. CHỈ nút "Kết nối" được gọi hàm này. */
 async function openToolWs() {
   const token = await resolveWsToken(false);
-  const client = new NagaWsClient({ url: wsCfgUrl(), onDisconnect: onToolWsDropped });
+  // Plugin theo env (wsPluginName): sai tên này là wsproxy không tìm ra route grpc cho lệnh.
+  const client = new NagaWsClient({ url: wsCfgUrl(), plugin: wsPluginName(), onDisconnect: onToolWsDropped });
   await client.connect();
   await client.auth(token, wsCfgAgent());
   let joined;

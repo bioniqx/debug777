@@ -1784,8 +1784,8 @@
         </summary>
         <ol class="steps">
           <li data-i18n-html="step1"><b>Chọn môi trường:</b> chọn <b>WEB/BUNDLE/TRIAL</b> rồi bấm <b>LOCAL</b> hoặc <b>STAG</b> trên hàng WS —
-            WS URL và agentId tự điền theo env đó. Trỏ staging thì hiện thêm username/password (mặc định <code>Admin101</code>); local dùng
-            seed token nên hai ô đó tự ẩn. Staging bundle/trial chưa có URL mẫu — tự điền tay.</li>
+            WS URL và agentId tự điền theo env đó. Trỏ staging thì hiện thêm username/password (mặc định web <code>Admin101</code>, bundle
+            <code>tester123</code>); local dùng seed token nên hai ô đó tự ẩn. Staging trial chưa có URL mẫu — tự điền tay.</li>
           <li data-i18n-html="step2">Bấm <b>Kết nối</b> — mở WebSocket, đăng nhập, JOIN rồi tải luôn danh sách người chơi.</li>
           <li data-i18n-html="step3"><b>Mở game</b> trên thiết bị test và đăng nhập tài khoản thật.</li>
           <li data-i18n-html="step4">Bấm <b>↻</b> để tải lại danh sách. Còn đúng <b>1 người chơi</b> → tool tự chọn; nhiều người → bấm
@@ -1842,7 +1842,7 @@
             <button class="btn btn-ghost btn-sm" type="button" onclick="setWsPreset('local')"
               title="ws://localhost:9099/websocket · agentId=1">LOCAL</button>
             <button class="btn btn-ghost btn-sm" type="button" onclick="setWsPreset('stag')"
-              title="Điền preset staging của env đang chọn (web có sẵn URL; bundle/trial tự điền)">STAG</button>
+              title="Điền preset staging của env đang chọn (web + bundle có sẵn URL; trial tự điền)">STAG</button>
             <input id="i-ws-url" data-i18n-placeholder="wsUrlPlaceholder" placeholder="WS URL (phiên debug riêng của tool)" onchange="saveWsConfig()">
             <input id="i-ws-agent" placeholder="agentId" onchange="saveWsConfig()">
             <!-- Không có ô accessToken: local dùng thẳng seed token, staging tự đăng nhập lấy token
@@ -2158,7 +2158,7 @@
         reloadPlayersAria: 'Tải lại danh sách',
         sessionsNoWs: 'Chưa kết nối WS — bấm <b>Kết nối</b> ở thanh trên, danh sách sẽ tự hiện.',
         guideTitle: 'Hướng dẫn nhanh',
-        step1: '<b>Chọn môi trường:</b> chọn <b>WEB/BUNDLE/TRIAL</b> rồi bấm <b>LOCAL</b> hoặc <b>STAG</b> trên hàng WS — WS URL và agentId tự điền theo env đó. Trỏ staging thì hiện thêm username/password (mặc định <code>Admin101</code>); local dùng seed token nên hai ô đó tự ẩn. Staging bundle/trial chưa có URL mẫu — tự điền tay.',
+        step1: '<b>Chọn môi trường:</b> chọn <b>WEB/BUNDLE/TRIAL</b> rồi bấm <b>LOCAL</b> hoặc <b>STAG</b> trên hàng WS — WS URL và agentId tự điền theo env đó. Trỏ staging thì hiện thêm username/password (mặc định web <code>Admin101</code>, bundle <code>tester123</code>); local dùng seed token nên hai ô đó tự ẩn. Staging trial chưa có URL mẫu — tự điền tay.',
         step2: 'Bấm <b>Kết nối</b> — mở WebSocket, đăng nhập, JOIN rồi tải luôn danh sách người chơi.',
         step3: '<b>Mở game</b> trên thiết bị test và đăng nhập tài khoản thật.',
         step4: 'Bấm <b>↻</b> để tải lại danh sách. Còn đúng <b>1 người chơi</b> → tool tự chọn; nhiều người → bấm <b>Dùng</b> ở đúng người.',
@@ -2331,7 +2331,7 @@
         reloadPlayersAria: 'Reload list',
         sessionsNoWs: 'Not connected to WS yet — click <b>Connect</b> in the top bar and the list will appear automatically.',
         guideTitle: 'Quick guide',
-        step1: '<b>Pick an environment:</b> choose <b>WEB/BUNDLE/TRIAL</b>, then click <b>LOCAL</b> or <b>STAG</b> on the WS row — WS URL and agentId fill in for that env. Pointing to staging reveals username/password (default <code>Admin101</code>); local uses a seed token so those two fields stay hidden. Staging bundle/trial have no preset URL yet — fill it in manually.',
+        step1: '<b>Pick an environment:</b> choose <b>WEB/BUNDLE/TRIAL</b>, then click <b>LOCAL</b> or <b>STAG</b> on the WS row — WS URL and agentId fill in for that env. Pointing to staging reveals username/password (default <code>Admin101</code> for web, <code>tester123</code> for bundle); local uses a seed token so those two fields stay hidden. Trial staging has no preset URL yet — fill it in manually.',
         step2: 'Click <b>Connect</b> — opens the WebSocket, logs in, JOINs, and loads the player list.',
         step3: '<b>Open the game</b> on the test device and log in with a real account.',
         step4: 'Click <b>↻</b> to reload the list. Exactly <b>1 player</b> → the tool auto-selects them; more than one → click <b>Use</b> on the right one.',
@@ -3381,7 +3381,7 @@
   <!-- ?v= là cache-busting: đổi URL thì bản cũ trong cache trình duyệt không khớp được nữa.
        Sửa hai file này thì tăng số. -->
   <script src="js/ws-client.js?v=10"></script>
-  <script src="js/ws-debug.js?v=12"></script>
+  <script src="js/ws-debug.js?v=13"></script>
 </body>
 
 </html>

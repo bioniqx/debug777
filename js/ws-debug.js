@@ -53,6 +53,8 @@ const ENV_DEFS = {
         url: 'wss://gob02-ws.relaxwmestu.xyz/websocket',
         agent: 'AGENCY_001',
         authHost: 'https://agency001.relaxwmestu.xyz',
+        loginPath: '/api/v1/user/login',
+        playPath: '/api/v1/play-game',
         user: 'Admin101',
         pass: '12345',
       },
@@ -64,7 +66,16 @@ const ENV_DEFS = {
     plugin: 'yama_01031',
     presets: {
       local: { url: 'ws://localhost:9099/websocket', agent: '1', token: '1-valid-token-100' },
-      stag: { url: '', agent: '' },
+      // Mock-login của bundle: 1 bước — token trả ở tầng trên dùng thẳng cho WS AUTH (host này
+      // không có /play-game, đã dò 404). AUTH đã thử thành công với agentId "1" (2026-11-03).
+      stag: {
+        url: 'wss://gob01-ws.relaxwmestu.xyz/websocket',
+        agent: '1',
+        authHost: 'https://mock-login.relaxwmestu.xyz',
+        loginPath: '/login',
+        user: 'tester123',
+        pass: 'Test123',
+      },
     },
   },
   trial: {
@@ -287,24 +298,39 @@ async function postJson(url, headers, body) {
 // /play-game đổi sang token game — chính token game mới dùng để AUTH vào WebSocket.
 // Host này là nền tảng của khách hàng, không phải game backend, nên gọi HTTP ở đây là đúng và
 // không đi ngược mục tiêu bỏ REST vào game BE.
-async function stagLogin() {
-  const stag = envDef().presets.stag;
-  // shortcut: staging bundle/trial chưa có authHost trong preset (URL chưa công khai trong repo).
-  // Khi nền tảng đó có host/luồng đăng nhập thật thì bổ sung authHost (và token guest cho trial)
-  // vào ENV_DEFS — tới hạn đó QC điền URL staging thủ công và dùng luồng web.
-  if (!stag.authHost) throw new Error(t('stagAuthUnknown', { env: wsEnv() }));
-  const host = stag.authHost;
+// Khuôn đăng nhập staging theo env, tra thẳng từ preset:
+//   web    -> 2 bước: login lấy token tài khoản, playPath đổi sang token game (gameId theo env)
+//   bundle -> 1 bước: mock-login trả token dùng thẳng cho WS AUTH
+//   trial  -> null: chưa có authHost — stagLogin sẽ ném lỗi rõ ràng cho QC
+function stagLoginPlan(env) {
+  const stag = ENV_DEFS[env].presets.stag;
+  if (!stag.authHost) return null;
+  return {
+    authHost: stag.authHost,
+    loginPath: stag.loginPath || '/api/v1/user/login',
+    playPath: stag.playPath || null,
+  };
+}
 
-  const loginUrl = host + '/api/v1/user/login';
+async function stagLogin() {
+  const plan = stagLoginPlan(wsEnv());
+  // shortcut: staging trial chưa có authHost trong preset (URL chưa công khai trong repo) —
+  // khi nền tảng trial có host thật thì bổ sung authHost/loginPath vào ENV_DEFS.
+  if (!plan) throw new Error(t('stagAuthUnknown', { env: wsEnv() }));
+  const host = plan.authHost;
+
+  const loginUrl = host + plan.loginPath;
   const login = await postJson(loginUrl, {}, { username: wsCfgUser(), password: wsCfgPass() });
+  // Token có thể nằm tầng trên (mock-login của bundle) hoặc trong data.token (agency web).
   const loginToken = login.data && (login.data.token || (login.data.data && login.data.data.token));
   if (!login.res.ok || !loginToken) {
     throw new Error(t('loginFail', { status: login.res.status, url: loginUrl, data: JSON.stringify(login.data) }));
   }
+  if (!plan.playPath) return loginToken;   // 1 bước: token này AUTH thẳng được (đã thử thành công)
 
-  // gameId phải theo env (bundle = yama_01031): /play-game đổi token sang đúng game được đăng ký
-  // trên nền tảng — truyền sai gameId là lấy nhầm token game khác ngay bước này.
-  const playUrl = host + '/api/v1/play-game';
+  // 2 bước (web): gameId phải theo env (bundle = yama_01031) — /play-game đổi token sang đúng
+  // game được đăng ký trên nền tảng, truyền sai gameId là lấy nhầm token game khác ngay bước này.
+  const playUrl = host + plan.playPath;
   const play = await postJson(playUrl, { Authorization: 'Bearer ' + loginToken }, { gameId: envGameId() });
   const gameToken = play.data && (play.data.token || (play.data.data && play.data.data.token));
   if (!play.res.ok || !gameToken) {
